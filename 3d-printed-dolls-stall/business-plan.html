@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D打印玩偶摆摊 — 商业模式扩展 & 生产方式分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f5f7;
+    color: #1d1d1f;
+    line-height: 1.6;
+  }
+  .hero {
+    background: linear-gradient(135deg, #1d1d1f 0%, #2d2d3f 50%, #1a1a2e 100%);
+    color: #fff;
+    padding: 50px 20px 40px;
+    text-align: center;
+  }
+  .hero h1 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.02em; }
+  .hero p { color: #a1a1a6; font-size: 1rem; max-width: 600px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-block; background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px; padding: 4px 16px;
+    font-size: 0.8rem; color: #a1a1a6; margin-bottom: 16px;
+  }
+  .nav {
+    background: #fff; border-bottom: 1px solid #e5e5ea;
+    padding: 0 20px; position: sticky; top: 0; z-index: 100;
+  }
+  .nav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 24px; overflow-x: auto; }
+  .nav a {
+    text-decoration: none; color: #6e6e73; font-size: 0.88rem;
+    padding: 14px 0; border-bottom: 2px solid transparent; white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .nav a:hover { color: #1d1d1f; border-bottom-color: #1d1d1f; }
+  .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+  .section { padding: 48px 0; }
+  .section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.02em; }
+  .section-desc { color: #6e6e73; font-size: 0.92rem; margin-bottom: 28px; }
+
+  /* Model cards */
+  .model-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .model-card {
+    background: #fff; border-radius: 14px; padding: 22px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border-top: 4px solid #176b2e;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .model-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+  .model-card .num {
+    display: inline-block; width: 28px; height: 28px; line-height: 28px;
+    text-align: center; background: #176b2e; color: #fff; border-radius: 50%;
+    font-size: 0.82rem; font-weight: 700; margin-right: 8px;
+  }
+  .model-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; }
+  .model-card h3 .emoji { margin-right: 8px; font-size: 1.2rem; }
+  .model-card .desc { font-size: 0.85rem; color: #3a3a3c; margin-bottom: 10px; }
+  .model-card .tag-row { display: flex; flex-wrap: wrap; gap: 5px; }
+  .model-card .tag {
+    font-size: 0.72rem; padding: 2px 8px; border-radius: 5px;
+    background: #e8f0fe; color: #1a56db; font-weight: 500;
+  }
+  .model-card .tag.green { background: #e6f7ed; color: #176b2e; }
+  .model-card .tag.orange { background: #fff4e0; color: #8a5a00; }
+
+  .model-card.existing {
+    border-top-color: #8a5a00; opacity: 0.85;
+  }
+  .model-card.existing .num { background: #8a5a00; }
+  .model-card.new {
+    border-top-color: #1a56db;
+  }
+  .model-card.new .num { background: #1a56db; }
+
+  /* Comparison table */
+  .table-wrap { overflow-x: auto; }
+  table {
+    width: 100%; border-collapse: collapse; background: #fff;
+    border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    font-size: 0.85rem;
+  }
+  th {
+    background: #1d1d1f; color: #fff; padding: 12px 14px;
+    text-align: left; font-weight: 600; white-space: nowrap;
+  }
+  td { padding: 11px 14px; border-bottom: 1px solid #f0f0f5; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f9f9fb; }
+  .winner { color: #176b2e; font-weight: 600; }
+  .loser { color: #d93025; }
+  .tie { color: #8a5a00; }
+
+  /* Verdict */
+  .verdict-box {
+    background: #fff; border-radius: 14px; padding: 28px;
+    border-left: 5px solid #1a56db; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    margin-top: 20px;
+  }
+  .verdict-box h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
+  .verdict-box ul { list-style: none; }
+  .verdict-box li { padding: 6px 0; font-size: 0.9rem; display: flex; gap: 8px; }
+  .step-list { counter-reset: step; }
+  .step-list li { counter-increment: step; }
+  .step-list li::before {
+    content: counter(step); display: inline-flex;
+    width: 22px; height: 22px; align-items: center; justify-content: center;
+    background: #1a56db; color: #fff; border-radius: 50%;
+    font-size: 0.75rem; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+  }
+
+  /* Cost table */
+  .cost-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .cost-card {
+    background: #fff; border-radius: 14px; padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .cost-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .cost-card ul { list-style: none; }
+  .cost-card li { padding: 7px 0; border-bottom: 1px solid #f0f0f5; font-size: 0.85rem; display: flex; gap: 8px; }
+  .cost-card li:last-child { border-bottom: none; }
+
+  .note-box {
+    background: #f0f0f5; border-left: 4px solid #6e6e73;
+    border-radius: 0 8px 8px 0; padding: 14px 18px;
+    font-size: 0.86rem; color: #3a3a3c; margin-top: 18px;
+  }
+  .warning-box {
+    background: #fff8e1; border-left: 4px solid #f59e0b;
+    border-radius: 0 8px 8px 0; padding: 14px 18px;
+    font-size: 0.86rem; color: #78350f; margin-top: 18px;
+  }
+
+  footer {
+    background: #1d1d1f; color: #a1a1a6; text-align: center;
+    padding: 28px 20px; font-size: 0.8rem;
+  }
+
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 1.4rem; }
+    .model-grid { grid-template-columns: 1fr; }
+    .cost-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">🧩 商业拓展 · 2026年版</div>
+  <h1>3D打印玩偶摆摊 — 商业模式扩展 & 生产方式分析</h1>
+  <p>7种商业模式对比 · 家用打印机 vs 工厂代工 · 前期行动路线</p>
+</div>
+
+<div class="nav">
+  <div class="nav-inner">
+    <a href="#models">🧩 商业模式（7种）</a>
+    <a href="#production">🏭 生产方式对比</a>
+    <a href="#verdict">✅ 建议路线</a>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- Section 1: 7 Business Models -->
+<div class="section" id="models">
+  <div class="section-title">🧩 7种商业模式</div>
+  <div class="section-desc">你提到的2种 + 我新增的5种，覆盖不同客单价、场景和利润空间</div>
+
+  <div class="model-grid">
+
+    <div class="model-card existing">
+      <h3><span class="emoji">🎨</span> 接单定制</h3>
+      <div class="desc">家长/孩子发图或提需求，用3D建模软件定制模型，集中打印后交货。微信群接单为主。</div>
+      <div class="tag-row">
+        <span class="tag">客单价 ¥25-50</span>
+        <span class="tag orange">毛利 80%+</span>
+        <span class="tag">需建模能力</span>
+      </div>
+    </div>
+
+    <div class="model-card existing">
+      <h3><span class="emoji">🎁</span> 批量盲盒</h3>
+      <div class="desc">设计8-12款小玩偶，每只成本¥2-3，装入盲盒袋卖¥10-15。隐藏款增加收集欲。寒暑假批量备货。</div>
+      <div class="tag-row">
+        <span class="tag">客单价 ¥10-15</span>
+        <span class="tag green">规模效应强</span>
+        <span class="tag orange">需款式设计</span>
+      </div>
+    </div>
+
+    <div class="model-card new">
+      <h3><span class="emoji">🖍️</span> DIY涂色套装</h3>
+      <div class="desc">打印白模玩偶（成本¥1.5-3）+ 配一小盒丙烯颜料 + 画笔 = ¥25-35套餐。孩子自己上色，体验感翻倍，家长更愿买单。</div>
+      <div class="tag-row">
+        <span class="tag">客单价 ¥25-35</span>
+        <span class="tag green">复购率高</span>
+        <span class="tag">省去后处理</span>
+      </div>
+    </div>
+
+    <div class="model-card new">
+      <h3><span class="emoji">📛</span> 姓名牌/文具</h3>
+      <div class="desc">定制姓名牌、笔筒、书签、尺子、手机支架。小学生每学期都需要换新文具，高频刚需。</div>
+      <div class="tag-row">
+        <span class="tag">客单价 ¥5-15</span>
+        <span class="tag green">高频复购</span>
+        <span class="tag">消耗量稳定</span>
+      </div>
+    </div>
+
+    <div class="model-card new">
+      <h3><span class="emoji">🏫</span> 学校文创</h3>
+      <div class="desc">和学校或班级合作，做校徽小摆件、班级吉祥物、运动会奖牌。每个孩子都想拥有自己学校的周边。</div>
+      <div class="tag-row">
+        <span class="tag">客单价 ¥10-20</span>
+        <span class="tag">批量出货</span>
+        <span class="tag green">情感溢价</span>
+      </div>
+    </div>
+
+    <div class="model-card new">
+      <h3><span class="emoji">🔧</span> STEM科学教具</h3>
+      <div class="desc">打印齿轮联动模型、桥梁结构、拼装恐龙骨架、简易机器人外壳。卖给家长/培训机构用于STEAM教育。</div>
+      <div class="tag-row">
+        <span class="tag">客单价 ¥20-60</span>
+        <span class="tag green">家长付费意愿高</span>
+        <span class="tag">需配套说明书</span>
+      </div>
+    </div>
+
+    <div class="model-card new">
+      <h3><span class="emoji">🎄</span> 节日/毕业季礼盒</h3>
+      <div class="desc">儿童节主题盲盒、圣诞节限定套装、毕业季纪念品。场景化营销，节前2周集中出货，单价可翻倍。</div>
+      <div class="tag-row">
+        <span class="tag">客单价 ¥20-50</span>
+        <span class="tag orange">季节性强</span>
+        <span class="tag green">溢价空间大</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="note-box" style="margin-top:24px;">
+    💡 <strong>建议的组合打法：</strong>日常做 <strong>姓名牌/文具</strong>（稳定现金流）+ 周末做 <strong>DIY涂色套装</strong>（高毛利）+ 节前做 <strong>节日礼盒</strong>（爆发式收入）。三条腿走路比单做一种稳妥。
+  </div>
+</div>
+
+<!-- Section 2: Production Method Comparison -->
+<div class="section" id="production">
+  <div class="section-title">🏭 生产方式对比：家用打印机 vs 工厂代工</div>
+  <div class="section-desc">按你问的"成批做的话，买家用机还是找工厂"</div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:24%">对比维度</th>
+          <th style="width:38%">🏠 家用3D打印机</th>
+          <th style="width:38%">🏭 找工厂代工</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>初始投入</strong></td>
+          <td><span class="loser">¥1,300-2,600</span>（1-2台A1 mini）</td>
+          <td><span class="winner">¥0</span>（只需设计费）</td>
+        </tr>
+        <tr>
+          <td><strong>单件成本（PLA玩偶）</strong></td>
+          <td><span class="winner">~¥3-4</span>（含耗材+电费+折旧）</td>
+          <td><span class="loser">~¥5-15</span>（含人工+运费）</td>
+        </tr>
+        <tr>
+          <td><strong>最小起订量</strong></td>
+          <td><span class="winner">1件起</span>（无门槛）</td>
+          <td><span class="loser">100-500件起</span>（囤货风险）</td>
+        </tr>
+        <tr>
+          <td><strong>产能</strong></td>
+          <td><span class="loser">慢</span>（1台A1 mini一天打5-8只）</td>
+          <td><span class="winner">快</span>（工厂一天出几百上千件）</td>
+        </tr>
+        <tr>
+          <td><strong>产品质量</strong></td>
+          <td><span class="tie">一般</span>（FDM层纹可见，需打磨）</td>
+          <td><span class="winner">好</span>（光固化/工业级，表面光滑）</td>
+        </tr>
+        <tr>
+          <td><strong>款式灵活度</strong></td>
+          <td><span class="winner">高</span>（随时换款、小批量试水）</td>
+          <td><span class="loser">低</span>（换款要重开模具/重调参数）</td>
+        </tr>
+        <tr>
+          <td><strong>时间投入</strong></td>
+          <td><span class="loser">高</span>（换料、清理、维护机器）</td>
+          <td><span class="winner">低</span>（下单等物流，省心）</td>
+        </tr>
+        <tr>
+          <td><strong>库存压力</strong></td>
+          <td><span class="winner">无</span>（按需打印，零库存）</td>
+          <td><span class="loser">有</span>（一次生产几百件存货）</td>
+        </tr>
+        <tr>
+          <td><strong>适用场景</strong></td>
+          <td><span class="winner">小批量试水、定制单、日常补货</span></td>
+          <td><span class="winner">爆款批量生产、节日大单、盲盒</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Combined approach -->
+  <div class="cost-grid" style="margin-top:24px;">
+
+    <div class="cost-card" style="border-top:4px solid #d93025;">
+      <h3>❌ 纯家用（不推荐）</h3>
+      <ul>
+        <li>✗ 一台机器一天只能打5-8只，不够卖的</li>
+        <li>✗ 要买3-5台才够批量，投入¥4000-6500</li>
+        <li>✗ 机器噪音大，放家里影响生活</li>
+        <li>✗ 需要自己维护、调试、换料</li>
+        <li>✗ 产能瓶颈明显，无法突增</li>
+      </ul>
+    </div>
+
+    <div class="cost-card" style="border-top:4px solid #d93025;">
+      <h3>❌ 纯找工厂（也不够灵活）</h3>
+      <ul>
+        <li>✗ 最小起订量100-500，卖不完就是库存</li>
+        <li>✗ 单件成本比家用高（工厂要利润）</li>
+        <li>✗ 定制单无法做（一件起订工厂不接）</li>
+        <li>✗ 款式切换慢，上新周期长</li>
+        <li>✗ 没有"摆摊展示机器"的引流效果</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="warning-box" style="margin-top:18px;">
+    ⚡ <strong>最佳方案混合打法：</strong>买1台A1 mini（¥1299）放家里，做三件事——① 日常打姓名牌/文具等小件，接定制单；② 测试新款，验证市场反应；③ 摆摊时当展示道具（机器运转本身就吸引孩子）。一旦某款验证是爆款（日销20+），立刻找工厂批量生产赚规模利润。家用的灵活 + 工厂的规模，两条腿走路。
+  </div>
+</div>
+
+<!-- Section 3: Recommended Path -->
+<div class="section" id="verdict">
+  <div class="section-title">✅ 行动路线建议</div>
+  <div class="section-desc">从1台机器起步，滚雪球式发展</div>
+
+  <div class="verdict-box">
+    <h3>📋 第一阶段：验证模式（第1-2个月）</h3>
+    <ol class="step-list" style="list-style:none;">
+      <li>买1台 <strong>Bambu Lab A1 mini</strong>（¥1299），开箱即用</li>
+      <li>从 <strong>Thingiverse / Printables</strong> 下载5-10款热门小玩偶模型（免费）</li>
+      <li>打印第一批样品，放在附近文具店寄卖，或放学时间段摆摊测反应</li>
+      <li>建立<strong>家长微信群</strong>，首批顾客拉进群</li>
+    </ol>
+  </div>
+
+  <div class="verdict-box" style="margin-top:16px;border-left-color:#176b2e;">
+    <h3>📋 第二阶段：测试爆款（第2-3个月）</h3>
+    <ol class="step-list" style="list-style:none;" start="5">
+      <li>根据群内反馈和销售数据，找出<strong>卖最好的3-5款</strong></li>
+      <li>尝试<strong>DIY涂色套装</strong>（白模+颜料），测试是否比成品更好卖</li>
+      <li>把姓名牌/文具作为<strong>长期稳定款</strong>，每日固定产出</li>
+    </ol>
+  </div>
+
+  <div class="verdict-box" style="margin-top:16px;border-left-color:#1a56db;">
+    <h3>📋 第三阶段：批量生产（第3-6个月）</h3>
+    <ol class="step-list" style="list-style:none;" start="8">
+      <li>确认<strong>至少1-2款爆款</strong>（月销100+的款）</li>
+      <li>联系1688或本地3D打印工厂（在"白令三维"等平台询价），计算批量成本</li>
+      <li>如果工厂成本 ≤ 家用成本×1.5，果断找工厂批量做</li>
+      <li>家用机回归"研发+定制"角色，工厂负责"爆款批量"</li>
+    </ol>
+  </div>
+
+  <div class="verdict-box" style="margin-top:16px;border-left-color:#8a5a00;">
+    <h3>📋 第四阶段：规模化（第6-12个月）</h3>
+    <ol class="step-list" style="list-style:none;" start="12">
+      <li>推出 <strong>节日限定盲盒系列</strong>（春节、六一、圣诞），工厂批量+线上线下渠道铺货</li>
+      <li>和 <strong>3-5所学校周边文具店/小卖部</strong> 建立稳定供货关系</li>
+      <li>尝试拓展 <strong>STEM教具套装</strong> 到培训机构/家委会渠道</li>
+      <li>月收入目标：¥5000-15000（保守-乐观）</li>
+    </ol>
+  </div>
+
+  <div class="note-box" style="margin-top:24px;">
+    📌 <strong>一句话总结：</strong>家用机做"研发+定制+引流"，工厂做"爆款批量"。一台A1 mini花¥1299起步，先跑通最小闭环。不用一开始就想着大规模，<strong>先卖出去一只赚¥16，卖100只就是¥1600。从1开始，别从1000开始。</strong>
+  </div>
+</div>
+
+</div><!-- end container -->
+
+<footer>
+  <p>数据来源：市场调研、Bambu Lab/创想三维官网、1688代工厂询价（2025-2026）</p>
+  <p style="margin-top:6px;">⚠️ 本分析仅供参考，实际利润以市场验证为准</p>
+  <p style="margin-top:12px;">📁 项目：3rd-career-exploration / 3d-printed-dolls-stall · 更新时间：2026年5月</p>
+</footer>
+
+</body>
+</html>
