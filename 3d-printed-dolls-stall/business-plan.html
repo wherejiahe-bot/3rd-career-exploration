@@ -3,402 +3,536 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3D打印玩偶摆摊 — 商业模式扩展 & 生产方式分析</title>
+<title>3D打印玩偶 · 商业模式 & 生产分析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;510;600;700&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: #f5f5f7;
-    color: #1d1d1f;
-    line-height: 1.6;
-  }
-  .hero {
-    background: linear-gradient(135deg, #1d1d1f 0%, #2d2d3f 50%, #1a1a2e 100%);
-    color: #fff;
-    padding: 50px 20px 40px;
-    text-align: center;
-  }
-  .hero h1 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.02em; }
-  .hero p { color: #a1a1a6; font-size: 1rem; max-width: 600px; margin: 0 auto; }
-  .hero-badge {
-    display: inline-block; background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 20px; padding: 4px 16px;
-    font-size: 0.8rem; color: #a1a1a6; margin-bottom: 16px;
-  }
-  .nav {
-    background: #fff; border-bottom: 1px solid #e5e5ea;
-    padding: 0 20px; position: sticky; top: 0; z-index: 100;
-  }
-  .nav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 24px; overflow-x: auto; }
-  .nav a {
-    text-decoration: none; color: #6e6e73; font-size: 0.88rem;
-    padding: 14px 0; border-bottom: 2px solid transparent; white-space: nowrap;
-    transition: color 0.2s, border-color 0.2s;
-  }
-  .nav a:hover { color: #1d1d1f; border-bottom-color: #1d1d1f; }
-  .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
-  .section { padding: 48px 0; }
-  .section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.02em; }
-  .section-desc { color: #6e6e73; font-size: 0.92rem; margin-bottom: 28px; }
+:root {
+  --bg: #0e0e10;
+  --bg-elevated: #17171a;
+  --glass-bg: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.06);
+  --glass-hover: rgba(255,255,255,0.08);
+  --text: #f0f0f0;
+  --text-secondary: #888890;
+  --text-tertiary: #5e5e66;
+  --accent: #5b8bf7;
+  --accent-soft: rgba(91,139,247,0.12);
+  --accent-text: #8ab4ff;
+  --green: #3ccf7e;
+  --green-soft: rgba(60,207,126,0.12);
+  --amber: #f5a623;
+  --amber-soft: rgba(245,166,35,0.12);
+  --red: #f75b5b;
+  --red-soft: rgba(247,91,91,0.08);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --font: "Noto Sans SC", system-ui, -apple-system, sans-serif;
+}
 
-  /* Model cards */
-  .model-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-  .model-card {
-    background: #fff; border-radius: 14px; padding: 22px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    border-top: 4px solid #176b2e;
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-  .model-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
-  .model-card .num {
-    display: inline-block; width: 28px; height: 28px; line-height: 28px;
-    text-align: center; background: #176b2e; color: #fff; border-radius: 50%;
-    font-size: 0.82rem; font-weight: 700; margin-right: 8px;
-  }
-  .model-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; }
-  .model-card h3 .emoji { margin-right: 8px; font-size: 1.2rem; }
-  .model-card .desc { font-size: 0.85rem; color: #3a3a3c; margin-bottom: 10px; }
-  .model-card .tag-row { display: flex; flex-wrap: wrap; gap: 5px; }
-  .model-card .tag {
-    font-size: 0.72rem; padding: 2px 8px; border-radius: 5px;
-    background: #e8f0fe; color: #1a56db; font-weight: 500;
-  }
-  .model-card .tag.green { background: #e6f7ed; color: #176b2e; }
-  .model-card .tag.orange { background: #fff4e0; color: #8a5a00; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
-  .model-card.existing {
-    border-top-color: #8a5a00; opacity: 0.85;
-  }
-  .model-card.existing .num { background: #8a5a00; }
-  .model-card.new {
-    border-top-color: #1a56db;
-  }
-  .model-card.new .num { background: #1a56db; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
 
-  /* Comparison table */
-  .table-wrap { overflow-x: auto; }
-  table {
-    width: 100%; border-collapse: collapse; background: #fff;
-    border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    font-size: 0.85rem;
-  }
-  th {
-    background: #1d1d1f; color: #fff; padding: 12px 14px;
-    text-align: left; font-weight: 600; white-space: nowrap;
-  }
-  td { padding: 11px 14px; border-bottom: 1px solid #f0f0f5; vertical-align: top; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #f9f9fb; }
-  .winner { color: #176b2e; font-weight: 600; }
-  .loser { color: #d93025; }
-  .tie { color: #8a5a00; }
+/* Noise overlay */
+body::before {
+  content:''; position:fixed; inset:0; z-index:9999;
+  pointer-events:none; opacity:0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
 
-  /* Verdict */
-  .verdict-box {
-    background: #fff; border-radius: 14px; padding: 28px;
-    border-left: 5px solid #1a56db; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    margin-top: 20px;
-  }
-  .verdict-box h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
-  .verdict-box ul { list-style: none; }
-  .verdict-box li { padding: 6px 0; font-size: 0.9rem; display: flex; gap: 8px; }
-  .step-list { counter-reset: step; }
-  .step-list li { counter-increment: step; }
-  .step-list li::before {
-    content: counter(step); display: inline-flex;
-    width: 22px; height: 22px; align-items: center; justify-content: center;
-    background: #1a56db; color: #fff; border-radius: 50%;
-    font-size: 0.75rem; font-weight: 700; flex-shrink: 0; margin-top: 2px;
-  }
+/* Hero */
+.hero {
+  position: relative; overflow: hidden;
+  padding: 80px 24px 64px; text-align: center;
+}
+.hero::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(91,139,247,0.08) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 40% at 80% 100%, rgba(60,207,126,0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block; position:relative;
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-radius: 100px; padding: 6px 20px; margin-bottom: 20px;
+  font-size: 0.78rem; color: var(--text-secondary);
+  animation: fadeUp 0.8s ease both;
+}
+.hero h1 {
+  font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700;
+  letter-spacing: -0.03em; line-height: 1.3; margin-bottom: 12px;
+  animation: fadeUp 0.8s 0.15s ease both;
+}
+.hero p {
+  color: var(--text-secondary); font-size: clamp(0.92rem, 2vw, 1.05rem);
+  max-width: 520px; margin: 0 auto;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
 
-  /* Cost table */
-  .cost-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .cost-card {
-    background: #fff; border-radius: 14px; padding: 24px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-  }
-  .cost-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-  .cost-card ul { list-style: none; }
-  .cost-card li { padding: 7px 0; border-bottom: 1px solid #f0f0f5; font-size: 0.85rem; display: flex; gap: 8px; }
-  .cost-card li:last-child { border-bottom: none; }
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to { opacity:1; transform:translateY(0); }
+}
 
-  .note-box {
-    background: #f0f0f5; border-left: 4px solid #6e6e73;
-    border-radius: 0 8px 8px 0; padding: 14px 18px;
-    font-size: 0.86rem; color: #3a3a3c; margin-top: 18px;
-  }
-  .warning-box {
-    background: #fff8e1; border-left: 4px solid #f59e0b;
-    border-radius: 0 8px 8px 0; padding: 14px 18px;
-    font-size: 0.86rem; color: #78350f; margin-top: 18px;
-  }
+/* Nav */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(14,14,16,0.85);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  padding: 0 20px;
+}
+.nav-inner { max-width: 860px; margin: 0 auto; display: flex; gap: 32px; overflow-x: auto; }
+.nav a {
+  text-decoration: none; color: var(--text-tertiary); font-size: 0.85rem;
+  padding: 14px 0; border-bottom: 1.5px solid transparent;
+  white-space: nowrap; transition: color 0.25s, border-color 0.25s;
+  font-weight: 500;
+}
+.nav a:hover { color: var(--text); border-bottom-color: var(--accent); }
 
-  footer {
-    background: #1d1d1f; color: #a1a1a6; text-align: center;
-    padding: 28px 20px; font-size: 0.8rem;
-  }
+/* Container */
+.container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 60px 0; }
 
-  @media (max-width: 768px) {
-    .hero h1 { font-size: 1.4rem; }
-    .model-grid { grid-template-columns: 1fr; }
-    .cost-grid { grid-template-columns: 1fr; }
-  }
+/* Section header */
+.section-header { margin-bottom: 32px; }
+.section-header .label {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--accent-text); margin-bottom: 8px;
+}
+.section-header h2 {
+  font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 700;
+  letter-spacing: -0.02em; line-height: 1.3;
+}
+.section-header p {
+  color: var(--text-secondary); font-size: 0.9rem;
+  margin-top: 6px; max-width: 560px;
+}
+
+/* Glass head divider */
+.head-divider {
+  width: 32px; height: 3px; border-radius: 2px;
+  background: var(--accent); margin-bottom: 16px;
+}
+
+/* Model cards */
+.model-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+}
+.model-card {
+  position: relative;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+  cursor: default;
+}
+.model-card:hover {
+  transform: translateY(-4px);
+  background: var(--glass-hover);
+  border-color: rgba(255,255,255,0.1);
+}
+.model-card .tag-type {
+  display: inline-block; font-size: 0.68rem; font-weight: 600;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 2px 10px; border-radius: 100px; margin-bottom: 10px;
+}
+.model-card .tag-type.existing { background: var(--amber-soft); color: var(--amber); }
+.model-card .tag-type.new { background: var(--accent-soft); color: var(--accent-text); }
+.model-card h3 {
+  font-size: 1rem; font-weight: 600; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.model-card .desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 12px; }
+.model-card .tag-row { display: flex; flex-wrap: wrap; gap: 5px; }
+.model-card .tag {
+  font-size: 0.7rem; padding: 2px 10px; border-radius: 100px;
+  font-weight: 500; border: 1px solid transparent;
+}
+.model-card .tag.blue { background: var(--accent-soft); color: var(--accent-text); border-color: rgba(91,139,247,0.15); }
+.model-card .tag.green { background: var(--green-soft); color: var(--green); border-color: rgba(60,207,126,0.15); }
+.model-card .tag.amber { background: var(--amber-soft); color: var(--amber); border-color: rgba(245,166,35,0.15); }
+
+/* Tip box */
+.tip-box {
+  margin-top: 24px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(91,139,247,0.12);
+  border-radius: var(--radius-md);
+  padding: 18px 22px; font-size: 0.85rem; color: var(--text-secondary);
+  line-height: 1.6;
+}
+.tip-box strong { color: var(--accent-text); font-weight: 600; }
+
+/* Comparison table */
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.82rem; min-width: 580px;
+}
+thead th {
+  padding: 14px 16px; text-align: left;
+  font-weight: 600; font-size: 0.82rem;
+  color: var(--text-secondary); border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+}
+tbody td {
+  padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.03);
+  vertical-align: middle;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr { transition: background 0.15s; }
+tbody tr:hover td { background: rgba(255,255,255,0.03); }
+.winner { color: var(--green); font-weight: 500; }
+.loser { color: var(--red); }
+.tie { color: var(--amber); }
+
+/* Cost cards */
+.cost-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.cost-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-md); padding: 22px;
+  border-top: 3px solid var(--red);
+}
+.cost-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.cost-card ul { list-style: none; }
+.cost-card li {
+  padding: 6px 0; font-size: 0.82rem; color: var(--text-secondary);
+  display: flex; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.cost-card li:last-child { border-bottom: none; }
+
+/* Highlight box */
+.highlight-box {
+  margin-top: 18px;
+  background: linear-gradient(135deg, rgba(60,207,126,0.06) 0%, rgba(91,139,247,0.04) 100%);
+  border: 1px solid rgba(60,207,126,0.15);
+  border-radius: var(--radius-md); padding: 18px 22px;
+  font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;
+}
+.highlight-box strong { color: var(--green); font-weight: 600; }
+.highlight-box .accent { color: var(--accent-text); }
+
+/* Verdict boxes */
+.verdict-box {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-md); padding: 24px;
+  margin-top: 16px; border-left: 4px solid var(--accent);
+  transition: background 0.2s;
+}
+.verdict-box:hover { background: var(--glass-hover); }
+.verdict-box h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.step-list { list-style: none; counter-reset: step; }
+.step-list li {
+  counter-increment: step; padding: 7px 0; font-size: 0.84rem;
+  color: var(--text-secondary); display: flex; gap: 10px; align-items: flex-start;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.step-list li:last-child { border-bottom: none; }
+.step-list li::before {
+  content: counter(step); display: inline-flex;
+  width: 22px; height: 22px; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+  background: var(--accent-soft); color: var(--accent-text);
+  border-radius: 50%; font-size: 0.7rem; font-weight: 600;
+}
+
+/* Summary box */
+.summary-box {
+  margin-top: 36px;
+  background: linear-gradient(135deg, rgba(91,139,247,0.08) 0%, rgba(60,207,126,0.04) 100%);
+  border: 1px solid rgba(91,139,247,0.12);
+  border-radius: var(--radius-lg); padding: 28px 30px;
+  text-align: center;
+}
+.summary-box h3 {
+  font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;
+  background: linear-gradient(135deg, var(--accent-text), var(--green));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.summary-box p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; max-width: 550px; margin: 0 auto; }
+
+/* Footer */
+footer {
+  border-top: 1px solid rgba(255,255,255,0.04);
+  text-align: center; padding: 36px 24px; 
+  font-size: 0.78rem; color: var(--text-tertiary);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .model-grid { grid-template-columns: 1fr; }
+  .cost-grid { grid-template-columns: 1fr; }
+  .hero { padding: 56px 20px 44px; }
+  .nav-inner { gap: 20px; }
+}
 </style>
 </head>
 <body>
 
+<!-- Hero -->
 <div class="hero">
-  <div class="hero-badge">🧩 商业拓展 · 2026年版</div>
-  <h1>3D打印玩偶摆摊 — 商业模式扩展 & 生产方式分析</h1>
-  <p>7种商业模式对比 · 家用打印机 vs 工厂代工 · 前期行动路线</p>
+  <div class="hero-badge">商业拓展 · 2026</div>
+  <h1>3D打印玩偶 · 商业模式与生产方式</h1>
+  <p>7种商业模式 · 家用vs工厂深度对比 · 从一台机器开始的行动路线</p>
 </div>
 
+<!-- Nav -->
 <div class="nav">
   <div class="nav-inner">
-    <a href="#models">🧩 商业模式（7种）</a>
-    <a href="#production">🏭 生产方式对比</a>
-    <a href="#verdict">✅ 建议路线</a>
+    <a href="#models">商业模式</a>
+    <a href="#production">生产方式</a>
+    <a href="#verdict">行动路线</a>
   </div>
 </div>
 
 <div class="container">
 
-<!-- Section 1: 7 Business Models -->
+<!-- Section 1: Business Models -->
 <div class="section" id="models">
-  <div class="section-title">🧩 7种商业模式</div>
-  <div class="section-desc">你提到的2种 + 我新增的5种，覆盖不同客单价、场景和利润空间</div>
+  <div class="section-header">
+    <div class="label">Models</div>
+    <div class="head-divider"></div>
+    <h2>7 种商业模式</h2>
+    <p>覆盖从每日稳定收入到节前爆发的完整产品矩阵</p>
+  </div>
 
   <div class="model-grid">
 
-    <div class="model-card existing">
-      <h3><span class="emoji">🎨</span> 接单定制</h3>
-      <div class="desc">家长/孩子发图或提需求，用3D建模软件定制模型，集中打印后交货。微信群接单为主。</div>
+    <div class="model-card">
+      <span class="tag-type existing">已有 · 定制</span>
+      <h3>🎨 接单定制</h3>
+      <div class="desc">家长/孩子发图提需求，3D建模后集中打印交货。微信群接单为主，每单需投入设计时间。</div>
       <div class="tag-row">
-        <span class="tag">客单价 ¥25-50</span>
-        <span class="tag orange">毛利 80%+</span>
-        <span class="tag">需建模能力</span>
+        <span class="tag blue">¥25-50/单</span>
+        <span class="tag amber">需建模能力</span>
       </div>
     </div>
 
-    <div class="model-card existing">
-      <h3><span class="emoji">🎁</span> 批量盲盒</h3>
-      <div class="desc">设计8-12款小玩偶，每只成本¥2-3，装入盲盒袋卖¥10-15。隐藏款增加收集欲。寒暑假批量备货。</div>
+    <div class="model-card">
+      <span class="tag-type existing">已有 · 批量</span>
+      <h3>🎁 批量盲盒</h3>
+      <div class="desc">设计8-12款小玩偶，成本¥2-3/只，盲盒袋卖¥10-15。隐藏款增加收集欲，寒暑假集中备货。</div>
       <div class="tag-row">
-        <span class="tag">客单价 ¥10-15</span>
+        <span class="tag blue">¥10-15/个</span>
         <span class="tag green">规模效应强</span>
-        <span class="tag orange">需款式设计</span>
+        <span class="tag amber">需款式设计</span>
       </div>
     </div>
 
-    <div class="model-card new">
-      <h3><span class="emoji">🖍️</span> DIY涂色套装</h3>
-      <div class="desc">打印白模玩偶（成本¥1.5-3）+ 配一小盒丙烯颜料 + 画笔 = ¥25-35套餐。孩子自己上色，体验感翻倍，家长更愿买单。</div>
+    <div class="model-card">
+      <span class="tag-type new">新增</span>
+      <h3>🖍️ DIY 涂色套装</h3>
+      <div class="desc">打印白模玩偶 + 配小盒丙烯颜料 + 画笔 = ¥25-35套餐。孩子自己上色，体验感翻倍。</div>
       <div class="tag-row">
-        <span class="tag">客单价 ¥25-35</span>
+        <span class="tag blue">¥25-35/套</span>
         <span class="tag green">复购率高</span>
         <span class="tag">省去后处理</span>
       </div>
     </div>
 
-    <div class="model-card new">
-      <h3><span class="emoji">📛</span> 姓名牌/文具</h3>
-      <div class="desc">定制姓名牌、笔筒、书签、尺子、手机支架。小学生每学期都需要换新文具，高频刚需。</div>
+    <div class="model-card">
+      <span class="tag-type new">新增</span>
+      <h3>📛 姓名牌 / 文具</h3>
+      <div class="desc">定制姓名牌、笔筒、书签、尺子、手机支架。每学期都换，高频刚需，稳定现金流。</div>
       <div class="tag-row">
-        <span class="tag">客单价 ¥5-15</span>
+        <span class="tag blue">¥5-15/件</span>
         <span class="tag green">高频复购</span>
-        <span class="tag">消耗量稳定</span>
+        <span class="tag">稳定消耗</span>
       </div>
     </div>
 
-    <div class="model-card new">
-      <h3><span class="emoji">🏫</span> 学校文创</h3>
-      <div class="desc">和学校或班级合作，做校徽小摆件、班级吉祥物、运动会奖牌。每个孩子都想拥有自己学校的周边。</div>
+    <div class="model-card">
+      <span class="tag-type new">新增</span>
+      <h3>🏫 学校文创</h3>
+      <div class="desc">校徽小摆件、班级吉祥物、运动会奖牌。和班级/家委会合作，情感溢价明显。</div>
       <div class="tag-row">
-        <span class="tag">客单价 ¥10-20</span>
+        <span class="tag blue">¥10-20/件</span>
         <span class="tag">批量出货</span>
         <span class="tag green">情感溢价</span>
       </div>
     </div>
 
-    <div class="model-card new">
-      <h3><span class="emoji">🔧</span> STEM科学教具</h3>
-      <div class="desc">打印齿轮联动模型、桥梁结构、拼装恐龙骨架、简易机器人外壳。卖给家长/培训机构用于STEAM教育。</div>
+    <div class="model-card">
+      <span class="tag-type new">新增</span>
+      <h3>🔧 STEM 科学教具</h3>
+      <div class="desc">齿轮联动、桥梁结构、拼装恐龙骨架。卖给家长和培训机构，教育方向的付费意愿高。</div>
       <div class="tag-row">
-        <span class="tag">客单价 ¥20-60</span>
-        <span class="tag green">家长付费意愿高</span>
-        <span class="tag">需配套说明书</span>
+        <span class="tag blue">¥20-60/套</span>
+        <span class="tag green">家长愿付费</span>
+        <span class="tag amber">需配说明书</span>
       </div>
     </div>
 
-    <div class="model-card new">
-      <h3><span class="emoji">🎄</span> 节日/毕业季礼盒</h3>
-      <div class="desc">儿童节主题盲盒、圣诞节限定套装、毕业季纪念品。场景化营销，节前2周集中出货，单价可翻倍。</div>
+    <div class="model-card">
+      <span class="tag-type new">新增</span>
+      <h3>🎄 节日 / 毕业季礼盒</h3>
+      <div class="desc">六一主题盲盒、圣诞限定、毕业纪念品。节前两周集中出货，单价可翻倍。</div>
       <div class="tag-row">
-        <span class="tag">客单价 ¥20-50</span>
-        <span class="tag orange">季节性强</span>
+        <span class="tag blue">¥20-50/套</span>
+        <span class="tag amber">季节性强</span>
         <span class="tag green">溢价空间大</span>
       </div>
     </div>
 
   </div>
 
-  <div class="note-box" style="margin-top:24px;">
-    💡 <strong>建议的组合打法：</strong>日常做 <strong>姓名牌/文具</strong>（稳定现金流）+ 周末做 <strong>DIY涂色套装</strong>（高毛利）+ 节前做 <strong>节日礼盒</strong>（爆发式收入）。三条腿走路比单做一种稳妥。
+  <div class="tip-box">
+    💡 <strong>推荐组合打法：</strong>日常跑 <strong>姓名牌/文具</strong>（稳定现金流）+ 周末推 <strong>DIY涂色套装</strong>（高毛利）+ 节前冲 <strong>节日礼盒</strong>（爆发式收入）。三条腿走路，比单做一种稳妥得多。
   </div>
 </div>
 
-<!-- Section 2: Production Method Comparison -->
+<!-- Section 2: Production -->
 <div class="section" id="production">
-  <div class="section-title">🏭 生产方式对比：家用打印机 vs 工厂代工</div>
-  <div class="section-desc">按你问的"成批做的话，买家用机还是找工厂"</div>
+  <div class="section-header">
+    <div class="label">Production</div>
+    <div class="head-divider"></div>
+    <h2>生产方式对比</h2>
+    <p>家用打印机 vs 工厂代工：按你问的"成批做怎么选"</p>
+  </div>
 
   <div class="table-wrap">
     <table>
       <thead>
         <tr>
-          <th style="width:24%">对比维度</th>
-          <th style="width:38%">🏠 家用3D打印机</th>
-          <th style="width:38%">🏭 找工厂代工</th>
+          <th style="width:22%">对比维度</th>
+          <th style="width:39%">🏠 家用3D打印机</th>
+          <th style="width:39%">🏭 找工厂代工</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><strong>初始投入</strong></td>
-          <td><span class="loser">¥1,300-2,600</span>（1-2台A1 mini）</td>
-          <td><span class="winner">¥0</span>（只需设计费）</td>
-        </tr>
-        <tr>
-          <td><strong>单件成本（PLA玩偶）</strong></td>
-          <td><span class="winner">~¥3-4</span>（含耗材+电费+折旧）</td>
-          <td><span class="loser">~¥5-15</span>（含人工+运费）</td>
-        </tr>
-        <tr>
-          <td><strong>最小起订量</strong></td>
-          <td><span class="winner">1件起</span>（无门槛）</td>
-          <td><span class="loser">100-500件起</span>（囤货风险）</td>
-        </tr>
-        <tr>
-          <td><strong>产能</strong></td>
-          <td><span class="loser">慢</span>（1台A1 mini一天打5-8只）</td>
-          <td><span class="winner">快</span>（工厂一天出几百上千件）</td>
-        </tr>
-        <tr>
-          <td><strong>产品质量</strong></td>
-          <td><span class="tie">一般</span>（FDM层纹可见，需打磨）</td>
-          <td><span class="winner">好</span>（光固化/工业级，表面光滑）</td>
-        </tr>
-        <tr>
-          <td><strong>款式灵活度</strong></td>
-          <td><span class="winner">高</span>（随时换款、小批量试水）</td>
-          <td><span class="loser">低</span>（换款要重开模具/重调参数）</td>
-        </tr>
-        <tr>
-          <td><strong>时间投入</strong></td>
-          <td><span class="loser">高</span>（换料、清理、维护机器）</td>
-          <td><span class="winner">低</span>（下单等物流，省心）</td>
-        </tr>
-        <tr>
-          <td><strong>库存压力</strong></td>
-          <td><span class="winner">无</span>（按需打印，零库存）</td>
-          <td><span class="loser">有</span>（一次生产几百件存货）</td>
-        </tr>
-        <tr>
-          <td><strong>适用场景</strong></td>
-          <td><span class="winner">小批量试水、定制单、日常补货</span></td>
-          <td><span class="winner">爆款批量生产、节日大单、盲盒</span></td>
-        </tr>
+        <tr><td>初始投入</td><td class="loser">¥1,300-2,600（1-2台A1 mini）</td><td class="winner">¥0（只需设计费）</td></tr>
+        <tr><td>单件成本</td><td class="winner">~¥3-4（含耗材+电费+折旧）</td><td class="loser">~¥5-15（含人工+运费）</td></tr>
+        <tr><td>最小起订量</td><td class="winner">1件起，无门槛</td><td class="loser">100-500件起，囤货风险</td></tr>
+        <tr><td>产能</td><td class="loser">慢，一台一天打5-8只</td><td class="winner">快，一天出几百上千件</td></tr>
+        <tr><td>产品质量</td><td class="tie">一般，FDM层纹需打磨</td><td class="winner">好，光固化表面光滑</td></tr>
+        <tr><td>款式灵活度</td><td class="winner">高，随时换款试水</td><td class="loser">低，换款成本高</td></tr>
+        <tr><td>时间投入</td><td class="loser">高，需换料维护</td><td class="winner">低，下单等物流</td></tr>
+        <tr><td>库存压力</td><td class="winner">无，按需打印零库存</td><td class="loser">有，一批几百件存货</td></tr>
+        <tr><td>适用场景</td><td class="winner">试水、定制、日常补货</td><td class="winner">爆款批量、节日大单</td></tr>
       </tbody>
     </table>
   </div>
 
-  <!-- Combined approach -->
-  <div class="cost-grid" style="margin-top:24px;">
-
-    <div class="cost-card" style="border-top:4px solid #d93025;">
-      <h3>❌ 纯家用（不推荐）</h3>
+  <div class="cost-grid" style="margin-top:20px;">
+    <div class="cost-card" style="border-top-color:var(--red);">
+      <h3>❌ 纯家用的问题</h3>
       <ul>
-        <li>✗ 一台机器一天只能打5-8只，不够卖的</li>
-        <li>✗ 要买3-5台才够批量，投入¥4000-6500</li>
-        <li>✗ 机器噪音大，放家里影响生活</li>
-        <li>✗ 需要自己维护、调试、换料</li>
-        <li>✗ 产能瓶颈明显，无法突增</li>
+        <li>一天只打5-8只，爆单时根本不够卖</li>
+        <li>想提产能得买3-5台，投入¥4000+</li>
+        <li>机器噪音大，占地方，要自己维护</li>
+        <li>产能瓶颈明显，无法突击出货</li>
       </ul>
     </div>
-
-    <div class="cost-card" style="border-top:4px solid #d93025;">
-      <h3>❌ 纯找工厂（也不够灵活）</h3>
+    <div class="cost-card" style="border-top-color:var(--red);">
+      <h3>❌ 纯工厂的问题</h3>
       <ul>
-        <li>✗ 最小起订量100-500，卖不完就是库存</li>
-        <li>✗ 单件成本比家用高（工厂要利润）</li>
-        <li>✗ 定制单无法做（一件起订工厂不接）</li>
-        <li>✗ 款式切换慢，上新周期长</li>
-        <li>✗ 没有"摆摊展示机器"的引流效果</li>
+        <li>最小起订100-500件，卖不出去是库存</li>
+        <li>单件成本反而比家用高（工厂要利润）</li>
+        <li>定制单做不了（一件起订不接）</li>
+        <li>款式切换慢，上新周期长</li>
       </ul>
     </div>
-
   </div>
 
-  <div class="warning-box" style="margin-top:18px;">
-    ⚡ <strong>最佳方案混合打法：</strong>买1台A1 mini（¥1299）放家里，做三件事——① 日常打姓名牌/文具等小件，接定制单；② 测试新款，验证市场反应；③ 摆摊时当展示道具（机器运转本身就吸引孩子）。一旦某款验证是爆款（日销20+），立刻找工厂批量生产赚规模利润。家用的灵活 + 工厂的规模，两条腿走路。
+  <div class="highlight-box">
+    ⚡ <strong>最佳方案：混合打法</strong> — 买1台 A1 mini（¥1299）放家里做三件事：① 日常打小件接定制；② 测试新款验证市场；③ 摆摊时当展示道具（机器运转本身就吸引孩子）。一旦某款验证是爆款（日销20+），立刻找工厂批量赚规模利润。家用做<span class="accent">灵活</span>，工厂做<span class="accent">规模</span>，两条腿走路。
   </div>
 </div>
 
-<!-- Section 3: Recommended Path -->
+<!-- Section 3: Roadmap -->
 <div class="section" id="verdict">
-  <div class="section-title">✅ 行动路线建议</div>
-  <div class="section-desc">从1台机器起步，滚雪球式发展</div>
+  <div class="section-header">
+    <div class="label">Roadmap</div>
+    <div class="head-divider"></div>
+    <h2>行动路线建议</h2>
+    <p>从一台机器起步，滚雪球式发展</p>
+  </div>
 
-  <div class="verdict-box">
-    <h3>📋 第一阶段：验证模式（第1-2个月）</h3>
-    <ol class="step-list" style="list-style:none;">
-      <li>买1台 <strong>Bambu Lab A1 mini</strong>（¥1299），开箱即用</li>
-      <li>从 <strong>Thingiverse / Printables</strong> 下载5-10款热门小玩偶模型（免费）</li>
-      <li>打印第一批样品，放在附近文具店寄卖，或放学时间段摆摊测反应</li>
-      <li>建立<strong>家长微信群</strong>，首批顾客拉进群</li>
+  <div class="verdict-box" style="border-left-color:var(--accent);">
+    <h3><span style="color:var(--accent-text);font-weight:700;">01</span> 验证模式（第1-2个月）</h3>
+    <ol class="step-list">
+      <li>买1台 <strong style="color:var(--text);">Bambu Lab A1 mini</strong>（¥1299），开箱即用</li>
+      <li>从 Thingiverse / Printables 下载 5-10 款热门小玩偶模型（免费）</li>
+      <li>打印样品，放在附近文具店寄卖，或放学时间段摆摊测反应</li>
+      <li>建立 <strong style="color:var(--text);">家长微信群</strong>，首批顾客拉进群</li>
     </ol>
   </div>
 
-  <div class="verdict-box" style="margin-top:16px;border-left-color:#176b2e;">
-    <h3>📋 第二阶段：测试爆款（第2-3个月）</h3>
-    <ol class="step-list" style="list-style:none;" start="5">
-      <li>根据群内反馈和销售数据，找出<strong>卖最好的3-5款</strong></li>
-      <li>尝试<strong>DIY涂色套装</strong>（白模+颜料），测试是否比成品更好卖</li>
-      <li>把姓名牌/文具作为<strong>长期稳定款</strong>，每日固定产出</li>
+  <div class="verdict-box" style="border-left-color:var(--green);">
+    <h3><span style="color:var(--green);font-weight:700;">02</span> 测试爆款（第2-3个月）</h3>
+    <ol class="step-list" start="5">
+      <li>根据群内反馈和销售数据，找出 <strong style="color:var(--text);">卖最好的3-5款</strong></li>
+      <li>尝试 DIY涂色套装（白模+颜料），测试是否比成品更好卖</li>
+      <li>把姓名牌/文具作为 <strong style="color:var(--text);">长期稳定款</strong>，每日固定产出</li>
     </ol>
   </div>
 
-  <div class="verdict-box" style="margin-top:16px;border-left-color:#1a56db;">
-    <h3>📋 第三阶段：批量生产（第3-6个月）</h3>
-    <ol class="step-list" style="list-style:none;" start="8">
-      <li>确认<strong>至少1-2款爆款</strong>（月销100+的款）</li>
-      <li>联系1688或本地3D打印工厂（在"白令三维"等平台询价），计算批量成本</li>
+  <div class="verdict-box" style="border-left-color:var(--accent);">
+    <h3><span style="color:var(--accent-text);font-weight:700;">03</span> 批量生产（第3-6个月）</h3>
+    <ol class="step-list" start="8">
+      <li>确认 <strong style="color:var(--text);">至少1-2款爆款</strong>（月销100+）</li>
+      <li>联系1688或"白令三维"等平台询价，算批量成本</li>
       <li>如果工厂成本 ≤ 家用成本×1.5，果断找工厂批量做</li>
-      <li>家用机回归"研发+定制"角色，工厂负责"爆款批量"</li>
+      <li>家用机回归 <strong style="color:var(--text);">研发+定制</strong> 角色，工厂负责爆款批量</li>
     </ol>
   </div>
 
-  <div class="verdict-box" style="margin-top:16px;border-left-color:#8a5a00;">
-    <h3>📋 第四阶段：规模化（第6-12个月）</h3>
-    <ol class="step-list" style="list-style:none;" start="12">
-      <li>推出 <strong>节日限定盲盒系列</strong>（春节、六一、圣诞），工厂批量+线上线下渠道铺货</li>
-      <li>和 <strong>3-5所学校周边文具店/小卖部</strong> 建立稳定供货关系</li>
-      <li>尝试拓展 <strong>STEM教具套装</strong> 到培训机构/家委会渠道</li>
-      <li>月收入目标：¥5000-15000（保守-乐观）</li>
+  <div class="verdict-box" style="border-left-color:var(--amber);">
+    <h3><span style="color:var(--amber);font-weight:700;">04</span> 规模化（第6-12个月）</h3>
+    <ol class="step-list" start="12">
+      <li>推出 <strong style="color:var(--text);">节日限定盲盒系列</strong>，工厂批量+多渠道铺货</li>
+      <li>和 3-5 所学校周边文具店建立稳定供货关系</li>
+      <li>尝试拓展 <strong style="color:var(--text);">STEM教具套装</strong> 到培训机构/家委会</li>
+      <li>月收入目标：<strong style="color:var(--green);">¥5000-15000</strong>（保守-乐观）</li>
     </ol>
   </div>
 
-  <div class="note-box" style="margin-top:24px;">
-    📌 <strong>一句话总结：</strong>家用机做"研发+定制+引流"，工厂做"爆款批量"。一台A1 mini花¥1299起步，先跑通最小闭环。不用一开始就想着大规模，<strong>先卖出去一只赚¥16，卖100只就是¥1600。从1开始，别从1000开始。</strong>
+  <div class="summary-box">
+    <h3>从1开始，别从1000开始</h3>
+    <p>家用机做研发+定制+引流，工厂做爆款批量。一台 A1 mini 花 ¥1299 起步，先跑通最小闭环。<br>卖出一只赚 ¥16，卖100只就是 ¥1600。</p>
   </div>
+
 </div>
 
-</div><!-- end container -->
+</div>
 
 <footer>
-  <p>数据来源：市场调研、Bambu Lab/创想三维官网、1688代工厂询价（2025-2026）</p>
-  <p style="margin-top:6px;">⚠️ 本分析仅供参考，实际利润以市场验证为准</p>
-  <p style="margin-top:12px;">📁 项目：3rd-career-exploration / 3d-printed-dolls-stall · 更新时间：2026年5月</p>
+  <p>数据来源：Bambu Lab / 创想三维 / Anycubic 官网 · 1688 代工厂询价（2025-2026）</p>
+  <p>⚠ 本分析仅供参考，实际利润以市场验证为准</p>
+  <p>3rd-career-exploration / 3d-printed-dolls-stall · 2026.05</p>
 </footer>
 
 </body>
