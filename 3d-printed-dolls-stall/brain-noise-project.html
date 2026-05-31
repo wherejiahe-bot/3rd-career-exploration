@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>关掉大脑噪音 · 项目企划</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-primary: #0e0e10;
+  --bg-secondary: #141416;
+  --bg-card: rgba(255,255,255,0.04);
+  --bg-glass: rgba(255,255,255,0.06);
+  --glass-border: rgba(255,255,255,0.08);
+  --text-primary: #f5f5f7;
+  --text-secondary: #a1a1a6;
+  --text-tertiary: #6e6e73;
+  --accent: #5e9eff;
+  --accent-soft: rgba(94,158,255,0.12);
+  --accent-glow: rgba(94,158,255,0.06);
+  --green: #30d158;
+  --amber: #ff9f0a;
+  --red: #ff453a;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Noto Sans SC", "PingFang SC", system-ui, -apple-system, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* SVG Noise overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  pointer-events: none;
+}
+
+/* ===== Hero ===== */
+.hero {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 20px 60px;
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 800px;
+  height: 800px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 100px;
+  padding: 6px 18px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  letter-spacing: 0.03em;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--accent), #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--text-secondary);
+  max-width: 580px;
+  position: relative;
+  z-index: 1;
+  line-height: 1.6;
+}
+.hero-cta {
+  margin-top: 36px;
+  display: flex;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 100px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.25s;
+  cursor: default;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(94,158,255,0.2);
+}
+.btn-ghost {
+  background: var(--bg-glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  color: var(--text-primary);
+}
+
+/* ===== Nav ===== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(14,14,16,0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--glass-border);
+}
+.nav-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.nav a {
+  text-decoration: none;
+  color: var(--text-tertiary);
+  font-size: 0.82rem;
+  padding: 14px 16px;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+.nav a:hover {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent);
+}
+
+/* ===== Container ===== */
+.container { max-width: 920px; margin: 0 auto; padding: 0 20px; }
+.container-wide { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+/* ===== Section ===== */
+.section { padding: var(--spacing-3xl) 0; }
+.section-title {
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+.section-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-xl);
+  max-width: 640px;
+}
+.section-title-line {
+  width: 40px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+/* ===== Glass Card ===== */
+.glass-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+/* ===== Grid ===== */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+/* ===== Customer Profile Cards ===== */
+.profile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.profile-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  position: relative;
+  overflow: hidden;
+}
+.profile-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+}
+.profile-card:nth-child(1)::before { background: var(--accent); }
+.profile-card:nth-child(2)::before { background: var(--green); }
+.profile-card:nth-child(3)::before { background: var(--amber); }
+.profile-card:nth-child(4)::before { background: #bf5af2; }
+.profile-card:nth-child(5)::before { background: var(--red); }
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+.profile-card:nth-child(1) .profile-icon { background: rgba(94,158,255,0.15); }
+.profile-card:nth-child(2) .profile-icon { background: rgba(48,209,88,0.15); }
+.profile-card:nth-child(3) .profile-icon { background: rgba(255,159,10,0.15); }
+.profile-card:nth-child(4) .profile-icon { background: rgba(191,90,242,0.15); }
+.profile-card:nth-child(5) .profile-icon { background: rgba(255,69,58,0.15); }
+.profile-card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
+.profile-card p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* ===== Pricing ===== */
+.pricing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.pricing-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s;
+}
+.pricing-card.featured {
+  border-color: var(--accent);
+  background: rgba(94,158,255,0.06);
+}
+.pricing-card.featured::after {
+  content: '推荐';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 2px 10px;
+  border-radius: 100px;
+  font-weight: 600;
+}
+.pricing-card:hover { transform: translateY(-4px); }
+.pricing-name { font-size: 0.85rem; color: var(--text-tertiary); margin-bottom: 4px; }
+.pricing-amount { font-size: 2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+.pricing-amount span { font-size: 0.9rem; font-weight: 400; color: var(--text-tertiary); }
+.pricing-desc { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 16px; }
+.pricing-features { list-style: none; font-size: 0.82rem; text-align: left; }
+.pricing-features li { padding: 6px 0; color: var(--text-secondary); display: flex; gap: 8px; align-items: center; }
+.pricing-features li::before { content: '✓'; color: var(--green); font-weight: 700; }
+
+/* ===== Video Topics ===== */
+.topic-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.topic-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.topic-card:hover {
+  border-color: rgba(94,158,255,0.2);
+}
+.topic-header {
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+.topic-number {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.topic-tags { display: flex; gap: 6px; flex-shrink: 0; }
+.topic-tag {
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.06);
+  color: var(--text-tertiary);
+  border: 1px solid var(--glass-border);
+}
+.topic-tag.daily { border-color: rgba(94,158,255,0.3); color: var(--accent); }
+.topic-tag.trend { border-color: rgba(48,209,88,0.3); color: var(--green); }
+.topic-tag.social { border-color: rgba(255,159,10,0.3); color: var(--amber); }
+.topic-tag.pain { border-color: rgba(255,69,58,0.3); color: var(--red); }
+.topic-title { font-size: 0.9rem; font-weight: 500; flex: 1; }
+.topic-body {
+  padding: 0 var(--spacing-lg) var(--spacing-md);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.topic-body .label { color: var(--text-tertiary); font-size: 0.75rem; font-weight: 600; margin-top: 8px; }
+.topic-body .label:first-child { margin-top: 0; }
+.topic-body .quote {
+  background: rgba(94,158,255,0.06);
+  border-left: 2px solid var(--accent);
+  padding: 8px 12px;
+  border-radius: 0 6px 6px 0;
+  margin: 8px 0;
+  font-style: italic;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+.topic-body .script {
+  background: rgba(255,255,255,0.03);
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin: 8px 0;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+.topic-body .science-ref {
+  color: var(--text-tertiary);
+  font-size: 0.75rem;
+  margin-top: 6px;
+}
+
+/* ===== Other Sections ===== */
+.info-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.info-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+}
+.info-card h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.info-card ul { list-style: none; }
+.info-card ul li {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  padding: 5px 0;
+  padding-left: 16px;
+  position: relative;
+}
+.info-card ul li::before {
+  content: '·';
+  position: absolute;
+  left: 4px;
+  color: var(--accent);
+}
+
+/* ===== Timeline / Roadmap ===== */
+.roadmap { display: flex; flex-direction: column; gap: 12px; }
+.roadmap-item {
+  display: flex; gap: 16px;
+  background: var(--bg-glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  align-items: center;
+}
+.roadmap-step {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700;
+  flex-shrink: 0;
+}
+.roadmap-content { flex: 1; }
+.roadmap-content h4 { font-size: 0.88rem; font-weight: 600; }
+.roadmap-content p { font-size: 0.8rem; color: var(--text-secondary); }
+
+/* ===== Footer ===== */
+footer {
+  border-top: 1px solid var(--glass-border);
+  padding: var(--spacing-2xl) 20px;
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 0.78rem;
+}
+footer a { color: var(--text-secondary); text-decoration: none; }
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .hero { min-height: 70vh; padding: 60px 16px 40px; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .profile-grid { grid-template-columns: 1fr; }
+  .nav-inner { padding: 0 12px; }
+  .nav a { padding: 12px 12px; font-size: 0.78rem; }
+}
+
+/* ===== Detail toggle ===== */
+.detail-toggle { display: none; }
+.detail-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.detail-toggle:checked ~ .detail-content { max-height: 2000px; }
+.detail-toggle:checked ~ .topic-header .topic-arrow { transform: rotate(180deg); }
+</style>
+</head>
+<body>
+
+<!-- ===== Hero ===== -->
+<div class="hero">
+  <div class="hero-badge">🧘 项目企划 · 2026版</div>
+  <h1>
+    关掉大脑里的<br class="mobile-only">
+    <span class="highlight">噪音</span>
+  </h1>
+  <p class="hero-sub">
+    向上的路只有一条，但岔路很多。<br>
+    我们帮那些方向对了、但还在绕路的人，找到那条直达的路。
+  </p>
+  <div class="hero-cta">
+    <span class="btn btn-primary">客户画像 · 交付 · 定价 · 内容</span>
+    <span class="btn btn-ghost">基于霎哈嘉 · 面向所有人</span>
+  </div>
+</div>
+
+<!-- ===== Nav ===== -->
+<div class="nav">
+  <div class="nav-inner">
+    <a href="#concept">🎯 核心理念</a>
+    <a href="#customers">👥 客户画像</a>
+    <a href="#delivery">📦 交付方式</a>
+    <a href="#pricing">💰 定价</a>
+    <a href="#courses">📚 课程</a>
+    <a href="#videos">🎬 短视频选题</a>
+    <a href="#roadmap">🛤️ 行动路线</a>
+  </div>
+</div>
+
+<div class="container-wide">
+
+<!-- ===== Section 1: Concept ===== -->
+<div class="section" id="concept">
+  <div class="section-title-line"></div>
+  <h2 class="section-title">🎯 核心理念</h2>
+  <p class="section-desc">"关小脑中的噪音"——用最现代的语言，讲最古老的智慧</p>
+
+  <div class="grid-2">
+    <div class="glass-card">
+      <h3 style="font-size:1.05rem;font-weight:600;margin-bottom:12px;">一句话说清我们做什么</h3>
+      <p style="font-size:0.88rem;color:var(--text-secondary);line-height:1.8;">
+        现代人最大的问题不是信息太少，而是<strong style="color:var(--text-primary);">脑子里收不住</strong>。<br><br>
+        白天想太多、晚上睡不着、焦虑停不下来、明明没发生什么事却总觉得累——<br>
+        这不是"心理问题"，是<strong style="color:var(--accent);">大脑开关没学会关</strong>。<br><br>
+        我们做的事情很简单：<br>
+        帮他找到那个"收"的感觉，从脑子的噪音里走出来，回到自己身上。
+      </p>
+    </div>
+    <div class="glass-card">
+      <h3 style="font-size:1.05rem;font-weight:600;margin-bottom:12px;">为什么是这个切入点？</h3>
+      <p style="font-size:0.88rem;color:var(--text-secondary);line-height:1.8;">
+        <strong style="color:var(--text-primary);">"关小噪音"不是冥想课，是生存技能。</strong><br><br>
+        ⚡ <strong style="color:var(--text-primary);">科学背书</strong>：默认模式网络（DMN）过度活跃=内耗。冥想=训练DMN安静下来。<br><br>
+        🧘 <strong style="color:var(--text-primary);">霎哈嘉的答案</strong>：Shri Mataji说"无思虑的觉知"（Thoughtless Awareness）不是失去意识，是注意力可以<em>放下</em>。<br><br>
+        🎯 <strong style="color:var(--text-primary);">受众极广</strong>：不分年龄性别，人人都被脑子累过。
+      </p>
+    </div>
+  </div>
+
+  <div class="glass-card" style="margin-top:16px;text-align:center;padding:var(--spacing-lg);">
+    <p style="font-size:0.85rem;color:var(--text-secondary);">
+      <strong style="color:var(--accent);">润色版核心理念：</strong><br><br>
+      "向上的路只有一条，但岔路很多。<br>
+      我们帮那些方向对了、但还在绕路的人，找到那条直达的路。<br>
+      不绕弯子、不卖玄学、不给答案——只帮你把心里的噪音关小，<br>
+      然后你自己就能听清楚该往哪走。"
+    </p>
+  </div>
+</div>
+
+<!-- ===== Section 2: Target Customers ===== -->
+<div class="section" id="customers">
+  <div class="section-title-line"></div>
+  <h2 class="section-title">👥 目标客户画像</h2>
+  <p class="section-desc">基于咨询经验的五类核心人群，他们不需要"算命"，需要"脑子能停下来"</p>
+
+  <div class="profile-grid">
+    <div class="profile-card">
+      <div class="profile-icon">🧠</div>
+      <h4>脑子收不住的人</h4>
+      <p>心里有事放不下，念头像弹幕一样刷屏。想停停不下来，越控制越焦虑。<br><br>
+      <strong style="color:var(--text-primary);">痛点</strong>：不是不懂道理，是"知道但不做不了主"。</p>
+    </div>
+    <div class="profile-card">
+      <div class="profile-icon">🌙</div>
+      <h4>睡不好的人</h4>
+      <p>大脑到点交不了班。躺下脑子自动复盘今天、预演明天，身体累但脑子还在跑。<br><br>
+      <strong style="color:var(--text-primary);">痛点</strong>：试过白噪音、褪黑素、冥想APP，都没用。</p>
+    </div>
+    <div class="profile-card">
+      <div class="profile-icon">👶</div>
+      <h4>焦虑孩子的家长</h4>
+      <p>家长自己的频率会传递给孩子。你以为你在为孩子焦虑，其实是你们两个的频率共振了。<br><br>
+      <strong style="color:var(--text-primary);">痛点</strong>：越想管好孩子，自己越绷，孩子越不听话。</p>
+    </div>
+    <div class="profile-card">
+      <div class="profile-icon">💔</div>
+      <h4>关系中内耗的人</h4>
+      <p>状态对了话自然对。但状态不对的时候，你做什么都是错的。<br><br>
+      <strong style="color:var(--text-primary);">痛点</strong>：学了一堆沟通技巧，心里不平静时一句都用不上。</p>
+    </div>
+    <div class="profile-card">
+      <div class="profile-icon">🎒</div>
+      <h4>心里挂着事的人</h4>
+      <p>什么事都放不下。工作的事、家里的事、别人的事、未来的事——背着一座山过每一天。<br><br>
+      <strong style="color:var(--text-primary);">痛点</strong>：理性上知道"没必要"，但身体放不下。</p>
+    </div>
+  </div>
+
+  <div class="glass-card" style="margin-top:16px;">
+    <h3 style="font-size:0.95rem;font-weight:600;margin-bottom:8px;">共同特征</h3>
+    <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.7;">
+      ✅ 都试过一些方法（看书、听课、冥想APP、心理咨询）但效果有限<br>
+      ✅ 都隐约感觉到"答案不在外面"<br>
+      ✅ 都对"玄学"有戒心，但对"科学+体验"的组合可以接受<br>
+      ✅ 付费意愿：愿意为"真的有用"付费，不愿意为"听着很有道理"付费<br>
+      ✅ 性别分布：女性 60-70%，男性 30-40%（男性需要针对性内容触达）
+    </p>
+  </div>
+</div>
+
+<!-- ===== Section 3: Delivery ===== -->
+<div class="section" id="delivery">
+  <div class="section-title-line"></div>
+  <h2 class="section-title">📦 交付方式</h2>
+  <p class="section-desc">三层交付体系：引流 → 咨询 → 深度陪伴</p>
+
+  <div class="grid-3">
+    <div class="glass-card" style="text-align:center;">
+      <div style="font-size:2rem;margin-bottom:12px;">🎬</div>
+      <h3 style="font-size:1rem;font-weight:600;margin-bottom:8px;">短视频内容</h3>
+      <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.7;">
+        <strong>定位：</strong>不做"霎哈嘉科普"，做"现代人收不住"的解药<br>
+        <strong>平台：</strong>抖音/视频号/小红书<br>
+        <strong>风格：</strong>日常场景切入 → 科学/神经科学背书 → 实操方法<br>
+        <strong>频率：</strong>每周3-5条<br>
+        <strong>目的：</strong>建立"这个人说话不一样"的认知，自然引流咨询
+      </p>
+    </div>
+    <div class="glass-card" style="text-align:center;border-color:var(--accent);">
+      <div style="font-size:2rem;margin-bottom:12px;">💬</div>
+      <h3 style="font-size:1rem;font-weight:600;margin-bottom:8px;color:var(--accent);">一对一咨询</h3>
+      <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.7;">
+        <strong>主力产品</strong><br><br>
+        <strong>时长：</strong>60分钟/次<br>
+        <strong>流程：</strong>接住→带体验→给方法→留门<br>
+        <strong>结构：</strong><br>
+        前5分钟：听他讲，不分析<br>
+        5-15分钟：带他体验"注意力可以放下来"<br>
+        15-30分钟：给他3件事带回去做（能量清理）<br>
+        30-50分钟：听反馈，继续深入<br>
+        最后10分钟：收尾，留一个自然入口<br><br>
+        <strong>附赠：</strong>免费教霎哈嘉冥想方法（不自称"霎哈嘉"，叫"静坐法"）
+      </p>
+    </div>
+    <div class="glass-card" style="text-align:center;">
+      <div style="font-size:2rem;margin-bottom:12px;">📖</div>
+      <h3 style="font-size:1rem;font-weight:600;margin-bottom:8px;">系统课程</h3>
+      <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.7;">
+        <strong>线上录播+社群：</strong>"7天关掉大脑噪音"入门课<br>
+        <strong>深度课：</strong>"21天觉知力训练营"<br>
+        <strong>直播课：</strong>每周一次带练冥想<br>
+        <strong>未来方向：</strong>导师线下工作坊<br>
+        <strong>附赠内容：</strong>每天一道能量清理方法
+      </p>
+    </div>
+  </div>
+
+  <div class="glass-card" style="margin-top:16px;">
+    <h3 style="font-size:0.95rem;font-weight:600;margin-bottom:8px;">咨询中的霎哈嘉元素（去宗教化包装）</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.82rem;color:var(--text-secondary);">
+      <div>
+        <p style="color:var(--text-primary);font-weight:600;margin-bottom:4px;">对外说的话</p>
+        <p>"有一个很简单的方法——把手放在这里，闭上眼睛，感受一下。"</p>
+        <p>"你不需要相信什么，试一下就好。"</p>
+        <p>"注意力可以放下来的，不是控制它，是让它休息。"</p>
+      </div>
+      <div>
+        <p style="color:var(--text-primary);font-weight:600;margin-bottom:4px;">实际上是</p>
+        <p>引导体验双手上的凉风（生命能量）</p>
+        <p>无条件的体验式引导</p>
+        <p>无思虑觉知 / 冥想</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Section 4: Pricing ===== -->
+<div class="section" id="pricing">
+  <div class="section-title-line"></div>
+  <h2 class="section-title">💰 定价策略</h2>
+  <p class="section-desc">参考你之前的玄学咨询收费 + 市场调研，分三层定价</p>
+
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-name">入门体验</div>
+      <div class="pricing-amount">¥99 <span>/ 次</span></div>
+      <div class="pricing-desc">30分钟轻体验，引流用</div>
+      <ul class="pricing-features">
+        <li>了解你的"噪音"类型</li>
+        <li>一次静坐体验引导</li>
+        <li>一个回家能做的能量练习</li>
+        <li style="color:var(--green);">含免费冥想基础教学</li>
+      </ul>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-name">深度咨询</div>
+      <div class="pricing-amount">¥399 <span>/ 次</span></div>
+      <div class="pricing-desc">60分钟完整版，主力产品</div>
+      <ul class="pricing-features">
+        <li>完整三层咨询流程</li>
+        <li>3个定制化的日常练习</li>
+        <li>7天微信跟进</li>
+        <li style="color:var(--green);">赠冥想体系教学（市价¥200+）</li>
+        <li style="color:var(--green);">赠能量清理方法包</li>
+      </ul>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-name">深度陪伴</div>
+      <div class="pricing-amount">¥1,299 <span>/ 月</span></div>
+      <div class="pricing-desc">4次咨询+每日跟踪</div>
+      <ul class="pricing-features">
+        <li>每周一次60分钟咨询</li>
+        <li>每日文字跟进/能量检查</li>
+        <li>紧急时优先回复</li>
+        <li style="color:var(--green);">赠21天课程全部内容</li>
+        <li style="color:var(--green);">每周一次带练冥想</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="glass-card" style="margin-top:16px;">
+    <h3 style="font-size:0.95rem;font-weight:600;margin-bottom:8px;">课程定价参考</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;font-size:0.82rem;color:var(--text-secondary);">
+      <div>
+        <p style="color:var(--text-primary);font-weight:600;">入门课"7天关掉噪音"</p>
+        <p>¥199 录播+社群</p>
+        <p style="font-size:0.75rem;">每天10分钟练习</p>
+      </div>
+      <div>
+        <p style="color:var(--text-primary);font-weight:600;">深度课"21天觉知力训练营"</p>
+        <p>¥599 直播+社群+1v1</p>
+        <p style="font-size:0.75rem;">含冥想教学+能量清理</p>
+      </div>
+      <div>
+        <p style="color:var(--text-primary);font-weight:600;">免费内容</p>
+        <p>每周直播带练冥想</p>
+        <p style="font-size:0.75rem;">引流用，建立信任</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Section 5: Courses ===== -->
+<div class="section" id="courses">
+  <div class="section-title-line"></div>
+  <h2 class="section-title">📚 课程开发思路</h2>
+  <p class="section-desc">从"脑子收不住"到"无思虑的觉知"——循序渐进</p>
+
+  <div class="glass-card" style="margin-bottom:12px;">
+    <h3 style="font-size:0.95rem;font-weight:600;margin-bottom:10px;">课程一：7天 · 关小大脑噪音（入门 · ¥199）</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.82rem;color:var(--text-secondary);">
+      <div>
+        <p style="color:var(--text-primary);">第1天：认识你的"噪音"</p>
+        <p style="color:var(--text-primary);">第2天：第一次体验"注意力放下来"</p>
+        <p style="color:var(--text-primary);">第3天：晚上怎么让大脑交班</p>
+        <p style="color:var(--text-primary);">第4天：焦虑时的3分钟紧急关机</p>
+      </div>
+      <div>
+        <p style="color:var(--text-primary);">第5天：睡前的"清空"练习</p>
+        <p style="color:var(--text-primary);">第6天：怎么秒回清明状态</p>
+        <p style="color:var(--text-primary);">第7天：整合——建立你的日常练习</p>
+      </div>
+    </div>
+    <p style="font-size:0.78rem;color:var(--text-tertiary);margin-top:8px;">每课包含：5分钟理论（神经科学+当天的轮穴）→ 10分钟带练 → 回家作业</p>
+  </div>
+
+  <div class="glass-card" style="margin-bottom:12px;">
+    <h3 style="font-size:0.95rem;font-weight:600;margin-bottom:10px;">课程二：21天觉知力训练营（深度 · ¥599）</h3>
+    <p style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:10px;">
+      三阶段递进：<strong style="color:var(--text-primary);">觉察</strong>（第1-7天）→ <strong style="color:var(--text-primary);">清理</strong>（第8-14天）→ <strong style="color:var(--text-primary);">稳固</strong>（第15-21天）
+    </p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:0.82rem;color:var(--text-secondary);">
+      <div>
+        <p style="color:var(--text-primary);font-weight:500;">Week 1：觉察</p>
+        <p>识别自己的"噪音模式"<br>区分想法和事实<br>学会看念头不跟它走</p>
+      </div>
+      <div>
+        <p style="color:var(--text-primary);font-weight:500;">Week 2：清理</p>
+        <p>能量清理方法系统教学<br>消除左脉/右脉的阻塞<br>建立日常练习习惯</p>
+      </div>
+      <div>
+        <p style="color:var(--text-primary);font-weight:500;">Week 3：稳固</p>
+        <p>中脉稳定<br>把觉知力融入日常生活<br>学会"随时reset"</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="glass-card">
+    <h3 style="font-size:0.95rem;font-weight:600;margin-bottom:10px;">课程三：导师线下工作坊（高阶 · 待定）</h3>
+    <p style="font-size:0.82rem;color:var(--text-secondary);">
+      聚焦教人"成为能教别人的人"。适合：心理咨询师、瑜伽教练、教育工作者。<br>
+      两天实战。内容涵盖：能量感知训练、引导他人体验无思虑、如何识别情绪模式。<br>
+      <span style="color:var(--text-tertiary);">定价参考：¥2,980-3,980</span>
+    </p>
+  </div>
+</div>
+
+<!-- ===== Section 6: Video Topics ===== -->
+<div class="section" id="videos">
+  <div class="section-title-line"></div>
+  <h2 class="section-title">🎬 20个短视频选题方案</h2>
+  <p class="section-desc">日常选题 · 热门选题 · 社会话题 · 痛点话题 · 含Shri Mataji指示 + 5分钟保险话术</p>
+
+  <div class="topic-grid">
+
+    <!-- 1 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t1" class="detail-toggle" checked>
+      <label for="t1" class="topic-header">
+        <span class="topic-number">01</span>
+        <span class="topic-title">你觉得自己脑子转太快、停不下来？</span>
+        <span class="topic-tags"><span class="topic-tag pain">痛点</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"不费力冥想"——你不需要做什么，只要把自己向生命能量敞开。最好的方式是不做任何努力。（1980-01-01）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头15秒】"你有没有这种感觉——脑子像一个坏掉的遥控器，永远在切频道？<br>
+你明明想休息，脑子里还在复盘白天说错的话、预演明天的事。这不是你不够自律，是你的大脑默认模式网络（DMN）太活跃了。"<br><br>
+【科学部分】"神经科学发现，人什么都不做的时候，大脑里的DMN区域反而最活跃——这就是你'脑子停不下来'的生理原因。全球有40%的人成年后一直处于这种状态。"<br><br>
+【方法部分】"有一个很简单的方法。不需要你相信什么，也不需要特殊的姿势。左手朝上放在膝盖上，右手轻轻按在地面上或桌面上，闭上眼睛——脑子还在跑没关系，你只要把注意力放在双手上就好。静下来坐一分钟。"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t2" class="detail-toggle">
+      <label for="t2" class="topic-header">
+        <span class="topic-number">02</span>
+        <span class="topic-title">晚上刷手机到深夜，不是因为你不想睡</span>
+        <span class="topic-tags"><span class="topic-tag pain">痛点</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"冥想是让自己安静下来。不是做一件特殊的事情，而是学会沉默。"（秘密花园第10课）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"你刷手机不是成瘾，是你的大脑到点交不了班。躺着闭眼→念头冲上来→拿起手机逃避——这是一个循环。"<br><br>
+【科学】"人的大脑需要'关机仪式'。就像发动机不能直接从6000转切到熄火，你需要一个过渡——这就是冥想的目的。不是玄学，是给大脑一个减速带。"<br><br>
+【实操】"今晚试试：躺着的时候，吸气心里默念'我原谅'三个字，呼气心里默念'我放下'。重复5次。注意你额头的感受。然后你会发现自己不知不觉就睡着了。"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t3" class="detail-toggle">
+      <label for="t3" class="topic-header">
+        <span class="topic-number">03</span>
+        <span class="topic-title">为什么你越努力越焦虑？</span>
+        <span class="topic-tags"><span class="topic-tag social">社会话题</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"如果你太恐慌，你的呼吸会非常快。你的整个躯体系统都与你的情绪关联。"（1981-10-29）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"努力就有回报——这句话骗了很多人。因为努力有三种：一种让你前进，一种让你在原地转，一种让你后退。第三种叫'挣扎型努力'。"<br><br>
+【科学+社会】"现代社会的节奏——996、内卷、鸡娃——设计了一个陷阱：你越用力越焦虑，越焦虑越用力。你的交感神经一直开着，没关过。这不是你的错，是机制问题。"<br><br>
+【实操】"下次感觉到焦虑的时候，停下来。把手放在肝脏的位置（右肋下方），深呼吸7次，每一次呼气心里说'我放'。不为什么，只是一个生理信号：让大脑从「战斗模式」切回「安全模式」。"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t4" class="detail-toggle">
+      <label for="t4" class="topic-header">
+        <span class="topic-number">04</span>
+        <span class="topic-title">一分钟就能做的"大脑关机"练习</span>
+        <span class="topic-tags"><span class="topic-tag daily">日常</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"冥想就是进入无思虑觉知。如果你能做到，你就完成了你的工作。因为在那一刻，你与真理、实相、喜乐同在。"（秘密花园第10课）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"今天教你一个1分钟就能做的练习，不需要任何工具，在哪里都能做。"<br><br>
+【直接实操】"就是现在，跟着我做：<br>
+1. 左手朝上放在膝盖上<br>
+2. 右手放在胸口（心脏位置）<br>
+3. 闭上眼睛，深呼吸一次<br>
+4. 呼气的时候，注意力从脑子里移到手上<br>
+5. 保持这个姿势，感受双手——有没有一丝凉风？<br>
+好了，睁开眼睛。"<br><br>
+【收尾】"你刚才体验到的就是"注意力可以放下来"的感觉。不是脑子空了，是你没有追着念头跑。"<br><br>
+【科学标签】"这个练习对应大脑的DMN脱钩训练，长期练习能降低默认模式网络的活跃度。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t5" class="detail-toggle">
+      <label for="t5" class="topic-header">
+        <span class="topic-number">05</span>
+        <span class="topic-title">孩子注意力不集中？先看看你自己的频率</span>
+        <span class="topic-tags"><span class="topic-tag social">社会话题</span><span class="topic-tag pain">痛点</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"左脉是情绪的力量。如果你哭太多或悲伤太多，会体现在你的脸上、喉轮、额轮。家长的状态会传递给孩子。"（1981-10-29 引申）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"很多家长问我：孩子注意力不集中怎么办？我反问他：你的注意力集中吗？<br><br>
+这不是推锅。量子纠缠知道吗？你什么状态，你周围就有个什么场。孩子的频率天然会同步到家长身上。"<br><br>
+【实操】"不要想'怎么训练孩子'，先做一件事：每天抽5分钟，关掉手机，坐着，左手朝上右手放胸口。让孩子看到你安静的样子。他不一定能学会，但他能感受到你的频率变了。你稳了，他自然就稳了。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t6" class="detail-toggle">
+      <label for="t6" class="topic-header">
+        <span class="topic-number">06</span>
+        <span class="topic-title">冥想不是"想"，是"不想"</span>
+        <span class="topic-tags"><span class="topic-tag trend">热门</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"不要做任何事情。只要进入无思虑觉知的状态。如果你能进入那个状态，你就完成了你的工作。"（秘密花园第10课）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"90%的人对冥想有一个误解——他们觉得冥想是"想一些美好的事情"。错了。冥想恰恰是"不想"。"<br><br>
+【解释】"你不需要想象光、想象能量、想象什么爱和和平——那些都是在'做'。真正的冥想是放下所有的做。就像你按了暂停键，但没关掉电视——画面还在，你不追着看了而已。"<br><br>
+【实操+收尾】"下次你静坐的时候，脑子里的念头来就来，走就走。你的任务不是赶走它们，是不追。你坐在这里，看着念头像云一样飘过。你就是那个天空。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t7" class="detail-toggle">
+      <label for="t7" class="topic-header">
+        <span class="topic-number">07</span>
+        <span class="topic-title">你的肝脏在"燃烧"——焦虑的生理根源</span>
+        <span class="topic-tags"><span class="topic-tag daily">日常</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"如果你的右脉过热——你会焦虑、过度思考、肝脏发热。你需要凉化肝脏。"（能量清理速查）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"你有没有觉得下午3-5点特别容易烦躁、头疼、想发火？那不是你脾气不好，是你的肝脏在'燃烧'。"<br><br>
+【科学】"中医叫'肝火旺'，现代医学叫'皮质醇升高'。下午是人体一天中皮质醇的第二个高峰。你的肝脏就像一个过滤器，过度思考的时候它就超负荷了。"<br><br>
+【实操】"一个非常简单的方法：把手放在右肋下方（肝脏位置），深呼吸，默念'我原谅'。不原谅任何人，就是原谅。7次之后换手。你会感觉到那个位置在变凉。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t8" class="detail-toggle">
+      <label for="t8" class="topic-header">
+        <span class="topic-number">08</span>
+        <span class="topic-title">为什么现代人越来越"内耗"？</span>
+        <span class="topic-tags"><span class="topic-tag trend">热门</span><span class="topic-tag social">社会话题</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"如果你不消融左右两脉，你就被留在半路。左脉和右脉都反映了我们的状态。"（1981-10-29 达到无思虑的训练）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"内耗这个词这几年很火。但你知道内耗本质上是什么吗？是你的左脉和右脉在打架。"<br><br>
+【解释】"左脉管过去——回忆、委屈、不舍。右脉管未来——焦虑、计划、控制。你内耗的时候，就是一个自己在说'当时应该这样'，另一个自己说'以后怎么办'。两边在打架，你的能量全浪费在这上面了。"<br><br>
+【实操】"走出内耗只需要一步：把注意力从过去和未来拉回到现在。怎么做？左手朝上右手按地，深呼吸7次。每次呼气，感觉从头顶到脚跟有一阵凉气下来。这是一个生理信号：告诉你的神经系统'现在是安全的'。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t9" class="detail-toggle">
+      <label for="t9" class="topic-header">
+        <span class="topic-number">09</span>
+        <span class="topic-title">"我原谅"不是对别人说的，是对自己</span>
+        <span class="topic-tags"><span class="topic-tag pain">痛点</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"额轮（Agnya）对应宽恕。你原谅的不是别人，是你自己放下的能力。不原谅，你的额轮就堵着，你永远进不了无思虑。"（额轮速查）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"我原谅。这三个字你以为是宗教，其实是生理。"<br><br>
+【解释】"你的额头（眉轮位置）对应一个叫额轮的东西——不是虚的，是交感神经丛的位置。你心里有事放不下的时候，你会不自觉地皱眉头、额头发紧。这就是额轮堵了。"<br><br>
+【实操】"下次你躺在床上睡不着的时候，把手放在额头上，心里默念'我原谅'。不是原谅谁——放下所有的原谅。你会发现额头的紧张感在消退，然后呼吸自然就深了。试试看。"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t10" class="detail-toggle">
+      <label for="t10" class="topic-header">
+        <span class="topic-number">10</span>
+        <span class="topic-title">你不是懒，是你的"电池"没电了</span>
+        <span class="topic-tags"><span class="topic-tag daily">日常</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"左脉（Ida Nadi）是月亮能量——当你左脉阻塞，你会没动力、起不了床、觉得做什么都没劲。"（三脉速查）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"你觉得自己懒？不是。你是左边没电了。"<br><br>
+【科学类比】"人有两个能量系统。右脉像手机的快充——工作、社交、使劲的时候用。左脉像无线充电——休息、恢复、充电的时候用。问题是你一天到晚用快充，无线充电的线圈已经没连上了。"<br><br>
+【实操】"早上起不来的话——不要刷手机！先坐起来，左手朝上，右手按在床上，闭眼3分钟。你不需要做什么，你的左脉会自动开始充电。你会发现，不需要咖啡也能醒。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t11" class="detail-toggle">
+      <label for="t11" class="topic-header">
+        <span class="topic-number">11</span>
+        <span class="topic-title">你跟伴侣吵架，不是因为谁对谁错</span>
+        <span class="topic-tags"><span class="topic-tag social">社会话题</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"有时你或许不喜欢某些东西。此时你要保持沉默，之后你可以把它纠正。但最好的是如何爱你的伴侣，你如何照顾他。"（2001-07-30 对新娘的忠告）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"你跟伴侣吵架的时候——你以为你们在争对错？不，你们只是频率对不上了。"<br><br>
+【科学解释】"人在焦虑、疲惫、有压力的时候，大脑前额叶（理性决策区）的功能会下降。同一个问题，你状态好的时候是一回事，状态差的时候是另一回事。不是你的三观变了，是你的生理状态变了。"<br><br>
+【实操】"下次你们要吵起来的时候——什么都别说，先停一下。把手放在胸口，慢呼吸三次。等你感觉到心跳慢下来了，再说第一句话。你会发现，同样一句话，你平静的时候说出来，听起来完全不一样。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t12" class="detail-toggle">
+      <label for="t12" class="topic-header">
+        <span class="topic-number">12</span>
+        <span class="topic-title">下午3-5点为什么最难熬？</span>
+        <span class="topic-tags"><span class="topic-tag daily">日常</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"下午3点到5点——凉化肝脏，低消耗。"（时间段对应表）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"你是不是一到下午3点左右就觉得没劲、犯困、想发火？这不是你懒，是你的生物钟在告诉你：现在是'低功耗模式'。"<br><br>
+【科学】"人体的昼夜节律中，下午2-5点是皮质醇的第二个高峰——比起早上第一个高峰，这个更容易让人烦躁。不是你的错，是生理。"<br><br>
+【实操】"下午3点，无论你在干什么——花30秒。右手按住右肋下方，慢呼吸7次，每一次呼气心里说'放'。30秒后你会感觉到身体松了一下。这就是你给肝脏的'冷却液'。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 13 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t13" class="detail-toggle">
+      <label for="t13" class="topic-header">
+        <span class="topic-number">13</span>
+        <span class="topic-title">你的"直觉"其实是一阵凉风</span>
+        <span class="topic-tags"><span class="topic-tag trend">热门</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"生命能量来了，你们只需要向它敞开。你不需要做什么努力，它自己会工作。"（1980-01-01 不费力冥想）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"你有没有过这种感觉——做了一个决定，后来发现是对的，但当时你完全说不出理由？那不是运气，是你的直觉在工作。"<br><br>
+【科学类比】"直觉不是你'想'出来的。是你的身体先于你的大脑做出了判断。这个生理信号，在霎哈嘉瑜伽里叫做'凉风'——生命能量。"<br><br>
+【实操】"下次你面对选择的时候：<br>
+1. 闭上眼睛<br>
+2. 左手朝上，右手放在头顶<br>
+3. 心里默念选项A——感受头顶有没有清凉的感觉？<br>
+4. 然后选项B——感受哪个选项让你更'松'？<br>
+你的身体会给你答案。头脑会说谎，凉风不会。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 14 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t14" class="detail-toggle">
+      <label for="t14" class="topic-header">
+        <span class="topic-number">14</span>
+        <span class="topic-title">为什么你总是"晚上清醒，白天后悔"？</span>
+        <span class="topic-tags"><span class="topic-tag pain">痛点</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"左脉和右脉——如果你不消融它们，你就被留在半路。晚上左脉会接管，白天右脉又活跃——你在两边摆荡。"（1981-10-29）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"白天想：今晚一定要早睡。晚上11点：再刷一会儿。凌晨2点：明天一定改。第二天：循环。这不是自律问题，是你的能量在昼夜节律里左右摆荡。"<br><br>
+【解释】"白天右脉主导——你下定决心、制定计划、觉得什么都能搞定。晚上左脉主导——你开始回忆、后悔、焦虑——这就是为什么你晚上做决定总是错误的。因为你在左脉里做的决定，到右脉主导的白天就不对了。"<br><br>
+【实操】"解决方法不是'逼自己早睡'——是下午5点后做'关小'的练习。下班前花30秒：左手朝上右手按地，深呼吸7次。这是在给你的能量一个平缓的过渡——右脉慢慢收，左脉缓缓起，中脉稳了，你就能在该做的事情上达到平衡。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 15 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t15" class="detail-toggle">
+      <label for="t15" class="topic-header">
+        <span class="topic-number">15</span>
+        <span class="topic-title">"正能量"没用，你需要的是"清能量"</span>
+        <span class="topic-tags"><span class="topic-tag trend">热门</span><span class="topic-tag social">社会话题</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"如果你有感染，你就持续关注那个地方。你就无需担心。就让能量自然流动，它自会起作用。"（1980-01-01）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"市面上教你'保持正能量'——我跟你说实话，正能量没用。你需要的是'清能量'。"<br><br>
+【解释】"你的大脑每天接收的信息就像一桶水——你一直在往里面倒。正能量是继续倒干净的水，但桶已经满了。你需要的是倒掉一部分。清空比填充重要得多。"<br><br>
+【实操】"每天回家做一个'清空练习'。不需要冥想垫，不需要特殊姿势：<br>
+1. 坐在床边，左手朝上<br>
+2. 右手从头顶开始，慢慢往下扫——扫到脚底<br>
+3. 做7次<br>
+4. 做完抖一抖手<br>
+就30秒。你会感觉到身体轻了一截。这30秒比你看10条正能量视频有用。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 16 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t16" class="detail-toggle">
+      <label for="t16" class="topic-header">
+        <span class="topic-number">16</span>
+        <span class="topic-title">宇宙的"呼吸"——你本来就是整体的一部分</span>
+        <span class="topic-tags"><span class="topic-tag trend">热门</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"静坐是你与上天合一。若有任何思绪，请说口诀：Twameva sakshat Nirvichaar... 无思无虑的觉醒状态。"（1979-11-18 怎样入静）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"天文学家发现，宇宙在膨胀。但你知道吗——你的呼吸和宇宙的膨胀是同步的。"<br><br>
+【科学类比】"这就是"全息宇宙"的概念：每一部分都包含整体的全部信息。你是宇宙的一个细胞。你安静下来的时候，不仅仅是你的脑子停下来——你是在跟宇宙的整体频率对齐。"<br><br>
+【实操】"找个地方坐好。闭上眼睛，感受你的呼吸。吸气的时候，想象宇宙在膨胀；呼气的时候，想象你在融入这个无限的空间。你在这个瞬间，不是在思考自己是独立的个体。你在这个瞬间，就是宇宙在呼吸。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 17 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t17" class="detail-toggle">
+      <label for="t17" class="topic-header">
+        <span class="topic-number">17</span>
+        <span class="topic-title">工作压力大的时候，试试"班丹"</span>
+        <span class="topic-tags"><span class="topic-tag daily">日常</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"班丹——保护性动作，7次清除负面能量。"（能量清理详表）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"我教你一个——听起来很傻，但真的有用的东西。叫做'扫一扫'。"<br><br>
+【实操】"左手朝上，右手从左手下方开始，沿着身体往上划过头顶，到身体右侧再原路返回——像画了一个半圆。做7次。你会感觉到周围的空间变得干净了。"<br><br>
+【科学类比】"人的身体周围有一个生物电磁场。当你压力大的时候，这个场会变乱。这个'扫'的动作是物理上的整理——它把你的能量场重新归位。做完7次之后你试着深呼吸——是不是感觉透气多了？"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 18 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t18" class="detail-toggle">
+      <label for="t18" class="topic-header">
+        <span class="topic-number">18</span>
+        <span class="topic-title">宇宙的"气"——从物理学到生命的能量</span>
+        <span class="topic-tags"><span class="topic-tag daily">日常</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"生命能量来了，它们自然地发散。你们所需做的就是向它敞开。"（1980-01-01）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"物理学告诉我们：宇宙中充满了量子场，真空不是空的——它在不断产生和湮灭粒子。这些能量场无处不在，而我们只能感知其中极小的一部分。"<br><br>
+【连接】"古代所有文明都描述了一种'生命能量'——中国的气、印度的普拉纳、希腊的普纽玛。现代物理学叫它量子真空涨落。叫法不同，说的是一个东西——宇宙本身是有能量的，而你可以感受到它。"<br><br>
+【实操】"伸出你的双手，掌心相对。慢慢地靠近——感受两手之间有什么。有的人感觉到热，有的人感觉到凉，有的人感觉到像是有一个磁场在推开。这就是生命的能量。你不需要相信什么，感受一下就知道它不是想象。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 19 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t19" class="detail-toggle">
+      <label for="t19" class="topic-header">
+        <span class="topic-number">19</span>
+        <span class="topic-title">你不需要"战胜焦虑"，你需要"退出战斗"</span>
+        <span class="topic-tags"><span class="topic-tag pain">痛点</span><span class="topic-tag social">社会话题</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"不要担心你们哪里有问题。就让能量自然流动，它自会起作用。"（1980-01-01）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"你越想战胜焦虑，焦虑就越强大。因为'战胜'意味着你在对抗它——你给了它能量。"<br><br>
+【科学解释】"焦虑本质上是交感神经系统进入了'战或逃'模式。你对抗它=你告诉你的神经系统'确实有威胁'——恶性循环。正确的做法不是你打败它，是你退出战场。"<br><br>
+【实操】"下一次你焦虑的时候——感觉自己心跳加速、呼吸变浅——对自己说一句话：'这是我的身体在保护我，谢谢它，但我不需要战斗了。'<br><br>
+然后做两个动作：<br>
+1. 左手朝上放在膝盖上<br>
+2. 右手放在胸口<br>
+深呼吸三次。每一次呼气，心里说'我安全了'。这不是安慰自己——这是给生理系统一个信号：战斗结束，可以休息了。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 20 -->
+    <div class="topic-card">
+      <input type="checkbox" id="t20" class="detail-toggle">
+      <label for="t20" class="topic-header">
+        <span class="topic-number">20</span>
+        <span class="topic-title">一分钟学会"从身体里找到平静"</span>
+        <span class="topic-tags"><span class="topic-tag daily">日常</span><span class="topic-tag trend">热门</span></span>
+        <span style="color:var(--text-tertiary);font-size:0.7rem;margin-left:auto;">展开▾</span>
+      </label>
+      <div class="detail-content">
+        <div class="topic-body">
+          <div class="label">Shri Mataji 教导</div>
+          <div class="quote">"不费力冥想的建议——不做任何努力。你只要向生命能量敞开，它自己会工作。"（1980-01-01 总结）</div>
+          <div class="label">文案脚本（约5分钟）</div>
+          <div class="script">
+【开头】"今天这期我教你一个东西——学会了之后，你随时随地都能让自己静下来。一分钱不花，不需要工具，不需要坐在垫子上。"<br><br>
+【实操引导】"就是现在，跟我做：<br>
+1. 左手朝上放在膝盖上<br>
+2. 右手放在头顶正中间<br>
+3. 闭上眼睛，深呼吸——吸气慢、呼气更慢<br>
+4. 注意力放在头顶和手接触的位置<br>
+5. 感受一下：有没有一阵清凉的感觉？<br>
+6. 保持30秒<br><br>
+好了，回来。你感觉到了什么？"<br><br>
+【收尾】"你刚才经历的——就是你的身体在告诉你：平静是可以不花力气获得的。你不需要做什么，你只需要停下来。这个感觉，就是你的内在在做最深处的回应——它一直在这里，只是你没注意过它。"</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="glass-card" style="margin-top:16px;">
+    <h3 style="font-size:0.9rem;font-weight:600;margin-bottom:6px;">选题分类统计</h3>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:0.82rem;color:var(--text-secondary);">
+      <span>🔥 痛点话题：1, 2, 5, 9, 14, 19（6条）</span>
+      <span>📊 社会话题：3, 5, 8, 11, 15（5条）</span>
+      <span>📈 热门话题：6, 8, 13, 15, 16, 20（6条）</span>
+      <span>☀️ 日常选题：4, 7, 10, 12, 17, 18, 20（7条）</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Section 7: Other Considerations ===== -->
+<div class="section" id="other">
+  <div class="section-title-line"></div>
+  <h2 class="section-title">📋 其他需考虑的方面</h2>
+  <p class="section-desc">除了以上核心部分，以下维度也需要提前布局</p>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <h4>⚖️ 合规与法律</h4>
+      <ul>
+        <li>不使用"治疗""治愈"等医疗用语</li>
+        <li>不做心理诊断，明确服务边界</li>
+        <li>隐私政策：客户信息保密</li>
+        <li>免责声明：不替代心理咨询和医学治疗</li>
+        <li>个体工商户或公司注册</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h4>🌐 品牌与定位</h4>
+      <ul>
+        <li>品牌名：暂定"关小"（"关小噪音"的缩写）</li>
+        <li>Slogan：关小噪音，听自己的答案</li>
+        <li>不做"冥想APP"——做"个人IP+深度咨询"</li>
+        <li>护城河：你的觉知力，不是技术或话术</li>
+        <li>去宗教化：不说"霎哈嘉"，说"静坐法"</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h4>💰 营收与成本</h4>
+      <ul>
+        <li>启动成本：≈¥0（已有知识+设备）</li>
+        <li>收入模型：引流免费内容 → 低价体验课 → 中价咨询 → 高价深度陪伴</li>
+        <li>月收入估算（保守）：5单咨询×¥399 = ¥1995</li>
+        <li>月收入（积极）：10单咨询+课程+陪伴 = ¥5,000-8,000</li>
+        <li>需持续学习投入：精进霎哈嘉知识</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h4>📱 技术工具</h4>
+      <ul>
+        <li>咨询平台：腾讯会议/Zoom</li>
+        <li>课程平台：小鹅通/知识星球</li>
+        <li>短视频：剪映+手机拍摄</li>
+        <li>支付：微信/支付宝</li>
+        <li>客户管理：微信+石墨文档</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h4>👤 你的竞争力</h4>
+      <ul>
+        <li>六年霎哈嘉瑜伽实修经验</li>
+        <li>三年玄学咨询经验（累计100+客户）</li>
+        <li>能感受到能量状态的变化</li>
+        <li>有写作和内容创作能力</li>
+        <li>本身就在走这条路——你不只是"教"，你是"做着示范"</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h4>⚠️ 风险与对策</h4>
+      <ul>
+        <li>被误解为"传教"→ 去宗教化包装</li>
+        <li>咨询能量消耗 → 每日固定清理，设周休</li>
+        <li>客户转化慢 → 内容先行，建立信任</li>
+        <li>收入不稳定 → 多收入管道（咨询+课程+内容）</li>
+        <li>被同行模仿 → 护城河是觉知力，不可复制</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Section 8: Roadmap ===== -->
+<div class="section" id="roadmap">
+  <div class="section-title-line"></div>
+  <h2 class="section-title">🛤️ 行动路线</h2>
+  <p class="section-desc">从"0"到"第一个客户"——四阶段走</p>
+
+  <div class="roadmap">
+    <div class="roadmap-item">
+      <div class="roadmap-step">1</div>
+      <div class="roadmap-content">
+        <h4>内容试水（第1-2周）</h4>
+        <p>在视频号/小红书发10期短视频试水。选题先用这20个，看哪个方向数据好。不需要完美，先发。</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-step">2</div>
+      <div class="roadmap-content">
+        <h4>接第一个客户（第3-4周）</h4>
+        <p>从评论区/私信里接第一个咨询。¥99体验价。跑通完整流程：引流→咨询→交付→跟进。</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-step">3</div>
+      <div class="roadmap-content">
+        <h4>打磨产品（第2个月）</h4>
+        <p>根据第一个月反馈，打磨咨询流程。制作"7天关小噪音"录播课。定价调整。</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-step">4</div>
+      <div class="roadmap-content">
+        <h4>放大（第3个月）</h4>
+        <p>积累10+客户案例后，开启第二个账号。开设"21天觉知力训练营"。考虑建立社群。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end container-wide -->
+
+<footer>
+  <p>"关小噪音，听自己的答案"</p>
+  <p style="margin-top:8px;">项目企划 · 基于霎哈嘉瑜伽理念 · 面向现代人的"脑子停不下来"问题</p>
+  <p style="margin-top:4px;">📁 所在仓库：wherejiahe-bot/3rd-career-exploration</p>
+  <p style="margin-top:4px;">© 2026 · 更新于 5月31日</p>
+</footer>
+
+<script>
+// Smooth open for all topics
+document.querySelectorAll('.topic-header').forEach(header => {
+  header.addEventListener('click', function() {
+    const toggle = this.previousElementSibling;
+    if (toggle && toggle.type === 'checkbox') {
+      toggle.checked = !toggle.checked;
+    }
+  });
+});
+</script>
+</body>
+</html>
