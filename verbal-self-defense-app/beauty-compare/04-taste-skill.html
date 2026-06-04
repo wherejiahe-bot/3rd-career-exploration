@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>语言自卫 — 音频方案 (taste-skill)</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', system-ui, sans-serif; background: #0c0c0c; color: #f0f0f0; }
+.canvas { max-width: 1000px; margin: 0 auto; padding: 60px 32px; }
+.hero { position: relative; margin-bottom: 80px; }
+.hero h1 { font-size: clamp(36px, 6vw, 64px); font-weight: 800; line-height: 0.95; letter-spacing: -2px; }
+.hero h1 .accent { color: #facc15; }
+.hero p { font-size: 14px; color: #666; margin-top: 16px; max-width: 400px; }
+.hero .sticker { position: absolute; right: 0; top: 0; width: 120px; height: 120px; border: 1px solid #2a2a2a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #444; text-transform: uppercase; letter-spacing: 2px; }
+/* Diagonal section */
+.diag { display: flex; gap: 60px; margin-bottom: 80px; position: relative; }
+.diag::before { content: ''; position: absolute; top: -40px; left: -40px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(250,204,21,0.03) 0%, transparent 70%); pointer-events: none; }
+.col-left { flex: 1; }
+.col-left h2 { font-size: 13px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+.constraint { border-top: 1px solid #2a2a2a; padding: 16px 0; display: flex; align-items: baseline; gap: 12px; }
+.constraint .key { font-size: 12px; color: #888; min-width: 80px; }
+.constraint .val { font-size: 14px; color: #f0f0f0; }
+.col-right { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; }
+.col-right .note { font-size: 12px; color: #555; line-height: 1.7; border-left: 2px solid #facc15; padding-left: 16px; }
+/* Large product cards */
+.product-strip { display: flex; gap: 2px; margin-bottom: 80px; }
+.prod { flex: 1; padding: 40px 24px; position: relative; overflow: hidden; }
+.prod:nth-child(1) { background: #1a1a1a; } .prod:nth-child(2) { background: #151515; } .prod:nth-child(3) { background: #1a1a1a; }
+.prod .icon { font-size: 28px; margin-bottom: 16px; }
+.prod h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.prod .desc { font-size: 12px; color: #666; line-height: 1.6; margin-bottom: 16px; }
+.prod .spec { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.prod .spec-item { background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 4px; }
+.prod .spec-item .num { font-size: 18px; font-weight: 700; }
+.prod .spec-item .lbl { font-size: 10px; color: #555; text-transform: uppercase; }
+.prod .tag { display: inline-block; font-size: 10px; padding: 3px 8px; border-radius: 2px; letter-spacing: 0.5px; margin-top: 12px; }
+.tag-go { background: #facc15; color: #000; } .tag-no { background: #2a2a2a; color: #555; } .tag-yes { background: #333; color: #facc15; }
+/* Radar-style comparison */
+.radar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 80px; }
+.radar-item { background: #151515; padding: 28px; }
+.radar-item h4 { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.radar-item .score { font-size: 28px; font-weight: 700; }
+.radar-item .score.high { color: #4ade80; } .radar-item .score.mid { color: #facc15; } .radar-item .score.low { color: #f87171; }
+.radar-item .bar { height: 2px; background: #2a2a2a; margin-top: 8px; position: relative; }
+.radar-item .bar-fill { height: 100%; position: absolute; left: 0; top: 0; }
+.bar-high .bar-fill { width: 90%; background: #4ade80; } .bar-mid .bar-fill { width: 55%; background: #facc15; } .bar-low .bar-fill { width: 25%; background: #f87171; }
+/* Phase plan */
+.phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-bottom: 40px; }
+.phase-card { background: #1a1a1a; padding: 32px; border-top: 2px solid; }
+.phase-card:nth-child(1) { border-color: #4ade80; }
+.phase-card:nth-child(2) { border-color: #facc15; }
+.phase-card:nth-child(3) { border-color: #60a5fa; }
+.phase-card .pnum { font-size: 11px; color: #555; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+.phase-card h4 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.phase-card p { font-size: 12px; color: #666; line-height: 1.6; }
+.footer { text-align: center; padding: 32px 0; font-size: 11px; color: #333; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="hero">
+    <h1>语言自卫<br>音频采集<span class="accent">方案选型</span></h1>
+    <p>手机 · 智能手表 · AI 录音卡 — 谁最适合做实时对话监听的「耳朵」？</p>
+    <div class="sticker">06·2026</div>
+  </div>
+
+  <div class="diag">
+    <div class="col-left">
+      <h2>约束条件</h2>
+      <div class="constraint"><span class="key">收音</span><span class="val">≥ 3-5 米，覆盖饭桌对话</span></div>
+      <div class="constraint"><span class="key">续航</span><span class="val">≥ 4 小时持续监听</span></div>
+      <div class="constraint"><span class="key">隐蔽</span><span class="val">社交中不能明显看出在记录</span></div>
+      <div class="constraint"><span class="key">算力</span><span class="val">端侧 ASR + NLP，延迟 &lt; 3s</span></div>
+      <div class="constraint"><span class="key">反馈</span><span class="val">震动 + 可选语音回怼</span></div>
+    </div>
+    <div class="col-right">
+      <div class="note">关键判断标准：<br>「收音距离」是硬约束 — 听不到就没后续。<br>「隐蔽性」是社交约束 — 被发现了就输了。<br>「续航」是体验约束 — 不能用到一半没电。</div>
+    </div>
+  </div>
+
+  <div class="product-strip">
+    <div class="prod">
+      <div class="icon">📱</div>
+      <h3>手机</h3>
+      <div class="desc">3-4 麦克风阵列，波束成形+AI降噪。旗舰机有效拾音 1-3 米。口袋衰减严重，桌面放置显眼。</div>
+      <div class="spec">
+        <div class="spec-item"><div class="num">¥0</div><div class="lbl">额外成本</div></div>
+        <div class="spec-item"><div class="num">✅</div><div class="lbl">本地算力</div></div>
+      </div>
+      <span class="tag tag-go">MVP</span>
+    </div>
+    <div class="prod">
+      <div class="icon">⌚️</div>
+      <h3>手表</h3>
+      <div class="desc">麦克风极小，手腕位置。收音距离 &lt; 0.5 米，环境噪声密集。录音 1-2 小时即耗尽电量。</div>
+      <div class="spec">
+        <div class="spec-item"><div class="num">&lt;0.5m</div><div class="lbl">收音距离</div></div>
+        <div class="spec-item"><div class="num">1-2h</div><div class="lbl">续航</div></div>
+      </div>
+      <span class="tag tag-no">不推荐</span>
+    </div>
+    <div class="prod">
+      <div class="icon">🪪</div>
+      <h3>AI录音卡</h3>
+      <div class="desc">6 麦克风阵列，收音 8 米，续航 45 小时。名片大小磁吸于手机背后，隐蔽且专业。</div>
+      <div class="spec">
+        <div class="spec-item"><div class="num">8m</div><div class="lbl">收音距离</div></div>
+        <div class="spec-item"><div class="num">45h</div><div class="lbl">续航</div></div>
+      </div>
+      <span class="tag tag-yes">最优选</span>
+    </div>
+  </div>
+
+  <div class="radar-grid">
+    <div class="radar-item"><h4>收音能力</h4><div class="score high">8m</div><div class="bar bar-high"><div class="bar-fill"></div></div></div>
+    <div class="radar-item"><h4>隐蔽性</h4><div class="score high">极佳</div><div class="bar bar-high"><div class="bar-fill"></div></div></div>
+    <div class="radar-item"><h4>续航表现</h4><div class="score high">45h</div><div class="bar bar-high"><div class="bar-fill"></div></div></div>
+    <div class="radar-item"><h4>开发难度</h4><div class="score mid">中等</div><div class="bar bar-mid"><div class="bar-fill"></div></div></div>
+  </div>
+
+  <div class="phases">
+    <div class="phase-card">
+      <div class="pnum">Phase I</div>
+      <h4>手机 + 领夹麦</h4>
+      <p>¥300-500 硬件投入，零开发平台成本。快速跑通 MVP 验证核心场景。</p>
+    </div>
+    <div class="phase-card">
+      <div class="pnum">Phase II</div>
+      <h4>手机 + 录音卡</h4>
+      <p>DingTalk A1 专用收音，手机处理 + 智能手表震动反馈。三端协同。</p>
+    </div>
+    <div class="phase-card">
+      <div class="pnum">Phase III</div>
+      <h4>TWS 耳机</h4>
+      <p>利用 AirPods Pro 外置麦克风。位置最佳，需攻克 iOS 后台权限限制。</p>
+    </div>
+  </div>
+
+  <div class="footer">taste-skill · verbal-self-defense-app</div>
+</div>
+</body>
+</html>

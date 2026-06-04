@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>语言自卫 App — 音频设备调研 · 不二设计</title>
+<style>
+:root { --primary: #D4764E; --primary-light: #F0D5C4; --primary-bg: #FDF8F5; --accent: #2D4A3E; --text: #3C2415; --text-secondary: #7A5A4A; --card-bg: #FFFFFF; --radius: 12px; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Serif SC', 'Source Han Serif CN', 'Songti SC', Georgia, serif; background: var(--primary-bg); color: var(--text); line-height: 1.8; }
+.container { max-width: 800px; margin: 0 auto; padding: 48px 28px; }
+header { border-bottom: 2px solid var(--primary-light); padding-bottom: 32px; margin-bottom: 48px; }
+.brand { font-size: 13px; letter-spacing: 3px; color: var(--primary); text-transform: uppercase; margin-bottom: 8px; }
+header h1 { font-size: 30px; font-weight: 600; color: var(--accent); line-height: 1.3; }
+header .sub { font-size: 15px; color: var(--text-secondary); margin-top: 8px; }
+.section { margin-bottom: 40px; }
+.section-title { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.section-num { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; font-family: sans-serif; }
+.section-title h2 { font-size: 20px; color: var(--accent); font-weight: 600; }
+.card { background: var(--card-bg); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; border-left: 3px solid var(--primary-light); box-shadow: 0 1px 6px rgba(212,118,78,0.06); }
+.card h3 { font-size: 17px; color: var(--accent); margin-bottom: 12px; }
+.card p, .card li { font-size: 14px; color: var(--text-secondary); }
+.card ul { padding-left: 20px; }
+.card li { margin-bottom: 6px; }
+.tag-wrap { margin-top: 12px; }
+.tag { display: inline-block; padding: 3px 12px; border-radius: 4px; font-size: 12px; font-weight: 500; margin-right: 6px; font-family: sans-serif; background: var(--primary-light); color: var(--primary); }
+.tag.rec { background: var(--accent); color: #fff; }
+.tag.warn { background: #FEE4D6; color: #C45A2E; }
+.data-grid { display: flex; gap: 12px; margin: 16px 0; flex-wrap: wrap; }
+.data-cell { flex: 1; min-width: 100px; text-align: center; padding: 16px; background: var(--primary-bg); border-radius: 8px; }
+.data-cell .val { font-size: 26px; font-weight: 700; color: var(--accent); font-family: sans-serif; }
+.data-cell .lbl { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+.comp-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0; }
+.comp-table th { background: var(--primary-bg); padding: 10px 14px; text-align: left; font-weight: 500; color: var(--accent); border-bottom: 1px solid var(--primary-light); }
+.comp-table td { padding: 10px 14px; border-bottom: 1px solid var(--primary-light); color: var(--text-secondary); }
+.conclusion { background: var(--accent); border-radius: var(--radius); padding: 28px; color: #fff; }
+.conclusion h3 { color: var(--primary-light); margin-bottom: 16px; }
+.conclusion li { color: rgba(255,255,255,0.85); margin-bottom: 8px; }
+.conclusion strong { color: #fff; }
+.footer { text-align: center; padding: 32px 0; font-size: 12px; color: var(--text-secondary); letter-spacing: 2px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="brand">Verbal Self-Defense · Audio Research</div>
+    <h1>语言自卫 App<br>音频采集设备调研</h1>
+    <p class="sub">手机 · 智能手表 · AI录音卡 — 硬件选型分析报告</p>
+  </header>
+
+  <div class="section">
+    <div class="section-title"><span class="section-num">1</span><h2>需求拆解</h2></div>
+    <div class="card">
+      <ul>
+        <li>社交场合中实时监听周围对话，无需刻意靠近</li>
+        <li>自动识别冒犯性语言、伪玩笑、阴阳怪气</li>
+        <li>震动提醒用户，可选语音回怼</li>
+        <li>收音距离 ≥ 3-5 米，持续监听 ≥ 4 小时</li>
+        <li>设备隐蔽，不能让社交对象察觉</li>
+        <li>端侧推理，延迟 &lt; 3 秒</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="section-num">2</span><h2>方案对比</h2></div>
+
+    <div class="card">
+      <h3>方案 A · 智能手机</h3>
+      <div class="data-grid">
+        <div class="data-cell"><div class="val">3-4</div><div class="lbl">麦克风阵列</div></div>
+        <div class="data-cell"><div class="val">1-3m</div><div class="lbl">收音距离</div></div>
+        <div class="data-cell"><div class="val">✅</div><div class="lbl">本地AI算力</div></div>
+        <div class="data-cell"><div class="val">¥0</div><div class="lbl">额外成本</div></div>
+      </div>
+      <p>现代旗舰机搭载 3-4 颗麦克风阵列，支持波束成形。口袋里收音严重衰减，桌面放置不够隐蔽。最佳方案：配合领夹无线麦。</p>
+      <div class="tag-wrap"><span class="tag rec">MVP推荐</span><span class="tag warn">需配领夹麦</span></div>
+    </div>
+
+    <div class="card">
+      <h3>方案 B · 智能手表</h3>
+      <div class="data-grid">
+        <div class="data-cell"><div class="val">&lt;0.5m</div><div class="lbl">收音距离</div></div>
+        <div class="data-cell"><div class="val">1-2h</div><div class="lbl">录音续航</div></div>
+        <div class="data-cell"><div class="val">⚠️</div><div class="lbl">算力受限</div></div>
+        <div class="data-cell"><div class="val">✅</div><div class="lbl">极致隐蔽</div></div>
+      </div>
+      <p>手表麦克风体积极小，手腕位置。环境噪声严重，拾音距离不足 0.5 米。录音极耗电。适合作为<strong>震动反馈终端</strong>而非主收音设备。</p>
+      <div class="tag-wrap"><span class="tag warn">不推荐主收音</span><span class="tag rec">反馈终端</span></div>
+    </div>
+
+    <div class="card">
+      <h3>方案 C · AI 录音卡</h3>
+      <table class="comp-table">
+        <tr><th>产品</th><th>麦克风</th><th>收音距离</th><th>续航</th><th>价格</th></tr>
+        <tr><td>DingTalk A1</td><td>6 颗</td><td><strong>8 米</strong></td><td><strong>45 小时</strong></td><td>¥499-799</td></tr>
+        <tr><td>TicNote</td><td>5 颗</td><td>5 米</td><td>20 小时</td><td>¥999-1499</td></tr>
+        <tr><td>Plaud Note</td><td>—</td><td>—</td><td>—</td><td>海外不便</td></tr>
+      </table>
+      <p style="margin-top:12px;">名片大小，磁吸在手机背面，隐蔽性强。收音和续航能力碾压前两者。需额外采购，依赖专属生态。</p>
+      <div class="tag-wrap"><span class="tag rec">长期方案</span><span class="tag warn">需采购</span></div>
+    </div>
+  </div>
+
+  <div class="conclusion">
+    <h3>推荐实施路线</h3>
+    <ul>
+      <li><strong>Phase 1 · MVP：</strong>手机 + 领夹无线麦（¥300-500），快速验证需求</li>
+      <li><strong>Phase 2 · 升级：</strong>手机处理 + AI录音卡收音 + 手表反馈</li>
+      <li><strong>Phase 3 · 理想态：</strong>TWS 耳机利用外置麦克风（如 AirPods Pro），攻克系统权限</li>
+    </ul>
+  </div>
+
+  <div class="footer">ESTHER DESIGN SYSTEM · verbal-self-defense-app</div>
+</div>
+</body>
+</html>

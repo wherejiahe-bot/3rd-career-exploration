@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>语言自卫 App — 音频采集设备调研 (Hallmark)</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'SF Mono', 'JetBrains Mono', 'Courier New', monospace; background: #0f0f0f; color: #e0e0e0; line-height: 1.6; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+/* Staggered layout accent */
+.hero { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 60px; }
+.hero-main { border-right: 1px solid #2a2a2a; padding-right: 40px; }
+.hero-main .label { font-size: 11px; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+.hero-main h1 { font-size: 36px; font-weight: 800; line-height: 1.1; color: #fff; letter-spacing: -1px; }
+.hero-side { display: flex; flex-direction: column; justify-content: center; }
+.hero-side .stat { border-bottom: 1px solid #2a2a2a; padding: 12px 0; }
+.hero-side .stat:last-child { border-bottom: none; }
+.stat .val { font-size: 24px; font-weight: 700; color: #fff; }
+.stat .desc { font-size: 12px; color: #666; }
+/* Asymmetric grid */
+.asym-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2px; margin-bottom: 40px; }
+.asym-grid .big { background: #1a1a1a; padding: 32px; }
+.asym-grid .side { background: #1a1a1a; padding: 32px; display: flex; flex-direction: column; justify-content: center; }
+.asym-grid h2 { font-size: 14px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+.asym-grid p, .asym-grid li { font-size: 13px; color: #aaa; }
+.asym-grid ul { list-style: none; }
+.asym-grid li { padding: 6px 0; border-bottom: 1px solid #2a2a2a; }
+.asym-grid li:last-child { border-bottom: none; }
+.asym-grid li::before { content: "▸ "; color: #555; }
+/* Full-width tables */
+.full-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 40px; }
+.full-table th { text-align: left; padding: 12px 16px; background: #1a1a1a; color: #888; font-weight: 500; border-bottom: 1px solid #2a2a2a; }
+.full-table td { padding: 12px 16px; border-bottom: 1px solid #2a2a2a; color: #aaa; }
+.full-table tr:hover td { background: #1a1a1a; }
+.full-table .highlight { color: #4ade80; font-weight: 600; }
+.full-table .warn { color: #fbbf24; }
+.full-table .bad { color: #f87171; }
+/* Split col */
+.split-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-bottom: 40px; }
+.split-card { background: #1a1a1a; padding: 24px; }
+.split-card h3 { font-size: 13px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.split-card .big-num { font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.split-card p { font-size: 12px; color: #666; line-height: 1.5; }
+/* Phase roadmap */
+.roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-bottom: 40px; }
+.phase { background: #1a1a1a; padding: 28px; position: relative; }
+.phase .num { font-size: 48px; font-weight: 800; color: #2a2a2a; line-height: 1; margin-bottom: 8px; }
+.phase h3 { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 8px; }
+.phase p { font-size: 12px; color: #666; }
+.phase .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+.dot-green { background: #4ade80; } .dot-yellow { background: #fbbf24; } .dot-blue { background: #60a5fa; }
+.footer { text-align: center; padding: 32px 0; font-size: 11px; color: #444; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-main">
+      <div class="label">Verb. Self-Defense · Audio Research</div>
+      <h1>语音采集设备<br>选型对比报告</h1>
+    </div>
+    <div class="hero-side">
+      <div class="stat"><div class="val">3</div><div class="desc">候选方案</div></div>
+      <div class="stat"><div class="val">8m</div><div class="desc">最佳收音距离</div></div>
+      <div class="stat"><div class="val">45h</div><div class="desc">最长续航</div></div>
+    </div>
+  </div>
+
+  <div class="asym-grid">
+    <div class="big">
+      <h2>需求约束</h2>
+      <ul>
+        <li>实时监听环境对话，距离 ≥ 3-5 米</li>
+        <li>识别冒犯性语言 / 伪装玩笑</li>
+        <li>震动提醒 + 可选语音回怼</li>
+        <li>延迟 &lt; 3 秒，端侧模型</li>
+        <li>社交隐蔽 — 不暴露录音行为</li>
+        <li>连续工作 ≥ 4 小时</li>
+      </ul>
+    </div>
+    <div class="side">
+      <p style="font-size:11px;color:#555;">关键指标优先级：<br>收音距离 > 隐蔽性 > 续航 > 算力</p>
+    </div>
+  </div>
+
+  <table class="full-table">
+    <tr><th>方案</th><th>收音距离</th><th>续航</th><th>隐蔽性</th><th>算力</th><th>成本</th></tr>
+    <tr><td><strong>手机 + 领夹麦</strong></td><td>5-10m <span class="highlight">✅</span></td><td>4-6h</td><td>中等 <span class="warn">⚠️</span></td><td>强 <span class="highlight">✅</span></td><td>¥300-500</td></tr>
+    <tr><td><strong>智能手表</strong></td><td>&lt;0.5m <span class="bad">❌</span></td><td>1-2h <span class="bad">❌</span></td><td>极佳 <span class="highlight">✅</span></td><td>弱 <span class="bad">❌</span></td><td>—</td></tr>
+    <tr><td><strong>AI 录音卡</strong></td><td>5-8m <span class="highlight">✅</span></td><td>20-45h <span class="highlight">✅</span></td><td>佳 <span class="highlight">✅</span></td><td>— <span class="warn">⚠️</span></td><td>¥499-1499</td></tr>
+  </table>
+
+  <div class="split-col">
+    <div class="split-card">
+      <h3>手机</h3>
+      <div class="big-num">3-4</div>
+      <p>麦克风阵列，波束成形+AI降噪。口袋衰减严重，桌面显眼。MVP阶段配合领夹麦性价比最优。</p>
+    </div>
+    <div class="split-card">
+      <h3>手表</h3>
+      <div class="big-num">&lt;0.5m</div>
+      <p>麦克风过小，手腕位置环境噪声密集。录音极耗电。只适合做振动反馈终端，不适合做主收音。</p>
+    </div>
+    <div class="split-card">
+      <h3>AI录音卡</h3>
+      <div class="big-num">8m</div>
+      <p>多麦克风阵列+骨传导，收音和续航碾压性优势。需但采购+API集成，可作为二期升级方案。</p>
+    </div>
+  </div>
+
+  <div class="roadmap">
+    <div class="phase">
+      <span class="dot dot-green"></span>
+      <div class="num">01</div>
+      <h3>MVP · 手机</h3>
+      <p>手机 + 领夹无线麦。零硬件开发成本，快速验证核心需求。</p>
+    </div>
+    <div class="phase">
+      <span class="dot dot-yellow"></span>
+      <div class="num">02</div>
+      <h3>升级 · 录音卡</h3>
+      <p>DingTalk A1 作为专用收音硬件。手机处理+手表反馈。</p>
+    </div>
+    <div class="phase">
+      <span class="dot dot-blue"></span>
+      <div class="num">03</div>
+      <h3>理想态 · 耳机</h3>
+      <p>TWS 耳机外置麦克风收音。位置佳，需攻克系统权限。</p>
+    </div>
+  </div>
+
+  <div class="footer">HALLMARK · verbal-self-defense-app · 2026</div>
+</div>
+</body>
+</html>

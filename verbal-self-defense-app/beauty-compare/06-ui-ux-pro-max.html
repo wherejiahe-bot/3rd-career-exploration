@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>语言自卫 App — 音频设备 UI/UX 调研报告</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, 'PingFang SC', sans-serif; background: #f8f9fc; color: #1e293b; }
+.wrap { max-width: 840px; margin: 0 auto; padding: 40px 24px; }
+.page-title { margin-bottom: 32px; display: flex; align-items: center; gap: 12px; }
+.page-title .s-title { font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 1.5px; background: #f1f5f9; padding: 4px 12px; border-radius: 4px; }
+.page-title h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.3px; }
+/* Metric cards */
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px; }
+.metric-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+.metric-card .val { font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 2px; }
+.metric-card .lbl { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+/* Split layout */
+.split { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; margin-bottom: 32px; }
+.split-left, .split-right { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+.split h2 { font-size: 13px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9; }
+.check-item { display: flex; gap: 10px; margin-bottom: 12px; }
+.check-item .dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+.dot-red { background: #ef4444; } .dot-amber { background: #f59e0b; } .dot-green { background: #22c55e; }
+.check-item p { font-size: 13px; color: #475569; }
+/* Device cards grid */
+.device-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+.device-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; transition: box-shadow 0.2s; }
+.device-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+.device-card .emoji { font-size: 28px; margin-bottom: 8px; }
+.device-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.device-card .status { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-bottom: 12px; }
+.status-rec { background: #dcfce7; color: #15803d; }
+.status-nr { background: #fef2f2; color: #b91c1c; }
+.status-opt { background: #fef9c3; color: #a16207; }
+.device-card .stat-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px; border-bottom: 1px solid #f8fafc; }
+.device-card .stat-row:last-child { border-bottom: none; }
+.device-card .stat-lbl { color: #94a3b8; }
+.device-card .stat-v { font-weight: 500; color: #334155; }
+/* Table */
+.table-section { margin-bottom: 32px; }
+.table-section h2 { font-size: 13px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.comp-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; }
+.comp-table th { background: #f8fafc; padding: 10px 14px; text-align: left; font-weight: 500; color: #64748b; border-bottom: 1px solid #e2e8f0; }
+.comp-table td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; color: #475569; }
+.comp-table tr:last-child td { border-bottom: none; }
+/* Roadmap */
+.roadmap { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; }
+.roadmap h2 { font-size: 13px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+.roadmap-step { display: flex; gap: 16px; margin-bottom: 16px; }
+.roadmap-step:last-child { margin-bottom: 0; }
+.roadmap-step .step-num { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.step-1 { background: #22c55e; } .step-2 { background: #f59e0b; } .step-3 { background: #3b82f6; }
+.roadmap-step .step-content { flex: 1; }
+.roadmap-step .step-content h4 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.roadmap-step .step-content p { font-size: 12px; color: #94a3b8; }
+.footer { text-align: center; padding: 32px 0; font-size: 11px; color: #cbd5e1; }
+@media (max-width: 640px) { .device-grid { grid-template-columns: 1fr; } .split { grid-template-columns: 1fr; } .metrics { grid-template-columns: repeat(2,1fr); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-title"><span class="s-title">UX Research · 音频硬件</span><h1>语言自卫 App: 音频采集方案</h1></div>
+
+  <div class="metrics">
+    <div class="metric-card"><div class="val">3 种</div><div class="lbl">候选设备</div></div>
+    <div class="metric-card"><div class="val">8m</div><div class="lbl">最优收音</div></div>
+    <div class="metric-card"><div class="val">45h</div><div class="lbl">最长续航</div></div>
+    <div class="metric-card"><div class="val">&lt;3s</div><div class="lbl">目标延迟</div></div>
+  </div>
+
+  <div class="split">
+    <div class="split-left">
+      <h2>使用场景约束</h2>
+      <div class="check-item"><span class="dot dot-red"></span><p><strong>收音距离 ≥ 3-5m</strong> — 需覆盖饭桌对面说话的人</p></div>
+      <div class="check-item"><span class="dot dot-red"></span><p><strong>持续监听 ≥ 4h</strong> — 一顿饭局/聚会的完整时长</p></div>
+      <div class="check-item"><span class="dot dot-amber"></span><p><strong>社交隐蔽</strong> — 对方不能知道你正在记录对话</p></div>
+      <div class="check-item"><span class="dot dot-amber"></span><p><strong>端侧处理延迟 &lt; 3s</strong> — 需本地 ASR + NLP 模型</p></div>
+      <div class="check-item"><span class="dot dot-green"></span><p><strong>震动反馈</strong> — 提醒用户被冒犯，无需看屏幕</p></div>
+    </div>
+    <div class="split-right">
+      <h2>关键决策因子</h2>
+      <div class="check-item"><span class="dot dot-red"></span><p><strong>收音能力</strong> — 听不见=一切免谈（硬约束）</p></div>
+      <div class="check-item"><span class="dot dot-green"></span><p><strong>随身属性</strong> — 出门一定会带，不需要刻意记着</p></div>
+      <div class="check-item"><span class="dot dot-green"></span><p><strong>开发成本</strong> — MVP 阶段不需要定制硬件</p></div>
+      <div class="check-item"><span class="dot dot-amber"></span><p><strong>隐私心理</strong> — 用户自己对"一直开着录音"的接受度</p></div>
+    </div>
+  </div>
+
+  <div class="device-grid">
+    <div class="device-card">
+      <div class="emoji">📱</div>
+      <h3>智能手机</h3>
+      <span class="status status-rec">MVP 推荐</span>
+      <div class="stat-row"><span class="stat-lbl">麦克风</span><span class="stat-v">3-4 颗阵列</span></div>
+      <div class="stat-row"><span class="stat-lbl">收音</span><span class="stat-v">1-3m</span></div>
+      <div class="stat-row"><span class="stat-lbl">续航</span><span class="stat-v">4-6h</span></div>
+    </div>
+    <div class="device-card">
+      <div class="emoji">⌚️</div>
+      <h3>智能手表</h3>
+      <span class="status status-nr">不推荐收音</span>
+      <div class="stat-row"><span class="stat-lbl">麦克风</span><span class="stat-v">极小型·手腕位</span></div>
+      <div class="stat-row"><span class="stat-lbl">收音</span><span class="stat-v">&lt;0.5m</span></div>
+      <div class="stat-row"><span class="stat-lbl">续航</span><span class="stat-v">1-2h</span></div>
+    </div>
+    <div class="device-card">
+      <div class="emoji">🪪</div>
+      <h3>AI 录音卡</h3>
+      <span class="status status-opt">远期升级</span>
+      <div class="stat-row"><span class="stat-lbl">麦克风</span><span class="stat-v">5-6 颗阵列</span></div>
+      <div class="stat-row"><span class="stat-lbl">收音</span><span class="stat-v">5-8m</span></div>
+      <div class="stat-row"><span class="stat-lbl">续航</span><span class="stat-v">20-45h</span></div>
+    </div>
+  </div>
+
+  <div class="table-section">
+    <h2>综合能力对比</h2>
+    <table class="comp-table">
+      <tr><th>维度</th><th>手机 + 领夹麦</th><th>智能手表</th><th>AI 录音卡</th></tr>
+      <tr><td>收音距离</td><td>5-10m ✅</td><td>&lt;0.5m ❌</td><td>5-8m ✅</td></tr>
+      <tr><td>持续录音</td><td>4-6h</td><td>1-2h</td><td>20-45h</td></tr>
+      <tr><td>隐蔽性</td><td>中等</td><td>极佳</td><td>佳</td></tr>
+      <tr><td>端侧算力</td><td>强 ✅</td><td>弱 ❌</td><td>需配合手机</td></tr>
+      <tr><td>额外成本</td><td>¥300-500</td><td>¥0</td><td>¥499-1499</td></tr>
+      <tr><td>开发复杂度</td><td>低</td><td>中</td><td>中高</td></tr>
+    </table>
+  </div>
+
+  <div class="roadmap">
+    <h2>实施路线图</h2>
+    <div class="roadmap-step">
+      <div class="step-num step-1">1</div>
+      <div class="step-content"><h4>MVP — 手机 + 领夹无线麦</h4><p>¥300-500 硬件投入，纯 app 开发。快速跑通 '监听→识别→回怼' 闭环。</p></div>
+    </div>
+    <div class="roadmap-step">
+      <div class="step-num step-2">2</div>
+      <div class="step-content"><h4>升级 — 手机 + AI 录音卡</h4><p>DingTalk A1 ¥499 青春版做专用收音。手机处理 + 手表震动反馈。</p></div>
+    </div>
+    <div class="roadmap-step">
+      <div class="step-num step-3">3</div>
+      <div class="step-content"><h4>理想态 — TWS 耳机方案</h4><p>AirPods Pro 外置麦克风收音，位置最优。需攻克 iOS 后台麦克风权限。</p></div>
+    </div>
+  </div>
+
+  <div class="footer">UI/UX Pro Max · verbal-self-defense-app · 2026</div>
+</div>
+</body>
+</html>
