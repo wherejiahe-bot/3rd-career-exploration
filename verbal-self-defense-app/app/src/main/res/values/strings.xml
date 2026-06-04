@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">VS Defense</string>
-    <string name="notification_channel_name">Audio Monitoring</string>
-    <string name="notification_channel_desc">Foreground service for ambient audio monitoring</string>
-    <string name="listening_text">Listening — all audio processed on-device</string>
-</resources>
