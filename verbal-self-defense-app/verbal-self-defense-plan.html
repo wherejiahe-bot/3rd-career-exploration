@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verbal Self-Defense App — Project Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,510;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === RESET & BASE === */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-weight:400;
+  color:#1a1a1a;
+  background:#f5f5f5;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* === BG NOISE === */
+body::before{
+  content:'';position:fixed;inset:0;z-index:-1;
+  background:radial-gradient(ellipse at 30% 0%,rgba(180,180,255,0.06) 0%,transparent 60%),
+             radial-gradient(ellipse at 70% 100%,rgba(255,180,180,0.04) 0%,transparent 60%);
+  pointer-events:none;
+}
+
+/* === TYPOGRAPHY === */
+h1{font-size:clamp(2.4rem,5vw,3.6rem);font-weight:700;letter-spacing:-0.03em;line-height:1.1;margin-bottom:1rem}
+h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:600;letter-spacing:-0.02em;line-height:1.25;margin-bottom:0.75rem;padding-top:2rem}
+h3{font-size:clamp(1.125rem,2vw,1.4rem);font-weight:600;letter-spacing:-0.01em;line-height:1.35;margin-bottom:0.5rem;padding-top:1.5rem}
+p{font-size:clamp(0.95rem,1.2vw,1.05rem);color:#444;line-height:1.65;max-width:65ch;margin-bottom:1rem}
+code{font-family:'JetBrains Mono',monospace;font-size:0.875em;background:#eee;padding:0.15em 0.4em;border-radius:4px}
+pre{background:#1a1a2e;color:#e4e4e7;padding:1.25rem 1.5rem;border-radius:12px;overflow-x:auto;font-size:0.85rem;line-height:1.7;margin:1rem 0 1.5rem}
+pre code{background:transparent;padding:0;color:inherit;font-size:inherit}
+
+/* === LAYOUT === */
+.container{max-width:900px;margin:0 auto;padding:0 24px}
+.section-spacer{height:2px;background:linear-gradient(90deg,transparent,#ddd,transparent);margin:1.5rem 0 0.5rem}
+
+/* === GLASS HEADER === */
+.glass-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(245,245,247,0.78);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  padding:14px 0;
+}
+.glass-header .container{
+  display:flex;align-items:center;justify-content:space-between;
+}
+.glass-header .logo{
+  font-weight:600;font-size:0.95rem;letter-spacing:-0.01em;
+  display:flex;align-items:center;gap:8px;
+}
+.glass-header .logo-badge{
+  display:inline-block;
+  background:#1a1a2e;color:#fff;
+  font-size:0.65rem;font-weight:500;padding:2px 8px;border-radius:4px;
+  letter-spacing:0.02em;
+}
+.glass-header nav{display:flex;gap:8px;flex-wrap:wrap}
+.glass-header nav a{
+  color:#555;text-decoration:none;font-size:0.8rem;font-weight:500;
+  padding:6px 12px;border-radius:6px;transition:all 0.2s;
+}
+.glass-header nav a:hover{background:rgba(0,0,0,0.06);color:#1a1a1a}
+
+/* === HERO === */
+.hero{
+  padding:6rem 0 3.5rem;text-align:center;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(100,100,255,0.08),transparent 70%);
+  pointer-events:none;
+}
+.hero .subtitle{
+  font-size:clamp(0.9rem,1.5vw,1.05rem);color:#666;max-width:580px;margin:0 auto 1.5rem;line-height:1.6;
+}
+.hero-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1.5rem}
+.hero-badge{
+  display:inline-block;font-size:0.72rem;font-weight:500;padding:4px 12px;border-radius:100px;
+  background:rgba(0,0,0,0.05);color:#555;letter-spacing:0.01em;
+}
+.hero-badge.accent{background:#1a1a2e;color:#fff}
+
+/* === GLASS CARDS === */
+.card{
+  background:rgba(255,255,255,0.72);
+  backdrop-filter:blur(12px) saturate(160%);
+  -webkit-backdrop-filter:blur(12px) saturate(160%);
+  border:1px solid rgba(255,255,255,0.5);
+  border-radius:16px;
+  padding:1.75rem 2rem;
+  margin-bottom:1.25rem;
+  transition:box-shadow 0.25s,transform 0.25s;
+}
+.card:hover{
+  box-shadow:0 8px 40px rgba(0,0,0,0.06);
+  transform:translateY(-2px);
+}
+.card strong{font-weight:600;color:#1a1a1a}
+
+/* === STATUS BADGES === */
+.status{display:inline-flex;align-items:center;gap:5px;font-size:0.78rem;font-weight:500;padding:3px 10px;border-radius:100px}
+.status-dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.status-green{background:#e8f5e9;color:#2e7d32}.status-green .status-dot{background:#2e7d32}
+.status-amber{background:#fff8e1;color:#f57f17}.status-amber .status-dot{background:#f57f17}
+.status-red{background:#ffebee;color:#c62828}.status-red .status-dot{background:#c62828}
+.status-blue{background:#e3f2fd;color:#1565c0}.status-blue .status-dot{background:#1565c0}
+
+/* === TAG === */
+.tag{display:inline-block;font-size:0.72rem;font-weight:500;padding:2px 8px;border-radius:4px;background:#eee;color:#555;margin:1px 2px}
+
+/* === GRID === */
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+
+/* === RISK TABLE === */
+.risk-table{width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0}
+.risk-table th{text-align:left;font-weight:600;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.04em;color:#888;padding:0.5rem 0.75rem;border-bottom:1px solid #e0e0e0}
+.risk-table td{padding:0.65rem 0.75rem;border-bottom:1px solid #f0f0f0;color:#444;vertical-align:top}
+.risk-table tr:last-child td{border-bottom:none}
+.risk-level{padding:2px 8px;border-radius:4px;font-size:0.75rem;font-weight:600;white-space:nowrap}
+.risk-high{background:#ffebee;color:#c62828}
+.risk-mid{background:#fff8e1;color:#f57f17}
+.risk-low{background:#e8f5e9;color:#2e7d32}
+
+/* === PHASE TIMELINE === */
+.timeline{position:relative;padding-left:2rem;margin:1.5rem 0}
+.timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,#1a1a2e,#888,transparent)}
+.timeline-item{position:relative;margin-bottom:1.75rem}
+.timeline-item::before{content:'';position:absolute;left:-1.65rem;top:0.5rem;width:14px;height:14px;border-radius:50%;background:#1a1a2e;border:3px solid #f5f5f5}
+.timeline-item h3{margin-bottom:0.25rem;padding-top:0}
+.timeline-item .meta{font-size:0.8rem;color:#888;margin-bottom:0.5rem}
+
+/* === SKILLS ROADMAP === */
+.skill-node{display:inline-flex;align-items:center;gap:6px;background:#1a1a2e;color:#fff;padding:4px 12px;border-radius:100px;font-size:0.78rem;font-weight:500;margin:3px 4px}
+.skill-node.phase1{background:#1565c0}
+.skill-node.phase2{background:#e65100}
+.skill-node.phase3{background:#2e7d32}
+.skill-node.phase4{background:#6a1b9a}
+.arrow{color:#bbb;font-size:0.8rem;margin:0 2px}
+
+/* === FOOTER === */
+.footer{
+  margin-top:4rem;padding:2rem 0;text-align:center;
+  border-top:1px solid rgba(0,0,0,0.06);
+  font-size:0.8rem;color:#999;
+}
+
+/* === PROGRESS TRACKER === */
+.progress-bar-track{height:22px;background:#e8e8e8;border-radius:11px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,#1565c0,#4CAF50);border-radius:11px;transition:width 0.5s}
+.progress-timeline td{padding:0.5rem 0.75rem;border-bottom:1px solid #f0f0f0;color:#444;font-size:0.88rem;vertical-align:middle}
+.progress-timeline th{text-align:left;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em;color:#888;padding:0.4rem 0.75rem;border-bottom:2px solid #e0e0e0}
+.progress-timeline tr:last-child td{border-bottom:none}
+.progress-timeline .total-row td{border-top:2px solid #e0e0e0;font-weight:600;color:#1a1a1a}
+.phase-pill{display:inline-block;padding:2px 10px;border-radius:100px;font-size:0.72rem;font-weight:600}
+.pill-done{background:#e8f5e9;color:#2e7d32}
+.pill-wait{background:#f5f5f5;color:#999}
+.phase-strip{display:flex;gap:4px;height:8px;margin:0.75rem 0}
+.phase-strip div{border-radius:4px;transition:width 0.3s}
+
+@media(max-width:640px){
+  .progress-timeline td,.progress-timeline th{padding:0.35rem 0.4rem;font-size:0.78rem}
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.card,.hero,.timeline-item{animation:fadeUp 0.5s ease-out both}
+.card:nth-child(2){animation-delay:0.08s}
+.card:nth-child(3){animation-delay:0.16s}
+.card:nth-child(4){animation-delay:0.24s}
+.card:nth-child(5){animation-delay:0.32s}
+
+/* === RESPONSIVE === */
+@media(max-width:640px){
+  .glass-header .container{flex-direction:column;gap:8px}
+  .glass-header nav a{font-size:0.72rem;padding:4px 8px}
+  .hero{padding:4rem 0 2.5rem}
+  .card{padding:1.25rem 1.25rem;border-radius:12px}
+  .risk-table{font-size:0.8rem}
+  .risk-table th,.risk-table td{padding:0.4rem 0.5rem}
+}
+
+/* === PRINT === */
+@media print{
+  .glass-header{position:static;backdrop-filter:none;background:#fff}
+  .card{background:#fff;backdrop-filter:none;box-shadow:none;break-inside:avoid}
+  .hero{padding:1rem 0}
+  @page{margin:1.5cm}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="glass-header">
+  <div class="container">
+    <div class="logo">
+      <span class="logo-badge">3CE</span>
+      3rd Career Exploration
+    </div>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#features">Features</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#risks">Risks</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#skills">Skills</a>
+      <a href="#progress">Progress</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <h1>Verbal Self-Defense App</h1>
+    <p class="subtitle">
+      A real-time ambient-aware Android application that detects verbal aggression,
+      PUA tactics, and language escalation — then helps you respond with the right retort, at the right level.
+    </p>
+    <div class="hero-badges">
+      <span class="hero-badge accent">Android</span>
+      <span class="hero-badge">Real-time Audio</span>
+      <span class="hero-badge">AI-Powered</span>
+      <span class="hero-badge">Smart Retort</span>
+      <span class="hero-badge">Haptic Feedback</span>
+      <span class="hero-badge">Privacy First</span>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+
+<section id="overview">
+  <h2>Project Overview</h2>
+  <p>
+    An Android app that runs in the background, continuously monitoring ambient conversation.
+    When it detects language patterns that are PUA (pick-up artist) tactics, gaslighting,
+    verbal escalation, or outright insults — it alerts the user through escalating haptic
+    and visual signals. The user can then trigger a pre-generated retort through the speaker
+    with a simple double-tap or triple-knock gesture.
+  </p>
+
+  <div class="grid-2">
+    <div class="card">
+      <strong style="font-size:1.1rem">Core Need</strong>
+      <p style="margin-top:0.5rem;margin-bottom:0">
+        People in verbally disadvantaged situations often freeze, regret not speaking up,
+        or escalate emotionally. This app gives them a calm, prepared response — in their
+        own voice or chosen tone.
+      </p>
+    </div>
+    <div class="card">
+      <strong style="font-size:1.1rem">Target User</strong>
+      <p style="margin-top:0.5rem;margin-bottom:0">
+        Individuals who find themselves in frequent verbal conflicts, social pressure
+        situations, or want a "second brain" for real-time social defense. Self-defense
+        isn't just physical.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- FEATURES -->
+<section id="features">
+  <h2>Core Features</h2>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:0.5rem">
+      <h3 style="padding-top:0;margin-bottom:0">1. Ambient Audio Monitoring</h3>
+      <span class="status status-amber"><span class="status-dot"></span>Always-on</span>
+    </div>
+    <p>
+      Runs as a foreground service with persistent notification. Uses the device microphone
+      to capture ambient audio. <strong>Privacy note:</strong> all audio processing happens
+      on-device. No data leaves the phone.
+    </p>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:0.5rem">
+      <h3 style="padding-top:0;margin-bottom:0">2. Voice Identification</h3>
+      <span class="status status-blue"><span class="status-dot"></span>Speaker Diarization</span>
+    </div>
+    <p>
+      Identifies different speakers by voice characteristics. Maps phrases to individuals
+      so you know exactly who said what. Builds a temporary session profile of each speaker's tone and aggression level.
+    </p>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:0.5rem">
+      <h3 style="padding-top:0;margin-bottom:0">3. Threat Level Detection</h3>
+      <span class="status status-green"><span class="status-dot"></span>Multi-Layer</span>
+    </div>
+    <p><strong>Three-tier alert system:</strong></p>
+    <div style="margin-top:0.5rem">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span class="status status-green" style="font-size:0.75rem"><span class="status-dot"></span>Level 1 - Awareness</span>
+        <span style="font-size:0.85rem;color:#666">Orange running light, subtle vibration</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span class="status status-amber" style="font-size:0.75rem"><span class="status-dot"></span>Level 2 - Warning</span>
+        <span style="font-size:0.85rem;color:#666">Fast orange-red pulse, medium vibration</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="status status-red" style="font-size:0.75rem"><span class="status-dot"></span>Level 3 - Defend</span>
+        <span style="font-size:0.85rem;color:#666">Red strobing light, strong vibration pattern</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:0.5rem">
+      <h3 style="padding-top:0;margin-bottom:0">4. Smart Retort Engine</h3>
+      <span class="status status-blue"><span class="status-dot"></span>Multi-Tone</span>
+    </div>
+    <p>
+      Pre-written or AI-generated retorts organized by tone and intensity:
+    </p>
+    <div style="margin-top:0.5rem;display:flex;flex-wrap:wrap;gap:6px">
+      <span class="tag">Gentle / Soft</span>
+      <span class="tag">Rational / Factual</span>
+      <span class="tag">Firm / Assertive</span>
+      <span class="tag">Sarcastic / Witty</span>
+      <span class="tag">Aggressive / Blunt</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:0.5rem">
+      <h3 style="padding-top:0;margin-bottom:0">5. Gesture Trigger</h3>
+      <span class="status status-amber"><span class="status-dot"></span>Quick Access</span>
+    </div>
+    <p>
+      <strong>Activation:</strong> Double-tap or triple-knock on the screen. The app then speaks
+      the selected retort through the device speaker (or connected audio output). The response
+      can be context-aware — the app picks the most appropriate retort based on what was just said.
+    </p>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:0.5rem">
+      <h3 style="padding-top:0;margin-bottom:0">6. Session Review & Learn</h3>
+      <span class="status status-green"><span class="status-dot"></span>Post-Event</span>
+    </div>
+    <p>
+      After a verbal encounter, review what happened, what was said, and how you responded.
+      The app helps you reflect: <em>"Next time, I could have said..."</em> — turning every
+      difficult conversation into a learning opportunity.
+    </p>
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <h2>Technical Architecture</h2>
+  <p>High-level component breakdown for the Android application:</p>
+
+  <div class="card">
+    <h3 style="padding-top:0">Audio Pipeline</h3>
+    <pre><code>Microphone → AudioRecord Buffer → VAD (Voice Activity Detection)
+    → Speaker Diarization → ASR (Speech-to-Text) → Text Analysis</code></pre>
+    <p>
+      <strong>Key choices:</strong> on-device ML models for privacy. VAD using WebRTC VAD,
+      speaker diarization via on-device embeddings, STT using on-device models (e.g., whisper.cpp
+      or ML Kit). Text analysis with lightweight on-device NLP for threat classification.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">Threat Classification</h3>
+    <pre><code>Text → Keyword Detection (fast path) → Pattern Analysis → LLM/NLP Classification
+    → Sentiment Scoring → Escalation Detection → Level Output (1-3)</code></pre>
+    <p>
+      <strong>Two-pass system:</strong> a fast keyword/pattern pass for immediate detection,
+      followed by a deeper semantic analysis for context understanding.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">Retort Engine</h3>
+    <pre><code>Detection Result → Context Builder → Retort Selector (Rule/LLM)
+    → TTS Engine → Speaker Output</code></pre>
+    <p>
+      Retorts can come from a curated local database (editable by the user) or generated
+      on-the-fly by an on-device LLM based on context.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">App State Machine</h3>
+    <pre><code>IDLE → LISTENING → ANALYZING → ALERTING → RETORT_READY → SPEAKING → IDLE</code></pre>
+    <p>
+      Clean state transitions with proper lifecycle management for the foreground service.
+      Battery optimization: audio processing is batched and throttled during quiet periods.
+    </p>
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- RISKS & COMPLIANCE -->
+<section id="risks">
+  <h2>Risk Assessment & Compliance</h2>
+  <p>
+    Building a real-time audio monitoring app comes with significant responsibilities.
+    Here is the risk matrix and mitigation strategy for each category.
+  </p>
+
+  <table class="risk-table">
+    <thead>
+      <tr>
+        <th>Risk Category</th>
+        <th>Level</th>
+        <th>Description</th>
+        <th>Mitigation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Privacy & Audio Data</strong></td>
+        <td><span class="risk-level risk-high">High</span></td>
+        <td>Always-on microphone is a privacy minefield. Users near the app user may not consent to recording.</td>
+        <td>All processing on-device. No network audio stream. Clear visual indicator when recording. User consent screen on first launch. Transparent data policy.</td>
+      </tr>
+      <tr>
+        <td><strong>Legal (Recording Consent)</strong></td>
+        <td><span class="risk-level risk-high">High</span></td>
+        <td>Recording conversations without consent may violate wiretapping laws in some jurisdictions (varies by country/state).</td>
+        <td>Localized legal warnings. The app acts as a "hearing aid" for the user (not recording storage). Consult legal advice per target market.</td>
+      </tr>
+      <tr>
+        <td><strong>Battery Drain</strong></td>
+        <td><span class="risk-level risk-mid">Medium</span></td>
+        <td>Continuous audio processing + on-device ML = significant battery impact.</td>
+        <td>Adaptive sampling: lower frequency during quiet periods. Wake-lock with debounce. Efficient ML models (quantized, small).</td>
+      </tr>
+      <tr>
+        <td><strong>False Positives</strong></td>
+        <td><span class="risk-level risk-mid">Medium</span></td>
+        <td>App triggering alert for normal conversation could cause embarrassment or unnecessary conflict.</td>
+        <td>Tunable sensitivity. Learning mode: app starts in passive mode, only alerts after user calibrates. User sets their own thresholds.</td>
+      </tr>
+      <tr>
+        <td><strong>Retort Misuse</strong></td>
+        <td><span class="risk-level risk-mid">Medium</span></td>
+        <td>User could use the app to escalate conflicts or be aggressive when it is not warranted.</td>
+        <td>Default to de-escalation tones. "Cool-down" period before retort trigger. User must actively choose to retort (not automatic).</td>
+      </tr>
+      <tr>
+        <td><strong>Play Store Compliance</strong></td>
+        <td><span class="risk-level risk-mid">Medium</span></td>
+        <td>Google Play restricts apps that record audio in the background. Accessibility API restrictions also apply.</td>
+        <td>Use foreground service with persistent notification. Declare RECORD_AUDIO with justification. Consider sideload/distribution outside Play Store.</td>
+      </tr>
+      <tr>
+        <td><strong>Model Accuracy</strong></td>
+        <td><span class="risk-level risk-low">Low</span></td>
+        <td>Chinese-language NLP for detecting PUA/gaslighting patterns is not a well-studied domain.</td>
+        <td>Build a curated phrase library first. Use rule-based detection for known patterns. Add ML classification as a later enhancement.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- DEVELOPMENT ROADMAP -->
+<section id="roadmap">
+  <h2>Development Roadmap</h2>
+  <p>Eight phases, ordered by dependency and risk. Each phase builds on the previous one.</p>
+
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <h3>Phase 0: Research & Foundation</h3>
+      <div class="meta">Week 1-2 | <span class="status status-blue"><span class="status-dot"></span>Current Phase</span></div>
+      <p>
+        Study Android audio APIs (AudioRecord, MediaRecorder). Research on-device ASR models
+        (whisper.cpp, ML Kit, Vosk). Build a prototype that can record audio and convert to text.
+        Evaluate Kotlin vs Java vs Flutter. <strong>Decision: Kotlin + Jetpack Compose.</strong>
+      </p>
+      <div>
+        <span class="skill-node phase1">skill-creator</span>
+        <span class="arrow">→</span>
+        <span class="skill-node phase1">brainstorming</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <h3>Phase 1: Audio Pipeline MVP</h3>
+      <div class="meta">Week 3-4</div>
+      <p>
+        Implement VAD (Voice Activity Detection) to detect speech segments. Implement
+        on-device STT (Speech-to-Text) for Chinese. Build a foreground service with persistent
+        notification. Basic audio buffering and batching.
+      </p>
+      <div>
+        <span class="skill-node phase1">karpathy-guidelines</span>
+        <span class="arrow">→</span>
+        <span class="skill-node phase1">tdd</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <h3>Phase 2: Threat Detection Engine</h3>
+      <div class="meta">Week 5-6</div>
+      <p>
+        Build the rule-based pattern matcher for PUA tactics, gaslighting phrases, and
+        escalation keywords. Create the three-tier classification system. Implement sentiment
+        and aggression scoring. Test with real conversation examples.
+      </p>
+      <div>
+        <span class="skill-node phase2">grill-me</span>
+        <span class="arrow">→</span>
+        <span class="skill-node phase2">systematic-debugging</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <h3>Phase 3: Alert System (Haptic + Visual)</h3>
+      <div class="meta">Week 7</div>
+      <p>
+        Implement custom vibration patterns (VibrationEffect with amplitude control).
+        Create the running light animation (orange → red) using the screen edge.
+        Design the visual alert overlay with Compose. Focus on not being distracting
+        to others in the same room.
+      </p>
+      <div>
+        <span class="skill-node phase2">ppvi</span>
+        <span class="arrow">→</span>
+        <span class="skill-node phase2">hallmark</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <h3>Phase 4: Gesture Detection</h3>
+      <div class="meta">Week 8</div>
+      <p>
+        Implement double-tap and triple-knock gesture recognition using Android's
+        GestureDetector or SensorManager (accelerometer for knock). Ensure it works
+        even when the screen is off or the phone is in a pocket. <strong>Use accelerometer
+        for knock detection — more reliable than touch for real-world scenarios.</strong>
+      </p>
+    </div>
+
+    <div class="timeline-item">
+      <h3>Phase 5: Retort Engine & TTS</h3>
+      <div class="meta">Week 9-10</div>
+      <p>
+        Build the retort database with 5 tone categories. Implement the context-aware
+        retort selection algorithm. Integrate Android TTS (TextToSpeech API) for voice output.
+        Create a user interface for browsing and customizing retorts. Support multiple languages
+        (Chinese first, English later).
+      </p>
+      <div>
+        <span class="skill-node phase3">ima-skill</span>
+        <span class="arrow">→</span>
+        <span class="skill-node phase3">kb-deep-search</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <h3>Phase 6: Session Review & Learning</h3>
+      <div class="meta">Week 11</div>
+      <p>
+        Build the session log with anonymized transcripts. Add reflection prompts and
+        "better response" suggestions. Implement local data storage (Room database).
+        Add export functionality. Privacy controls: automatic deletion after N days.
+      </p>
+    </div>
+
+    <div class="timeline-item">
+      <h3>Phase 7: Polish & Distribution</h3>
+      <div class="meta">Week 12</div>
+      <p>
+        UI/UX refinement using taste-skill, ppvi, hallmark, and esther-design-system.
+        Battery optimization profiling. Edge case testing (noisy environments,
+        multiple speakers, different Chinese dialects). Prepare APK for sideloading
+        or distribution. Create landing page and documentation.
+      </p>
+      <div>
+        <span class="skill-node phase4">taste-skill</span>
+        <span class="arrow">→</span>
+        <span class="skill-node phase4">ppvi</span>
+        <span class="arrow">→</span>
+        <span class="skill-node phase4">esther-design-system</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- SKILLS ROADMAP -->
+<section id="skills">
+  <h2>Skill Invocation Roadmap</h2>
+  <p>
+    Each phase maps to specific WorkBuddy skills. Here is the complete calling sequence:
+  </p>
+
+  <div class="card">
+    <h3 style="padding-top:0">Phase 0 — Discovery & Planning</h3>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:0.75rem">
+      <span class="skill-node phase1">brainstorming</span>
+      <span class="arrow">→</span>
+      <span class="skill-node phase1">skill-creator</span>
+      <span class="arrow">→</span>
+      <span class="skill-node phase1">grill-me</span>
+    </div>
+    <p style="margin-top:0.75rem;margin-bottom:0;font-size:0.9rem">
+      Brainstorming first to explore approaches. Skill-creator to set up the project skill
+      for repeatable workflows. Grill-me to pressure-test design decisions.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">Phase 1-2 — Core Engineering</h3>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:0.75rem">
+      <span class="skill-node phase1">karpathy-guidelines</span>
+      <span class="arrow">→</span>
+      <span class="skill-node phase1">tdd</span>
+      <span class="arrow">→</span>
+      <span class="skill-node phase1">systematic-debugging</span>
+    </div>
+    <p style="margin-top:0.75rem;margin-bottom:0;font-size:0.9rem">
+      Karpathy guidelines for coding discipline. TDD for the core audio pipeline.
+      Systematic debugging when audio latency or recognition accuracy issues arise.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">Phase 3-4 — UX & Interaction</h3>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:0.75rem">
+      <span class="skill-node phase2">hallmark</span>
+      <span class="arrow">→</span>
+      <span class="skill-node phase2">ppvi</span>
+      <span class="arrow">→</span>
+      <span class="skill-node phase2">taste-skill</span>
+    </div>
+    <p style="margin-top:0.75rem;margin-bottom:0;font-size:0.9rem">
+      Hallmark for structural anti-slop design. PPVI for glassmorphism and visual depth.
+      Taste-skill for overall aesthetic calibration.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">Phase 5-6 — Content & Knowledge</h3>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:0.75rem">
+      <span class="skill-node phase3">ima-skill</span>
+      <span class="arrow">→</span>
+      <span class="skill-node phase3">kb-deep-search</span>
+      <span class="arrow">→</span>
+      <span class="skill-node phase3">humanizer-zh-enhanced</span>
+    </div>
+    <p style="margin-top:0.75rem;margin-bottom:0;font-size:0.9rem">
+      IMA for managing retort knowledge base. KB deep search for retrieving relevant
+      patterns from the Sahaja knowledge library. Humanizer for natural-sounding retorts.
+    </p>
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- DESIGN DECISIONS -->
+<section id="brainstorming">
+  <h2>Brainstorming Design Decisions</h2>
+  <p>Decisions made during WorkBuddy brainstorming session, June 4, 2026.</p>
+
+  <div class="card">
+    <h3 style="padding-top:0">1. Usage Scenarios</h3>
+    <p><strong>Decision: All three scenarios covered, switchable by mode.</strong></p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:0.5rem">
+      <span class="tag" style="background:#e3f2fd;color:#1565c0;font-weight:600">👔 Workplace / Office</span>
+      <span class="tag" style="background:#fff3e0;color:#e65100;font-weight:600">🍻 Social Gatherings</span>
+      <span class="tag" style="background:#f3e5f5;color:#7b1fa2;font-weight:600">❤️ Relationships / Family</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">2. Retort Speed Architecture</h3>
+    <p><strong>Decision: Three-layer speed system.</strong> AI is too slow for the first retort (on-device: 0.5-2s, cloud: 3s+), so the first response must use preset library for &lt;200ms delivery.</p>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:0.75rem">
+      <div style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-radius:10px;padding:12px 16px;border-left:4px solid #1565c0">
+        <strong style="color:#1565c0">Layer 1 — First Strike (Preset, &lt;200ms)</strong>
+        <div style="font-size:0.88rem;color:#444;margin-top:4px">
+          Detection → context match → TTS playback. Double-tap to deploy. ZERO latency.
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,#fff8e1,#ffecb3);border-radius:10px;padding:12px 16px;border-left:4px solid #e65100">
+        <strong style="color:#e65100">Layer 2 — Stalling (Backup)</strong>
+        <div style="font-size:0.88rem;color:#444;margin-top:4px">
+          Universal phrases: "Say that again?", a laugh, "Interesting." — buys 2-5 seconds for AI to generate.
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:10px;padding:12px 16px;border-left:4px solid #2e7d32">
+        <strong style="color:#2e7d32">Layer 3 — AI Follow-Up (5-15s window)</strong>
+        <div style="font-size:0.88rem;color:#444;margin-top:4px">
+          On-device LLM generates context-aware retort. User previews on screen, double-taps to deploy.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">3. Retort Library Structure</h3>
+    <p>Three-dimensional organization matrix:</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin:0.75rem 0">
+      <div style="flex:1;min-width:140px;background:rgba(255,255,255,0.5);border-radius:10px;padding:12px;border:1px solid #e0e0e0;text-align:center">
+        <div style="font-size:0.75rem;font-weight:600;color:#666">Dimension 1</div>
+        <div style="font-size:1rem;font-weight:700;color:#1565c0;margin:4px 0">Scenario</div>
+        <div style="font-size:0.78rem;color:#666">Workplace / Social / Relationship</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:rgba(255,255,255,0.5);border-radius:10px;padding:12px;border:1px solid #e0e0e0;text-align:center">
+        <div style="font-size:0.75rem;font-weight:600;color:#666">Dimension 2</div>
+        <div style="font-size:1rem;font-weight:700;color:#e65100;margin:4px 0">Tone</div>
+        <div style="font-size:0.78rem;color:#666">Gentle / Rational / Sharp / Blunt / Humorous</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:rgba(255,255,255,0.5);border-radius:10px;padding:12px;border:1px solid #e0e0e0;text-align:center">
+        <div style="font-size:0.75rem;font-weight:600;color:#666">Dimension 3</div>
+        <div style="font-size:1rem;font-weight:700;color:#c62828;margin:4px 0">Threat Level</div>
+        <div style="font-size:0.78rem;color:#666">L1 Passive / L2 Escalation / L3 Attack</div>
+      </div>
+    </div>
+    <p style="font-size:0.9rem;color:#555;margin-bottom:0">Each cell in the 3×5×3 matrix contains 2-4 preset retort phrases. Total: ~180-360 phrases initially.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">4. User Interaction Flow</h3>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:0.5rem">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">1</div>
+        <div><strong>被动监听</strong> — APP 后台运行，持续检测环境语音</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">2</div>
+        <div><strong>等级预警</strong> — 检测到针对性语言，屏幕边沿亮起橙/红灯+震动</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">3</div>
+        <div><strong>首发预设</strong> — 双击屏幕，预设话术经TTS即时外放（&lt;200ms）</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">4</div>
+        <div><strong>AI生成后续</strong> — 后台开始生成第二句，10秒内屏幕显示AI推荐</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">5</div>
+        <div><strong>确认发声</strong> — 瞟一眼→双击确认，或滑动换一条AI建议</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">5. User Customization</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span class="tag">Edit retort library</span>
+      <span class="tag">Set default tone per scenario</span>
+      <span class="tag">Alert sensitivity (relaxed/standard/strict)</span>
+      <span class="tag">AI model choice (local/cloud)</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">6. Retort Classification Rules</h3>
+    <p>The auto-matching engine selects the best retort based on this ruleset:</p>
+    <div style="margin-top:0.75rem">
+
+      <div style="margin-bottom:0.75rem">
+        <strong>Rule 1: Match Scenario First</strong>
+        <div style="font-size:0.88rem;color:#555;margin-top:2px">
+          The current app mode (Workplace/Social/Relationship) acts as the primary filter. Only retorts tagged for that scenario are considered.
+        </div>
+      </div>
+
+      <div style="margin-bottom:0.75rem">
+        <strong>Rule 2: Escalate Tone with Threat Level</strong>
+        <div style="font-size:0.88rem;color:#555;margin-top:2px">
+          L1 (passive aggression) → Gentle or Rational tone default.<br>
+          L2 (escalation) → Sharp or Rational tone, user's last-used preference.<br>
+          L3 (attack) → Blunt or Sharp tone, or user's pre-configured "combat mode" tone.
+        </div>
+      </div>
+
+      <div style="margin-bottom:0.75rem">
+        <strong>Rule 3: User Tone Preference as Weight</strong>
+        <div style="font-size:0.88rem;color:#555;margin-top:2px">
+          Each user can assign a "default tone" per scenario. This adds a +30% selection weight to that tone, but the engine can override if the threat level demands escalation.
+        </div>
+      </div>
+
+      <div>
+        <strong>Rule 4: Diversity within Session</strong>
+        <div style="font-size:0.88rem;color:#555;margin-top:2px">
+          Avoid repeating the same retort within the same conversation session. Track recently used phrases per scenario and deprioritize them (recency penalty).
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">7. AI Generation Strategy</h3>
+    <p>For follow-up retorts (Layer 3), the on-device LLM uses this strategy:</p>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:0.75rem">
+      <div style="background:#f5f5f5;border-radius:8px;padding:10px 14px;border-left:3px solid #2e7d32">
+        <strong style="color:#2e7d32">Trigger</strong>
+        <div style="font-size:0.85rem;color:#555;margin-top:2px">
+          Activated when first retort finishes playing AND at least 2 more exchanges are detected.
+        </div>
+      </div>
+      <div style="background:#f5f5f5;border-radius:8px;padding:10px 14px;border-left:3px solid #2e7d32">
+        <strong style="color:#2e7d32">Context Window</strong>
+        <div style="font-size:0.85rem;color:#555;margin-top:2px">
+          Last 30 seconds of transcribed conversation + detected speakers + current threat level + user's tone preference.
+        </div>
+      </div>
+      <div style="background:#f5f5f5;border-radius:8px;padding:10px 14px;border-left:3px solid #2e7d32">
+        <strong style="color:#2e7d32">Generation Type</strong>
+        <div style="font-size:0.85rem;color:#555;margin-top:2px">
+          <strong>Quick (0.5-2s):</strong> Template-based slot filling. Fill detected name/organization into sentence templates.<br>
+          <strong>Full (3-8s):</strong> On-device LLM (1-3B param, quantized). Generates from scratch with tone instruction.
+        </div>
+      </div>
+      <div style="background:#f5f5f5;border-radius:8px;padding:10px 14px;border-left:3px solid #2e7d32">
+        <strong style="color:#2e7d32">Quality Guardrails</strong>
+        <div style="font-size:0.85rem;color:#555;margin-top:2px">
+          Max 2 sentences (keep it punchy). No swearing by default (configurable). No escalation escalation — AI tends to de-escalate unless user's combat mode is on.
+        </div>
+      </div>
+      <div style="background:#f5f5f5;border-radius:8px;padding:10px 14px;border-left:3px solid #2e7d32">
+        <strong style="color:#2e7d32">Fallback</strong>
+        <div style="font-size:0.85rem;color:#555;margin-top:2px">
+          If LLM times out or produces low-quality output, fall back to second-best preset retort from the library.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- NEXT STEPS -->
+<section>
+  <h2>Immediate Next Steps</h2>
+  <div class="grid-2">
+    <div class="card" style="border-left:3px solid #1565c0">
+      <h3 style="padding-top:0">Step 1: Skill Invocation</h3>
+      <p style="margin-bottom:0.5rem">Call these skills in sequence:</p>
+      <ol style="color:#444;font-size:0.9rem;padding-left:1.25rem;line-height:1.8">
+        <li><strong>brainstorming</strong> — explore approaches and generate design spec</li>
+        <li><strong>grill-me</strong> — pressure-test key decisions</li>
+        <li><strong>writing-plans</strong> — create the implementation plan</li>
+      </ol>
+    </div>
+    <div class="card" style="border-left:3px solid #2e7d32">
+      <h3 style="padding-top:0">Step 2: Development</h3>
+      <p style="margin-bottom:0.5rem">Start building with:</p>
+      <ol style="color:#444;font-size:0.9rem;padding-left:1.25rem;line-height:1.8">
+        <li>Set up Android project (Kotlin + Jetpack Compose)</li>
+        <li>Implement VAD + STT audio pipeline</li>
+        <li>Build threat detection engine</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- === PROGRESS TRACKER === -->
+<section id="progress">
+  <h2>Progress Tracker</h2>
+  <div class="card" style="border-left:3px solid #1565c0">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:1rem">
+    <div>
+      <span class="status status-blue"><span class="status-dot"></span>Session 1 · 2026-06-04</span>
+      <div style="font-size:1.4rem;font-weight:700;letter-spacing:-0.02em;margin-top:6px">Progress: 3.5%</div>
+    </div>
+    <div style="text-align:right;font-size:0.85rem;color:#666">
+      <div>Net work: <strong>1h45m</strong></div>
+      <div>Total elapsed: 2h20m</div>
+      <div style="font-size:0.75rem;color:#999;margin-top:2px">~26 sessions · 8-12 weeks to ship</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:8px">
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" style="width:3.5%"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:#888;margin-top:4px">
+      <span>0%</span><span>MVP ~54%</span><span>Beta ~65%</span><span>Ship 100%</span>
+    </div>
+  </div>
+
+  <div style="margin-bottom:1rem">
+    <div class="phase-strip">
+      <div style="flex:1;background:#4CAF50" title="P0"></div>
+      <div style="flex:1.5;background:#e0e0e0" title="P1"></div>
+      <div style="flex:1.25;background:#e0e0e0" title="P2"></div>
+      <div style="flex:0.75;background:#e0e0e0" title="P3"></div>
+      <div style="flex:0.75;background:#e0e0e0" title="P4"></div>
+      <div style="flex:2;background:#e0e0e0" title="P5"></div>
+      <div style="flex:1.5;background:#e0e0e0" title="P6"></div>
+      <div style="flex:3;background:#e0e0e0" title="P7"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#999;margin-top:2px">
+      <span>P0</span><span>P1</span><span>P2</span><span>P3</span><span>P4</span><span>P5</span><span>P6</span><span>P7</span>
+    </div>
+  </div>
+
+  <table class="progress-timeline" style="width:100%;border-collapse:collapse">
+    <tr><th>Phase</th><th>Focus</th><th>Est. Hours</th><th>Status</th></tr>
+    <tr><td style="color:#2e7d32;font-weight:600">P0</td><td>Design · Spec · Plan</td><td>2h</td><td><span class="phase-pill pill-done">Done 1.75h</span></td></tr>
+    <tr><td style="color:#1565c0">P1</td><td>Audio Pipeline (VAD + STT + Service)</td><td>6h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#1565c0">P2</td><td>Threat Detection Engine</td><td>5h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#e65100">P3</td><td>Alert System (Haptic + Edge Light)</td><td>4h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#e65100">P4</td><td>Gesture Detection (Knock + Tap)</td><td>3h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#6a1b9a">P5</td><td>Retort Engine + TTS</td><td>8h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#6a1b9a">P6</td><td>Session Review + Data Layer</td><td>6h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#c62828">P7</td><td>Polish · Test · Distribute</td><td>18h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr class="total-row"><td colspan="2"><strong>Total</strong></td><td><strong>52h</strong></td><td><strong style="color:#2e7d32">3.5%</strong></td></tr>
+  </table>
+  <div style="font-size:0.75rem;color:#999;margin-top:8px;line-height:1.5">
+    Estimate: ~2h net per session · 2-3 sessions/week → <strong>8-12 weeks to ship-ready</strong>.<br>
+    MVP (P0-P5): ~28h (54%) · ~5-7 weeks.
+  </div>
+</div>
+</section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    3rd Career Exploration &mdash; Verbal Self-Defense App Project Analysis<br>
+    Generated June 4, 2026 &bull; Part of the WorkBuddy-powered development workflow
+  </div>
+</footer>
+
+</body>
+</html>
