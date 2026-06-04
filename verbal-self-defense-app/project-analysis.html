@@ -660,6 +660,109 @@ pre code{background:transparent;padding:0;color:inherit;font-size:inherit}
 
 <div class="section-spacer"></div>
 
+<!-- DESIGN DECISIONS -->
+<section id="brainstorming">
+  <h2>Brainstorming Design Decisions</h2>
+  <p>Decisions made during WorkBuddy brainstorming session, June 4, 2026.</p>
+
+  <div class="card">
+    <h3 style="padding-top:0">1. Usage Scenarios</h3>
+    <p><strong>Decision: All three scenarios covered, switchable by mode.</strong></p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:0.5rem">
+      <span class="tag" style="background:#e3f2fd;color:#1565c0;font-weight:600">👔 Workplace / Office</span>
+      <span class="tag" style="background:#fff3e0;color:#e65100;font-weight:600">🍻 Social Gatherings</span>
+      <span class="tag" style="background:#f3e5f5;color:#7b1fa2;font-weight:600">❤️ Relationships / Family</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">2. Retort Speed Architecture</h3>
+    <p><strong>Decision: Three-layer speed system.</strong> AI is too slow for the first retort (on-device: 0.5-2s, cloud: 3s+), so the first response must use preset library for &lt;200ms delivery.</p>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:0.75rem">
+      <div style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-radius:10px;padding:12px 16px;border-left:4px solid #1565c0">
+        <strong style="color:#1565c0">Layer 1 — First Strike (Preset, &lt;200ms)</strong>
+        <div style="font-size:0.88rem;color:#444;margin-top:4px">
+          Detection → context match → TTS playback. Double-tap to deploy. ZERO latency.
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,#fff8e1,#ffecb3);border-radius:10px;padding:12px 16px;border-left:4px solid #e65100">
+        <strong style="color:#e65100">Layer 2 — Stalling (Backup)</strong>
+        <div style="font-size:0.88rem;color:#444;margin-top:4px">
+          Universal phrases: "Say that again?", a laugh, "Interesting." — buys 2-5 seconds for AI to generate.
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:10px;padding:12px 16px;border-left:4px solid #2e7d32">
+        <strong style="color:#2e7d32">Layer 3 — AI Follow-Up (5-15s window)</strong>
+        <div style="font-size:0.88rem;color:#444;margin-top:4px">
+          On-device LLM generates context-aware retort. User previews on screen, double-taps to deploy.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">3. Retort Library Structure</h3>
+    <p>Three-dimensional organization matrix:</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin:0.75rem 0">
+      <div style="flex:1;min-width:140px;background:rgba(255,255,255,0.5);border-radius:10px;padding:12px;border:1px solid #e0e0e0;text-align:center">
+        <div style="font-size:0.75rem;font-weight:600;color:#666">Dimension 1</div>
+        <div style="font-size:1rem;font-weight:700;color:#1565c0;margin:4px 0">Scenario</div>
+        <div style="font-size:0.78rem;color:#666">Workplace / Social / Relationship</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:rgba(255,255,255,0.5);border-radius:10px;padding:12px;border:1px solid #e0e0e0;text-align:center">
+        <div style="font-size:0.75rem;font-weight:600;color:#666">Dimension 2</div>
+        <div style="font-size:1rem;font-weight:700;color:#e65100;margin:4px 0">Tone</div>
+        <div style="font-size:0.78rem;color:#666">Gentle / Rational / Sharp / Blunt / Humorous</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:rgba(255,255,255,0.5);border-radius:10px;padding:12px;border:1px solid #e0e0e0;text-align:center">
+        <div style="font-size:0.75rem;font-weight:600;color:#666">Dimension 3</div>
+        <div style="font-size:1rem;font-weight:700;color:#c62828;margin:4px 0">Threat Level</div>
+        <div style="font-size:0.78rem;color:#666">L1 Passive / L2 Escalation / L3 Attack</div>
+      </div>
+    </div>
+    <p style="font-size:0.9rem;color:#555;margin-bottom:0">Each cell in the 3×5×3 matrix contains 2-4 preset retort phrases. Total: ~180-360 phrases initially.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">4. User Interaction Flow</h3>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:0.5rem">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">1</div>
+        <div><strong>被动监听</strong> — APP 后台运行，持续检测环境语音</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">2</div>
+        <div><strong>等级预警</strong> — 检测到针对性语言，屏幕边沿亮起橙/红灯+震动</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">3</div>
+        <div><strong>首发预设</strong> — 双击屏幕，预设话术经TTS即时外放（&lt;200ms）</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">4</div>
+        <div><strong>AI生成后续</strong> — 后台开始生成第二句，10秒内屏幕显示AI推荐</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">5</div>
+        <div><strong>确认发声</strong> — 瞟一眼→双击确认，或滑动换一条AI建议</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">5. User Customization</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span class="tag">Edit retort library</span>
+      <span class="tag">Set default tone per scenario</span>
+      <span class="tag">Alert sensitivity (relaxed/standard/strict)</span>
+      <span class="tag">AI model choice (local/cloud)</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
 <!-- NEXT STEPS -->
 <section>
   <h2>Immediate Next Steps</h2>
