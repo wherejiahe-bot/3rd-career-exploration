@@ -237,72 +237,8 @@ pre code{background:transparent;padding:0;color:inherit;font-size:inherit}
   </div>
 </section>
 
-<!-- === PROGRESS TRACKER === -->
-<div class="card" style="margin-top:1.5rem;margin-bottom:1.5rem;border-left:3px solid #1565c0">
-  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:1rem">
-    <div>
-      <span class="status status-blue"><span class="status-dot"></span>Session 1 · 2026-06-04</span>
-      <div style="font-size:1.4rem;font-weight:700;letter-spacing:-0.02em;margin-top:6px">Progress: 3.5%</div>
-    </div>
-    <div style="text-align:right;font-size:0.85rem;color:#666">
-      <div>Net work: <strong>1h45m</strong></div>
-      <div>Total elapsed: 2h20m</div>
-      <div style="font-size:0.75rem;color:#999;margin-top:2px">~26 sessions · 8-12 weeks to ship</div>
-    </div>
-  </div>
-
-  <!-- Big throughput bar -->
-  <div style="margin-bottom:8px">
-    <div class="progress-bar-track">
-      <div class="progress-bar-fill" style="width:3.5%"></div>
-    </div>
-    <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:#888;margin-top:4px">
-      <span>0%</span>
-      <span>MVP ~54%</span>
-      <span>Beta ~65%</span>
-      <span>Ship 100%</span>
-    </div>
-  </div>
-
-  <!-- Phase strip -->
-  <div style="margin-bottom:1rem">
-    <div class="phase-strip">
-      <div style="flex:1;background:#4CAF50" title="P0: Design — done"></div>
-      <div style="flex:1.5;background:#e0e0e0" title="P1: Audio Pipeline"></div>
-      <div style="flex:1.25;background:#e0e0e0" title="P2: Detection Engine"></div>
-      <div style="flex:0.75;background:#e0e0e0" title="P3: Alert System"></div>
-      <div style="flex:0.75;background:#e0e0e0" title="P4: Gesture"></div>
-      <div style="flex:2;background:#e0e0e0" title="P5: Retort Engine"></div>
-      <div style="flex:1.5;background:#e0e0e0" title="P6: Session Review"></div>
-      <div style="flex:3;background:#e0e0e0" title="P7: Polish + Distribute"></div>
-    </div>
-    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#999;margin-top:2px">
-      <span>P0</span><span>P1</span><span>P2</span><span>P3</span><span>P4</span><span>P5</span><span>P6</span><span>P7</span>
-    </div>
-  </div>
-
-  <!-- Timeline table -->
-  <table class="progress-timeline" style="width:100%;border-collapse:collapse">
-    <tr><th>Phase</th><th>Focus</th><th>Est. Hours</th><th>Status</th></tr>
-    <tr><td style="color:#2e7d32;font-weight:600">P0</td><td>Design · Spec · Plan</td><td>2h</td><td><span class="phase-pill pill-done">✅ 1.75h done</span></td></tr>
-    <tr><td style="color:#1565c0">P1</td><td>Audio Pipeline (VAD + STT + Service)</td><td>6h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
-    <tr><td style="color:#1565c0">P2</td><td>Threat Detection Engine</td><td>5h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
-    <tr><td style="color:#e65100">P3</td><td>Alert System (Haptic + Edge Light)</td><td>4h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
-    <tr><td style="color:#e65100">P4</td><td>Gesture Detection (Knock + Tap)</td><td>3h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
-    <tr><td style="color:#6a1b9a">P5</td><td>Retort Engine + TTS</td><td>8h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
-    <tr><td style="color:#6a1b9a">P6</td><td>Session Review + Data Layer</td><td>6h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
-    <tr><td style="color:#c62828">P7</td><td>Polish · Test · Distribute</td><td>18h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
-    <tr class="total-row"><td colspan="2"><strong>Total</strong></td><td><strong>52h</strong></td><td><strong style="color:#2e7d32">3.5%</strong></td></tr>
-  </table>
-  <div style="font-size:0.75rem;color:#999;margin-top:8px;line-height:1.5">
-    Estimate: ~2h net per session · 2-3 sessions/week → <strong>8-12 weeks to ship-ready</strong>.<br>
-    MVP (P0-P5): ~28h (54%) · ~5-7 weeks.
-  </div>
 </div>
 
-<div class="container">
-
-<!-- OVERVIEW -->
 <section id="overview">
   <h2>Project Overview</h2>
   <p>
@@ -944,6 +880,63 @@ pre code{background:transparent;padding:0;color:inherit;font-size:inherit}
     </div>
   </div>
 </section>
+
+<!-- === PROGRESS TRACKER === -->
+<div class="card" style="border-left:3px solid #1565c0">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:1rem">
+    <div>
+      <span class="status status-blue"><span class="status-dot"></span>Session 1 · 2026-06-04</span>
+      <div style="font-size:1.4rem;font-weight:700;letter-spacing:-0.02em;margin-top:6px">Progress: 3.5%</div>
+    </div>
+    <div style="text-align:right;font-size:0.85rem;color:#666">
+      <div>Net work: <strong>1h45m</strong></div>
+      <div>Total elapsed: 2h20m</div>
+      <div style="font-size:0.75rem;color:#999;margin-top:2px">~26 sessions · 8-12 weeks to ship</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:8px">
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" style="width:3.5%"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:#888;margin-top:4px">
+      <span>0%</span><span>MVP ~54%</span><span>Beta ~65%</span><span>Ship 100%</span>
+    </div>
+  </div>
+
+  <div style="margin-bottom:1rem">
+    <div class="phase-strip">
+      <div style="flex:1;background:#4CAF50" title="P0"></div>
+      <div style="flex:1.5;background:#e0e0e0" title="P1"></div>
+      <div style="flex:1.25;background:#e0e0e0" title="P2"></div>
+      <div style="flex:0.75;background:#e0e0e0" title="P3"></div>
+      <div style="flex:0.75;background:#e0e0e0" title="P4"></div>
+      <div style="flex:2;background:#e0e0e0" title="P5"></div>
+      <div style="flex:1.5;background:#e0e0e0" title="P6"></div>
+      <div style="flex:3;background:#e0e0e0" title="P7"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#999;margin-top:2px">
+      <span>P0</span><span>P1</span><span>P2</span><span>P3</span><span>P4</span><span>P5</span><span>P6</span><span>P7</span>
+    </div>
+  </div>
+
+  <table class="progress-timeline" style="width:100%;border-collapse:collapse">
+    <tr><th>Phase</th><th>Focus</th><th>Est. Hours</th><th>Status</th></tr>
+    <tr><td style="color:#2e7d32;font-weight:600">P0</td><td>Design · Spec · Plan</td><td>2h</td><td><span class="phase-pill pill-done">Done 1.75h</span></td></tr>
+    <tr><td style="color:#1565c0">P1</td><td>Audio Pipeline (VAD + STT + Service)</td><td>6h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#1565c0">P2</td><td>Threat Detection Engine</td><td>5h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#e65100">P3</td><td>Alert System (Haptic + Edge Light)</td><td>4h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#e65100">P4</td><td>Gesture Detection (Knock + Tap)</td><td>3h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#6a1b9a">P5</td><td>Retort Engine + TTS</td><td>8h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#6a1b9a">P6</td><td>Session Review + Data Layer</td><td>6h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#c62828">P7</td><td>Polish · Test · Distribute</td><td>18h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr class="total-row"><td colspan="2"><strong>Total</strong></td><td><strong>52h</strong></td><td><strong style="color:#2e7d32">3.5%</strong></td></tr>
+  </table>
+  <div style="font-size:0.75rem;color:#999;margin-top:8px;line-height:1.5">
+    Estimate: ~2h net per session · 2-3 sessions/week → <strong>8-12 weeks to ship-ready</strong>.<br>
+    MVP (P0-P5): ~28h (54%) · ~5-7 weeks.
+  </div>
+</div>
 
 </div>
 
