@@ -220,6 +220,127 @@ pre code{background:transparent;padding:0;color:inherit;font-size:inherit}
   </div>
 </section>
 
+<!-- === PROGRESS TRACKER === -->
+<div class="progress-strip" style="background:linear-gradient(135deg,#1a1a2e,#2d2d5e);color:#fff;padding:2.5rem 0;margin-bottom:0">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:20px">
+      <div style="flex:2;min-width:240px">
+        <div style="font-size:0.7rem;font-weight:500;letter-spacing:0.06em;opacity:0.5;margin-bottom:8px">PROGRESS TRACKER — 2026-06-04</div>
+        <div style="font-size:1.6rem;font-weight:700;letter-spacing:-0.02em">26堂課 → 能賣</div>
+        <div style="font-size:0.85rem;opacity:0.7;margin-top:4px">預估總工時 52h · 預計 8-12 週</div>
+      </div>
+      <div style="flex:3;min-width:280px">
+        <!-- Big progress bar -->
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px">
+          <div style="flex:1;height:24px;background:rgba(255,255,255,0.12);border-radius:12px;overflow:hidden">
+            <div style="height:100%;width:3.5%;background:linear-gradient(90deg,#4CAF50,#8BC34A);border-radius:12px;transition:width 0.5s"></div>
+          </div>
+          <span style="font-size:1.2rem;font-weight:700;color:#8BC34A;flex-shrink:0">3.5%</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.75rem;opacity:0.6;margin-bottom:12px">
+          <span>0%</span>
+          <span>自用MVP ~15%</span>
+          <span>內測 ~35%</span>
+          <span>可銷售 100%</span>
+        </div>
+        <!-- Session stats -->
+        <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.85rem">
+          <div><span style="font-weight:600;color:#8BC34A">1</span> <span style="opacity:0.6">/ 26 堂課</span></div>
+          <div><span style="font-weight:600;color:#8BC34A">1h45m</span> <span style="opacity:0.6">淨工作</span></div>
+          <div><span style="font-weight:600;color:#FF9800">Phase 0</span> <span style="opacity:0.6">· 設計階段</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- Phase progress bar -->
+    <div style="margin-top:16px;display:flex;gap:4px;align-items:center">
+      <div style="height:6px;flex:1;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;display:flex">
+        <div style="height:100%;width:100%;background:#4CAF50;border-radius:3px" title="Phase 0: Design"></div>
+      </div>
+      <div style="height:6px;flex:1;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;display:flex">
+        <div style="height:100%;width:0%;background:#2196F3;border-radius:3px" title="Phase 1: Audio Pipeline"></div>
+      </div>
+      <div style="height:6px;flex:1;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;display:flex">
+        <div style="height:100%;width:0%;background:#FF9800;border-radius:3px" title="Phase 2: Detection"></div>
+      </div>
+      <div style="height:6px;flex:1;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;display:flex">
+        <div style="height:100%;width:0%;background:#9C27B0;border-radius:3px" title="Phase 3-4: Alert + Gesture"></div>
+      </div>
+      <div style="height:6px;flex:1;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;display:flex">
+        <div style="height:100%;width:0%;background:#F44336;border-radius:3px" title="Phase 5-7: Retort + Polish"></div>
+      </div>
+      <div style="font-size:0.65rem;opacity:0.5;margin-left:8px">P0 P1 P2 P3-4 P5-7</div>
+    </div>
+    <!-- Full timeline table -->
+    <div style="margin-top:16px;font-size:0.78rem;border-top:1px solid rgba(255,255,255,0.08);padding-top:12px">
+      <table style="width:100%;border-collapse:collapse;color:rgba(255,255,255,0.8)">
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.06)">
+          <th style="text-align:left;padding:4px 8px;opacity:0.5;font-weight:500">Phase</th>
+          <th style="text-align:left;padding:4px 8px;opacity:0.5;font-weight:500">內容</th>
+          <th style="text-align:left;padding:4px 8px;opacity:0.5;font-weight:500">工時估</th>
+          <th style="text-align:left;padding:4px 8px;opacity:0.5;font-weight:500">狀態</th>
+        </tr>
+        <tr>
+          <td style="padding:4px 8px;color:#8BC34A;font-weight:600">P0</td>
+          <td style="padding:4px 8px">設計·規格·計畫</td>
+          <td style="padding:4px 8px">2h</td>
+          <td style="padding:4px 8px;color:#8BC34A">✅ 完成 1.75h</td>
+        </tr>
+        <tr>
+          <td style="padding:4px 8px;color:#64B5F6">P1</td>
+          <td style="padding:4px 8px">音頻管線（VAD+STT+Service）</td>
+          <td style="padding:4px 8px">6h</td>
+          <td style="padding:4px 8px">⏳ 未開始</td>
+        </tr>
+        <tr>
+          <td style="padding:4px 8px;color:#64B5F6">P2</td>
+          <td style="padding:4px 8px">威脅檢測引擎</td>
+          <td style="padding:4px 8px">5h</td>
+          <td style="padding:4px 8px">⏳ 未開始</td>
+        </tr>
+        <tr>
+          <td style="padding:4px 8px;color:#FFB74D">P3</td>
+          <td style="padding:4px 8px">警報系統（震動+跑馬燈）</td>
+          <td style="padding:4px 8px">4h</td>
+          <td style="padding:4px 8px">⏳ 未開始</td>
+        </tr>
+        <tr>
+          <td style="padding:4px 8px;color:#FFB74D">P4</td>
+          <td style="padding:4px 8px">手勢檢測（敲擊+雙擊）</td>
+          <td style="padding:4px 8px">3h</td>
+          <td style="padding:4px 8px">⏳ 未開始</td>
+        </tr>
+        <tr>
+          <td style="padding:4px 8px;color:#CE93D8">P5</td>
+          <td style="padding:4px 8px">回怼引擎+TTS</td>
+          <td style="padding:4px 8px">8h</td>
+          <td style="padding:4px 8px">⏳ 未開始</td>
+        </tr>
+        <tr>
+          <td style="padding:4px 8px;color:#CE93D8">P6</td>
+          <td style="padding:4px 8px">會話回顧+數據層</td>
+          <td style="padding:4px 8px">6h</td>
+          <td style="padding:4px 8px">⏳ 未開始</td>
+        </tr>
+        <tr>
+          <td style="padding:4px 8px;color:#EF9A9A">P7</td>
+          <td style="padding:4px 8px">打磨·測試·分發</td>
+          <td style="padding:4px 8px">18h</td>
+          <td style="padding:4px 8px">⏳ 未開始</td>
+        </tr>
+        <tr style="border-top:1px solid rgba(255,255,255,0.12)">
+          <td style="padding:6px 8px;font-weight:700" colspan="2">合計</td>
+          <td style="padding:6px 8px;font-weight:700">52h</td>
+          <td style="padding:6px 8px;color:#8BC34A">3.5%</td>
+        </tr>
+      </table>
+      <div style="margin-top:8px;font-size:0.7rem;opacity:0.4;line-height:1.5">
+        以每堂課 ~2h 淨工作估算 · 每週 2-3 堂 → 約 8-12 週可銷售<br>
+        自用 MVP（P0-P5 完成）約需 28h（54%）· 約 5-7 週
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
 
 <!-- OVERVIEW -->
