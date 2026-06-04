@@ -154,6 +154,23 @@ pre code{background:transparent;padding:0;color:inherit;font-size:inherit}
   font-size:0.8rem;color:#999;
 }
 
+/* === PROGRESS TRACKER === */
+.progress-bar-track{height:22px;background:#e8e8e8;border-radius:11px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,#1565c0,#4CAF50);border-radius:11px;transition:width 0.5s}
+.progress-timeline td{padding:0.5rem 0.75rem;border-bottom:1px solid #f0f0f0;color:#444;font-size:0.88rem;vertical-align:middle}
+.progress-timeline th{text-align:left;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em;color:#888;padding:0.4rem 0.75rem;border-bottom:2px solid #e0e0e0}
+.progress-timeline tr:last-child td{border-bottom:none}
+.progress-timeline .total-row td{border-top:2px solid #e0e0e0;font-weight:600;color:#1a1a1a}
+.phase-pill{display:inline-block;padding:2px 10px;border-radius:100px;font-size:0.72rem;font-weight:600}
+.pill-done{background:#e8f5e9;color:#2e7d32}
+.pill-wait{background:#f5f5f5;color:#999}
+.phase-strip{display:flex;gap:4px;height:8px;margin:0.75rem 0}
+.phase-strip div{border-radius:4px;transition:width 0.3s}
+
+@media(max-width:640px){
+  .progress-timeline td,.progress-timeline th{padding:0.35rem 0.4rem;font-size:0.78rem}
+}
+
 /* === ANIMATIONS === */
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .card,.hero,.timeline-item{animation:fadeUp 0.5s ease-out both}
@@ -221,123 +238,65 @@ pre code{background:transparent;padding:0;color:inherit;font-size:inherit}
 </section>
 
 <!-- === PROGRESS TRACKER === -->
-<div class="progress-strip" style="background:linear-gradient(135deg,#1a1a2e,#2d2d5e);color:#fff;padding:2.5rem 0;margin-bottom:0">
-  <div class="container">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:20px">
-      <div style="flex:2;min-width:240px">
-        <div style="font-size:0.7rem;font-weight:500;letter-spacing:0.06em;opacity:0.5;margin-bottom:8px">PROGRESS TRACKER — 2026-06-04</div>
-        <div style="font-size:1.6rem;font-weight:700;letter-spacing:-0.02em">26堂課 → 能賣</div>
-        <div style="font-size:0.85rem;opacity:0.7;margin-top:4px">預估總工時 52h · 預計 8-12 週</div>
-      </div>
-      <div style="flex:3;min-width:280px">
-        <!-- Big progress bar -->
-        <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px">
-          <div style="flex:1;height:24px;background:rgba(255,255,255,0.12);border-radius:12px;overflow:hidden">
-            <div style="height:100%;width:3.5%;background:linear-gradient(90deg,#4CAF50,#8BC34A);border-radius:12px;transition:width 0.5s"></div>
-          </div>
-          <span style="font-size:1.2rem;font-weight:700;color:#8BC34A;flex-shrink:0">3.5%</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:0.75rem;opacity:0.6;margin-bottom:12px">
-          <span>0%</span>
-          <span>自用MVP ~15%</span>
-          <span>內測 ~35%</span>
-          <span>可銷售 100%</span>
-        </div>
-        <!-- Session stats -->
-        <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.85rem">
-          <div><span style="font-weight:600;color:#8BC34A">1</span> <span style="opacity:0.6">/ 26 堂課</span></div>
-          <div><span style="font-weight:600;color:#8BC34A">1h45m</span> <span style="opacity:0.6">淨工作</span></div>
-          <div><span style="font-weight:600;color:#FF9800">Phase 0</span> <span style="opacity:0.6">· 設計階段</span></div>
-        </div>
-      </div>
+<div class="card" style="margin-top:1.5rem;margin-bottom:1.5rem;border-left:3px solid #1565c0">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:1rem">
+    <div>
+      <span class="status status-blue"><span class="status-dot"></span>Session 1 · 2026-06-04</span>
+      <div style="font-size:1.4rem;font-weight:700;letter-spacing:-0.02em;margin-top:6px">Progress: 3.5%</div>
     </div>
-    <!-- Phase progress bar -->
-    <div style="margin-top:16px;display:flex;gap:4px;align-items:center">
-      <div style="height:6px;flex:1;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;display:flex">
-        <div style="height:100%;width:100%;background:#4CAF50;border-radius:3px" title="Phase 0: Design"></div>
-      </div>
-      <div style="height:6px;flex:1;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;display:flex">
-        <div style="height:100%;width:0%;background:#2196F3;border-radius:3px" title="Phase 1: Audio Pipeline"></div>
-      </div>
-      <div style="height:6px;flex:1;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;display:flex">
-        <div style="height:100%;width:0%;background:#FF9800;border-radius:3px" title="Phase 2: Detection"></div>
-      </div>
-      <div style="height:6px;flex:1;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;display:flex">
-        <div style="height:100%;width:0%;background:#9C27B0;border-radius:3px" title="Phase 3-4: Alert + Gesture"></div>
-      </div>
-      <div style="height:6px;flex:1;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;display:flex">
-        <div style="height:100%;width:0%;background:#F44336;border-radius:3px" title="Phase 5-7: Retort + Polish"></div>
-      </div>
-      <div style="font-size:0.65rem;opacity:0.5;margin-left:8px">P0 P1 P2 P3-4 P5-7</div>
+    <div style="text-align:right;font-size:0.85rem;color:#666">
+      <div>Net work: <strong>1h45m</strong></div>
+      <div>Total elapsed: 2h20m</div>
+      <div style="font-size:0.75rem;color:#999;margin-top:2px">~26 sessions · 8-12 weeks to ship</div>
     </div>
-    <!-- Full timeline table -->
-    <div style="margin-top:16px;font-size:0.78rem;border-top:1px solid rgba(255,255,255,0.08);padding-top:12px">
-      <table style="width:100%;border-collapse:collapse;color:rgba(255,255,255,0.8)">
-        <tr style="border-bottom:1px solid rgba(255,255,255,0.06)">
-          <th style="text-align:left;padding:4px 8px;opacity:0.5;font-weight:500">Phase</th>
-          <th style="text-align:left;padding:4px 8px;opacity:0.5;font-weight:500">內容</th>
-          <th style="text-align:left;padding:4px 8px;opacity:0.5;font-weight:500">工時估</th>
-          <th style="text-align:left;padding:4px 8px;opacity:0.5;font-weight:500">狀態</th>
-        </tr>
-        <tr>
-          <td style="padding:4px 8px;color:#8BC34A;font-weight:600">P0</td>
-          <td style="padding:4px 8px">設計·規格·計畫</td>
-          <td style="padding:4px 8px">2h</td>
-          <td style="padding:4px 8px;color:#8BC34A">✅ 完成 1.75h</td>
-        </tr>
-        <tr>
-          <td style="padding:4px 8px;color:#64B5F6">P1</td>
-          <td style="padding:4px 8px">音頻管線（VAD+STT+Service）</td>
-          <td style="padding:4px 8px">6h</td>
-          <td style="padding:4px 8px">⏳ 未開始</td>
-        </tr>
-        <tr>
-          <td style="padding:4px 8px;color:#64B5F6">P2</td>
-          <td style="padding:4px 8px">威脅檢測引擎</td>
-          <td style="padding:4px 8px">5h</td>
-          <td style="padding:4px 8px">⏳ 未開始</td>
-        </tr>
-        <tr>
-          <td style="padding:4px 8px;color:#FFB74D">P3</td>
-          <td style="padding:4px 8px">警報系統（震動+跑馬燈）</td>
-          <td style="padding:4px 8px">4h</td>
-          <td style="padding:4px 8px">⏳ 未開始</td>
-        </tr>
-        <tr>
-          <td style="padding:4px 8px;color:#FFB74D">P4</td>
-          <td style="padding:4px 8px">手勢檢測（敲擊+雙擊）</td>
-          <td style="padding:4px 8px">3h</td>
-          <td style="padding:4px 8px">⏳ 未開始</td>
-        </tr>
-        <tr>
-          <td style="padding:4px 8px;color:#CE93D8">P5</td>
-          <td style="padding:4px 8px">回怼引擎+TTS</td>
-          <td style="padding:4px 8px">8h</td>
-          <td style="padding:4px 8px">⏳ 未開始</td>
-        </tr>
-        <tr>
-          <td style="padding:4px 8px;color:#CE93D8">P6</td>
-          <td style="padding:4px 8px">會話回顧+數據層</td>
-          <td style="padding:4px 8px">6h</td>
-          <td style="padding:4px 8px">⏳ 未開始</td>
-        </tr>
-        <tr>
-          <td style="padding:4px 8px;color:#EF9A9A">P7</td>
-          <td style="padding:4px 8px">打磨·測試·分發</td>
-          <td style="padding:4px 8px">18h</td>
-          <td style="padding:4px 8px">⏳ 未開始</td>
-        </tr>
-        <tr style="border-top:1px solid rgba(255,255,255,0.12)">
-          <td style="padding:6px 8px;font-weight:700" colspan="2">合計</td>
-          <td style="padding:6px 8px;font-weight:700">52h</td>
-          <td style="padding:6px 8px;color:#8BC34A">3.5%</td>
-        </tr>
-      </table>
-      <div style="margin-top:8px;font-size:0.7rem;opacity:0.4;line-height:1.5">
-        以每堂課 ~2h 淨工作估算 · 每週 2-3 堂 → 約 8-12 週可銷售<br>
-        自用 MVP（P0-P5 完成）約需 28h（54%）· 約 5-7 週
-      </div>
+  </div>
+
+  <!-- Big throughput bar -->
+  <div style="margin-bottom:8px">
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" style="width:3.5%"></div>
     </div>
+    <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:#888;margin-top:4px">
+      <span>0%</span>
+      <span>MVP ~54%</span>
+      <span>Beta ~65%</span>
+      <span>Ship 100%</span>
+    </div>
+  </div>
+
+  <!-- Phase strip -->
+  <div style="margin-bottom:1rem">
+    <div class="phase-strip">
+      <div style="flex:1;background:#4CAF50" title="P0: Design — done"></div>
+      <div style="flex:1.5;background:#e0e0e0" title="P1: Audio Pipeline"></div>
+      <div style="flex:1.25;background:#e0e0e0" title="P2: Detection Engine"></div>
+      <div style="flex:0.75;background:#e0e0e0" title="P3: Alert System"></div>
+      <div style="flex:0.75;background:#e0e0e0" title="P4: Gesture"></div>
+      <div style="flex:2;background:#e0e0e0" title="P5: Retort Engine"></div>
+      <div style="flex:1.5;background:#e0e0e0" title="P6: Session Review"></div>
+      <div style="flex:3;background:#e0e0e0" title="P7: Polish + Distribute"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#999;margin-top:2px">
+      <span>P0</span><span>P1</span><span>P2</span><span>P3</span><span>P4</span><span>P5</span><span>P6</span><span>P7</span>
+    </div>
+  </div>
+
+  <!-- Timeline table -->
+  <table class="progress-timeline" style="width:100%;border-collapse:collapse">
+    <tr><th>Phase</th><th>Focus</th><th>Est. Hours</th><th>Status</th></tr>
+    <tr><td style="color:#2e7d32;font-weight:600">P0</td><td>Design · Spec · Plan</td><td>2h</td><td><span class="phase-pill pill-done">✅ 1.75h done</span></td></tr>
+    <tr><td style="color:#1565c0">P1</td><td>Audio Pipeline (VAD + STT + Service)</td><td>6h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#1565c0">P2</td><td>Threat Detection Engine</td><td>5h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#e65100">P3</td><td>Alert System (Haptic + Edge Light)</td><td>4h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#e65100">P4</td><td>Gesture Detection (Knock + Tap)</td><td>3h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#6a1b9a">P5</td><td>Retort Engine + TTS</td><td>8h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#6a1b9a">P6</td><td>Session Review + Data Layer</td><td>6h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr><td style="color:#c62828">P7</td><td>Polish · Test · Distribute</td><td>18h</td><td><span class="phase-pill pill-wait">Not started</span></td></tr>
+    <tr class="total-row"><td colspan="2"><strong>Total</strong></td><td><strong>52h</strong></td><td><strong style="color:#2e7d32">3.5%</strong></td></tr>
+  </table>
+  <div style="font-size:0.75rem;color:#999;margin-top:8px;line-height:1.5">
+    Estimate: ~2h net per session · 2-3 sessions/week → <strong>8-12 weeks to ship-ready</strong>.<br>
+    MVP (P0-P5): ~28h (54%) · ~5-7 weeks.
   </div>
 </div>
 
