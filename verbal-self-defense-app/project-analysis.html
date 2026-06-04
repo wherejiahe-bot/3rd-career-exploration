@@ -759,6 +759,83 @@ pre code{background:transparent;padding:0;color:inherit;font-size:inherit}
       <span class="tag">AI model choice (local/cloud)</span>
     </div>
   </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">6. Retort Classification Rules</h3>
+    <p>The auto-matching engine selects the best retort based on this ruleset:</p>
+    <div style="margin-top:0.75rem">
+
+      <div style="margin-bottom:0.75rem">
+        <strong>Rule 1: Match Scenario First</strong>
+        <div style="font-size:0.88rem;color:#555;margin-top:2px">
+          The current app mode (Workplace/Social/Relationship) acts as the primary filter. Only retorts tagged for that scenario are considered.
+        </div>
+      </div>
+
+      <div style="margin-bottom:0.75rem">
+        <strong>Rule 2: Escalate Tone with Threat Level</strong>
+        <div style="font-size:0.88rem;color:#555;margin-top:2px">
+          L1 (passive aggression) → Gentle or Rational tone default.<br>
+          L2 (escalation) → Sharp or Rational tone, user's last-used preference.<br>
+          L3 (attack) → Blunt or Sharp tone, or user's pre-configured "combat mode" tone.
+        </div>
+      </div>
+
+      <div style="margin-bottom:0.75rem">
+        <strong>Rule 3: User Tone Preference as Weight</strong>
+        <div style="font-size:0.88rem;color:#555;margin-top:2px">
+          Each user can assign a "default tone" per scenario. This adds a +30% selection weight to that tone, but the engine can override if the threat level demands escalation.
+        </div>
+      </div>
+
+      <div>
+        <strong>Rule 4: Diversity within Session</strong>
+        <div style="font-size:0.88rem;color:#555;margin-top:2px">
+          Avoid repeating the same retort within the same conversation session. Track recently used phrases per scenario and deprioritize them (recency penalty).
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="padding-top:0">7. AI Generation Strategy</h3>
+    <p>For follow-up retorts (Layer 3), the on-device LLM uses this strategy:</p>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:0.75rem">
+      <div style="background:#f5f5f5;border-radius:8px;padding:10px 14px;border-left:3px solid #2e7d32">
+        <strong style="color:#2e7d32">Trigger</strong>
+        <div style="font-size:0.85rem;color:#555;margin-top:2px">
+          Activated when first retort finishes playing AND at least 2 more exchanges are detected.
+        </div>
+      </div>
+      <div style="background:#f5f5f5;border-radius:8px;padding:10px 14px;border-left:3px solid #2e7d32">
+        <strong style="color:#2e7d32">Context Window</strong>
+        <div style="font-size:0.85rem;color:#555;margin-top:2px">
+          Last 30 seconds of transcribed conversation + detected speakers + current threat level + user's tone preference.
+        </div>
+      </div>
+      <div style="background:#f5f5f5;border-radius:8px;padding:10px 14px;border-left:3px solid #2e7d32">
+        <strong style="color:#2e7d32">Generation Type</strong>
+        <div style="font-size:0.85rem;color:#555;margin-top:2px">
+          <strong>Quick (0.5-2s):</strong> Template-based slot filling. Fill detected name/organization into sentence templates.<br>
+          <strong>Full (3-8s):</strong> On-device LLM (1-3B param, quantized). Generates from scratch with tone instruction.
+        </div>
+      </div>
+      <div style="background:#f5f5f5;border-radius:8px;padding:10px 14px;border-left:3px solid #2e7d32">
+        <strong style="color:#2e7d32">Quality Guardrails</strong>
+        <div style="font-size:0.85rem;color:#555;margin-top:2px">
+          Max 2 sentences (keep it punchy). No swearing by default (configurable). No escalation escalation — AI tends to de-escalate unless user's combat mode is on.
+        </div>
+      </div>
+      <div style="background:#f5f5f5;border-radius:8px;padding:10px 14px;border-left:3px solid #2e7d32">
+        <strong style="color:#2e7d32">Fallback</strong>
+        <div style="font-size:0.85rem;color:#555;margin-top:2px">
+          If LLM times out or produces low-quality output, fall back to second-best preset retort from the library.
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <div class="section-spacer"></div>
