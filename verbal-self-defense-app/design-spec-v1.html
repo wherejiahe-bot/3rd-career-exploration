@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verbal Self-Defense App — Design Spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,510;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Inter',-apple-system,sans-serif;font-weight:400;color:#1a1a1a;background:#f8f8fa;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse at 30% 0%,rgba(100,100,255,0.04),transparent 60%);pointer-events:none}
+h1{font-size:clamp(2rem,4vw,2.8rem);font-weight:700;letter-spacing:-0.03em;line-height:1.15;margin-bottom:0.5rem}
+h2{font-size:clamp(1.3rem,2.5vw,1.7rem);font-weight:600;letter-spacing:-0.02em;margin:2rem 0 0.75rem;padding-top:1rem}
+h3{font-size:1.15rem;font-weight:600;margin:1.25rem 0 0.4rem;padding-top:0.5rem}
+h4{font-size:0.95rem;font-weight:600;color:#555;margin:0.75rem 0 0.3rem}
+p{font-size:0.95rem;color:#444;max-width:65ch;margin-bottom:0.75rem;line-height:1.6}
+code{font-family:'JetBrains Mono',monospace;font-size:0.85em;background:#eef;padding:0.15em 0.35em;border-radius:4px}
+pre{background:#1a1a2e;color:#e4e4e7;padding:1rem 1.25rem;border-radius:10px;overflow-x:auto;font-size:0.82rem;line-height:1.6;margin:0.75rem 0 1rem}
+.container{max-width:860px;margin:0 auto;padding:0 24px}
+.header-bar{position:sticky;top:0;z-index:100;background:rgba(248,248,250,0.82);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.06);padding:10px 0}
+.header-bar .container{display:flex;align-items:center;gap:10px}
+.header-bar .badge{background:#1a1a2e;color:#fff;font-size:0.65rem;padding:2px 8px;border-radius:4px;font-weight:500}
+.header-bar .meta{font-size:0.78rem;color:#888}
+.card{background:#fff;border:1px solid #eee;border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1rem}
+.card:hover{box-shadow:0 2px 12px rgba(0,0,0,0.04)}
+.card strong{color:#1a1a1a}
+.spec-meta{display:flex;flex-wrap:wrap;gap:6px;margin:0.5rem 0}
+.spec-tag{display:inline-block;font-size:0.72rem;padding:2px 10px;border-radius:100px;background:#eef;color:#446;font-weight:500}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:0.75rem 0}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+.done{background:#2e7d32;color:#2e7d32}
+.pending{background:#e65100;color:#e65100}
+.checklist{list-style:none;padding:0}
+.checklist li{font-size:0.9rem;padding:4px 0;display:flex;align-items:center;gap:8px;color:#444}
+.footer{margin-top:3rem;padding:1.5rem 0;text-align:center;border-top:1px solid #eee;font-size:0.78rem;color:#999}
+</style>
+</head>
+<body>
+
+<div class="header-bar">
+  <div class="container">
+    <span class="badge">SPEC v1</span>
+    <span class="meta">Verbal Self-Defense App · 2026-06-04</span>
+  </div>
+</div>
+
+<div class="container">
+
+<h1>Verbal Self-Defense App<br><span style="font-size:0.5em;font-weight:400;color:#888">Design Specification v1.0</span></h1>
+
+<div class="spec-meta">
+  <span class="spec-tag">Android</span>
+  <span class="spec-tag">Kotlin + Jetpack Compose</span>
+  <span class="spec-tag">On-Device ML</span>
+  <span class="spec-tag">Privacy First</span>
+</div>
+
+<!-- 1. Overview -->
+<section>
+<h2>1. Product Overview</h2>
+<p>An Android app that runs as a foreground service, continuously monitoring ambient conversation through the device microphone. When it detects language patterns indicative of PUA tactics, gaslighting, verbal escalation, or insults, it alerts the user through escalating haptic and visual signals (vibration + edge lighting, orange → red). The user triggers a retort via double-tap or triple-knock gesture, and the app speaks the response through the device speaker.</p>
+<div class="grid-2">
+  <div class="card"><strong>Core Problem</strong><br><span style="font-size:0.88rem;color:#555">People freeze in verbal conflict situations. This app gives them a prepared, calm response.</span></div>
+  <div class="card"><strong>Target User</strong><br><span style="font-size:0.88rem;color:#555">Individuals who face frequent verbal pressure and want real-time social defense.</span></div>
+</div>
+</section>
+
+<!-- 2. Scenarios -->
+<section>
+<h2>2. Usage Scenarios</h2>
+<p><strong>Decision:</strong> All three, switchable by user mode.</p>
+<div class="card">
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <div style="flex:1;min-width:120px"><strong>👔 Workplace</strong><br><span style="font-size:0.85rem;color:#555">Colleague/manager PUA, blame-shifting, passive aggression. Retorts should be rational, professional, firm.</span></div>
+    <div style="flex:1;min-width:120px"><strong>🍻 Social</strong><br><span style="font-size:0.85rem;color:#555">Dinner parties, drinking culture, unsolicited comments. Retorts should be witty, sharp, humorous.</span></div>
+    <div style="flex:1;min-width:120px"><strong>❤️ Relationship</strong><br><span style="font-size:0.85rem;color:#555">Gaslighting, emotional blackmail, boundary violations. Retorts should be gentle → firm → assertive.</span></div>
+  </div>
+</div>
+</section>
+
+<!-- 3. Architecture -->
+<section>
+<h2>3. Retort Speed Architecture (3-Layer)</h2>
+<p><strong>Key insight:</strong> AI is too slow for the first retort (on-device 0.5-2s, cloud 3s+). The first response must use preset library for &lt;200ms delivery.</p>
+<div style="display:flex;flex-direction:column;gap:10px;margin:0.75rem 0">
+  <div style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);padding:12px 16px;border-radius:10px;border-left:4px solid #1565c0">
+    <strong style="color:#1565c0">Layer 1 — First Strike (&lt;200ms)</strong>
+    <div style="font-size:0.85rem;color:#444;margin-top:4px">Detection → context match → TTS playback. Double-tap to deploy. Zero AI latency. Uses pre-written retort library.</div>
+  </div>
+  <div style="background:linear-gradient(135deg,#fff8e1,#ffecb3);padding:12px 16px;border-radius:10px;border-left:4px solid #e65100">
+    <strong style="color:#e65100">Layer 2 — Stalling (Backup)</strong>
+    <div style="font-size:0.85rem;color:#444;margin-top:4px">Universal phrases: "Say that again?", a laugh, "Interesting." — buys 2-5 seconds for AI to generate a proper follow-up.</div>
+  </div>
+  <div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);padding:12px 16px;border-radius:10px;border-left:4px solid #2e7d32">
+    <strong style="color:#2e7d32">Layer 3 — AI Follow-Up (5-15s window)</strong>
+    <div style="font-size:0.85rem;color:#444;margin-top:4px">On-device LLM generates context-aware retort considering the full conversation context, threat level, and user tone preference. User previews on screen, confirms with double-tap.</div>
+  </div>
+</div>
+</section>
+
+<!-- 4. Library Structure -->
+<section>
+<h2>4. Retort Library Structure</h2>
+<p>Three-dimensional organization: <strong>Scenario (3) × Tone (5) × Threat Level (3)</strong>. Each cell contains 2-4 preset phrases. Total: ~180-360 initial phrases.</p>
+<div class="grid-2">
+  <div class="card" style="text-align:center"><strong>Scenario</strong><br><span style="font-size:0.85rem;color:#555">Workplace / Social / Relationship</span></div>
+  <div class="card" style="text-align:center"><strong>Tone</strong><br><span style="font-size:0.85rem;color:#555">Gentle / Rational / Sharp / Blunt / Humorous</span></div>
+  <div class="card" style="text-align:center"><strong>Threat Level</strong><br><span style="font-size:0.85rem;color:#555">L1 Passive / L2 Escalation / L3 Attack</span></div>
+</div>
+
+<h4>Classification Rules</h4>
+<div class="card">
+  <ol style="padding-left:1.2rem;font-size:0.9rem;color:#444;line-height:1.8">
+    <li><strong>Match Scenario First</strong> — Current app mode acts as primary filter.</li>
+    <li><strong>Escalate Tone with Threat Level</strong> — L1→Gentle/Rational, L2→Sharp/Rational, L3→Blunt/Sharp or user's combat mode.</li>
+    <li><strong>User Tone Preference as Weight</strong> — +30% selection weight to user's preferred tone per scenario.</li>
+    <li><strong>Diversity within Session</strong> — Recency penalty prevents repeating the same retort.</li>
+  </ol>
+</div>
+</section>
+
+<!-- 5. Interaction Flow -->
+<section>
+<h2>5. User Interaction Flow</h2>
+<div style="display:flex;flex-direction:column;gap:8px;margin:0.75rem 0">
+  <div style="display:flex;gap:10px;align-items:flex-start;background:#fafafa;padding:8px 12px;border-radius:8px">
+    <span style="background:#1565c0;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0">1</span>
+    <div><strong>Monitor</strong> — Foreground service with persistent notification. On-device VAD + STT.</div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:flex-start;background:#fafafa;padding:8px 12px;border-radius:8px">
+    <span style="background:#1565c0;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0">2</span>
+    <div><strong>Alert</strong> — Threat detected. Screen edge glow (orange/red) + haptic feedback.</div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:flex-start;background:#fafafa;padding:8px 12px;border-radius:8px">
+    <span style="background:#1565c0;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0">3</span>
+    <div><strong>First Strike</strong> — Double-tap → preset retort TTS playback (&lt;200ms). No waiting.</div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:flex-start;background:#fafafa;padding:8px 12px;border-radius:8px">
+    <span style="background:#1565c0;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0">4</span>
+    <div><strong>AI Generates Follow-Up</strong> — Background LLM inference. Shows suggestion on screen within 10s.</div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:flex-start;background:#fafafa;padding:8px 12px;border-radius:8px">
+    <span style="background:#1565c0;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0">5</span>
+    <div><strong>Confirm & Speak</strong> — Quick glance → double-tap to deploy, or swipe to see alternatives.</div>
+  </div>
+</div>
+</section>
+
+<!-- 6. AI Strategy -->
+<section>
+<h2>6. AI Generation Strategy</h2>
+<div style="display:flex;flex-direction:column;gap:8px;margin:0.75rem 0">
+  <div style="background:#f5f5f5;padding:10px 14px;border-radius:8px;border-left:3px solid #2e7d32">
+    <strong style="color:#2e7d32">Trigger</strong>
+    <div style="font-size:0.85rem;color:#555;margin-top:2px">Activated after first retort finishes + at least 2 more speech exchanges detected.</div>
+  </div>
+  <div style="background:#f5f5f5;padding:10px 14px;border-radius:8px;border-left:3px solid #2e7d32">
+    <strong style="color:#2e7d32">Context Window</strong>
+    <div style="font-size:0.85rem;color:#555;margin-top:2px">Last 30s of transcript + speaker IDs + threat level + tone preference.</div>
+  </div>
+  <div style="background:#f5f5f5;padding:10px 14px;border-radius:8px;border-left:3px solid #2e7d32">
+    <strong style="color:#2e7d32">Dual-Track Generation</strong>
+    <div style="font-size:0.85rem;color:#555;margin-top:2px"><strong>Quick (0.5-2s):</strong> Template slot-filling (insert detected name/org). <strong>Full (3-8s):</strong> On-device 1-3B quantized LLM.</div>
+  </div>
+  <div style="background:#f5f5f5;padding:10px 14px;border-radius:8px;border-left:3px solid #2e7d32">
+    <strong style="color:#2e7d32">Quality Guardrails</strong>
+    <div style="font-size:0.85rem;color:#555;margin-top:2px">Max 2 sentences. No swearing by default (configurable). De-escalation bias unless combat mode is on.</div>
+  </div>
+  <div style="background:#f5f5f5;padding:10px 14px;border-radius:8px;border-left:3px solid #2e7d32">
+    <strong style="color:#2e7d32">Fallback</strong>
+    <div style="font-size:0.85rem;color:#555;margin-top:2px">LLM timeout or low quality → fallback to second-best preset retort.</div>
+  </div>
+</div>
+</section>
+
+<!-- 7. Tech Stack -->
+<section>
+<h2>7. Technical Stack</h2>
+<div class="card">
+  <div style="display:flex;flex-wrap:wrap;gap:12px">
+    <div style="min-width:140px"><strong>Language</strong><br><span style="font-size:0.85rem;color:#555">Kotlin</span></div>
+    <div style="min-width:140px"><strong>UI</strong><br><span style="font-size:0.85rem;color:#555">Jetpack Compose</span></div>
+    <div style="min-width:140px"><strong>Architecture</strong><br><span style="font-size:0.85rem;color:#555">MVVM + Foreground Service</span></div>
+    <div style="min-width:140px"><strong>Audio</strong><br><span style="font-size:0.85rem;color:#555">AudioRecord + WebRTC VAD</span></div>
+    <div style="min-width:140px"><strong>STT</strong><br><span style="font-size:0.85rem;color:#555">On-device (whisper.cpp/ML Kit)</span></div>
+    <div style="min-width:140px"><strong>LLM</strong><br><span style="font-size:0.85rem;color:#555">On-device 1-3B quantized</span></div>
+    <div style="min-width:140px"><strong>TTS</strong><br><span style="font-size:0.85rem;color:#555">Android TTS API</span></div>
+    <div style="min-width:140px"><strong>Storage</strong><br><span style="font-size:0.85rem;color:#555">Room DB (local)</span></div>
+    <div style="min-width:140px"><strong>Distribution</strong><br><span style="font-size:0.85rem;color:#555">Sideload APK</span></div>
+  </div>
+</div>
+</section>
+
+<!-- 8. Phases -->
+<section>
+<h2>8. Development Phases</h2>
+<div class="card">
+  <table style="width:100%;font-size:0.85rem;border-collapse:collapse">
+    <tr style="border-bottom:1px solid #eee"><th style="text-align:left;padding:6px 8px;color:#888;font-size:0.72rem;font-weight:600">Phase</th><th style="text-align:left;padding:6px 8px;color:#888;font-size:0.72rem;font-weight:600">Focus</th><th style="text-align:left;padding:6px 8px;color:#888;font-size:0.72rem;font-weight:600">Timeline</th><th style="text-align:left;padding:6px 8px;color:#888;font-size:0.72rem;font-weight:600">Skills</th></tr>
+    <tr><td style="padding:6px 8px">P0</td><td style="padding:6px 8px">Research & Foundation</td><td style="padding:6px 8px">Week 1-2</td><td style="padding:6px 8px">brainstorming, skill-creator</td></tr>
+    <tr><td style="padding:6px 8px">P1</td><td style="padding:6px 8px">Audio Pipeline MVP</td><td style="padding:6px 8px">Week 3-4</td><td style="padding:6px 8px">karpathy-guidelines, tdd</td></tr>
+    <tr><td style="padding:6px 8px">P2</td><td style="padding:6px 8px">Threat Detection Engine</td><td style="padding:6px 8px">Week 5-6</td><td style="padding:6px 8px">grill-me, systematic-debugging</td></tr>
+    <tr><td style="padding:6px 8px">P3</td><td style="padding:6px 8px">Alert System (Haptic + Visual)</td><td style="padding:6px 8px">Week 7</td><td style="padding:6px 8px">ppvi, hallmark</td></tr>
+    <tr><td style="padding:6px 8px">P4</td><td style="padding:6px 8px">Gesture Detection</td><td style="padding:6px 8px">Week 8</td><td style="padding:6px 8px">—</td></tr>
+    <tr><td style="padding:6px 8px">P5</td><td style="padding:6px 8px">Retort Engine & TTS</td><td style="padding:6px 8px">Week 9-10</td><td style="padding:6px 8px">ima-skill, kb-deep-search</td></tr>
+    <tr><td style="padding:6px 8px">P6</td><td style="padding:6px 8px">Session Review & Learning</td><td style="padding:6px 8px">Week 11</td><td style="padding:6px 8px">—</td></tr>
+    <tr><td style="padding:6px 8px">P7</td><td style="padding:6px 8px">Polish & Distribution</td><td style="padding:6px 8px">Week 12</td><td style="padding:6px 8px">taste-skill, ppvi, esther</td></tr>
+  </table>
+</div>
+</section>
+
+<!-- 9. Risks -->
+<section>
+<h2>9. Risk Mitigation</h2>
+<div class="card" style="font-size:0.88rem">
+  <div style="display:flex;flex-wrap:wrap;gap:8px">
+    <div style="flex:1;min-width:200px;background:#fff5f5;padding:10px;border-radius:8px"><strong>🔴 Privacy</strong><br>All processing on-device. Transparent data policy. Visual recording indicator.</div>
+    <div style="flex:1;min-width:200px;background:#fff5f5;padding:10px;border-radius:8px"><strong>🔴 Legal</strong><br>No permanent audio storage. Acts as "hearing aid." Consult local wiretapping laws.</div>
+    <div style="flex:1;min-width:200px;background:#fff8e1;padding:10px;border-radius:8px"><strong>🟡 Battery</strong><br>Adaptive sampling. Efficient quantized models. Wake-lock with debounce.</div>
+    <div style="flex:1;min-width:200px;background:#fff8e1;padding:10px;border-radius:8px"><strong>🟡 False Positives</strong><br>Tunable sensitivity. Learning mode. User-calibrated thresholds.</div>
+    <div style="flex:1;min-width:200px;background:#e8f5e9;padding:10px;border-radius:8px"><strong>🟢 Play Store</strong><br>Target sideload. If Play Store needed, foreground service + RECORD_AUDIO justification.</div>
+  </div>
+</div>
+</section>
+
+<!-- Self Review -->
+<section>
+<h2>10. Spec Self-Review</h2>
+<ul class="checklist">
+  <li><span class="status-dot done"></span> ✅ All sections complete (1-9), no TBD placeholders</li>
+  <li><span class="status-dot done"></span> ✅ Internal consistency: architecture matches features</li>
+  <li><span class="status-dot done"></span> ✅ Scope: focused on Android MVP, one platform, incremental phases</li>
+  <li><span class="status-dot done"></span> ✅ Ambiguity: all design decisions documented with specific rules</li>
+</ul>
+</section>
+
+</div>
+
+<footer class="footer">
+  Verbal Self-Defense App — Design Spec v1.0<br>
+  Part of 3rd Career Exploration · Generated 2026-06-04
+</footer>
+
+</body>
+</html>
