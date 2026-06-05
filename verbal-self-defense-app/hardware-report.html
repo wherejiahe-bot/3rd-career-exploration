@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>硬件选择调研报告 — Verbal Self-Defense App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,510;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<style>
+/* === PPVI: 克制优雅 === */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+
+/* === PPVI: 灰阶为基 === */
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-weight:400;color:#1a1a1a;
+  background:#f0f0f0;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-1;
+  background:radial-gradient(ellipse at 25% 0%,rgba(160,160,255,0.05) 0%,transparent 65%),
+             radial-gradient(ellipse at 75% 100%,rgba(255,160,160,0.03) 0%,transparent 65%);
+  pointer-events:none;
+}
+
+/* === PPVI: 严格层级 === */
+h1{font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-0.03em;line-height:1.1;margin-bottom:0.75rem}
+h2{font-size:clamp(1.35rem,2.5vw,1.75rem);font-weight:600;letter-spacing:-0.02em;line-height:1.25;margin-bottom:0.6rem;padding-top:1.75rem;color:#222}
+h3{font-size:clamp(1.05rem,1.6vw,1.2rem);font-weight:600;letter-spacing:-0.01em;line-height:1.35;margin-bottom:0.4rem;padding-top:1.25rem}
+p{font-size:clamp(0.95rem,1.2vw,1rem);color:#444;line-height:1.65;max-width:70ch;margin-bottom:0.85rem}
+code{font-family:'JetBrains Mono',monospace;font-size:0.875em;background:#e8e8e8;padding:0.15em 0.4em;border-radius:4px}
+
+/* === PPVI: 玻璃拟态 === */
+.card{
+  background:rgba(255,255,255,0.7);
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  border:1px solid rgba(255,255,255,0.45);
+  border-radius:14px;
+  padding:1.5rem 1.75rem;
+  margin-bottom:1rem;
+  transition:box-shadow 0.2s;
+}
+.card:hover{box-shadow:0 6px 30px rgba(0,0,0,0.05)}
+
+/* === 布局 === */
+.container{max-width:880px;margin:0 auto;padding:0 20px}
+.section-spacer{height:1px;background:linear-gradient(90deg,transparent,#d0d0d0,transparent);margin:1rem 0}
+
+/* === PPVI: 彩色占比 ≤15% === */
+.accent-blue{color:#1565c0}
+.badge{
+  display:inline-block;font-size:0.72rem;font-weight:500;
+  padding:3px 10px;border-radius:100px;background:#e8e8e8;color:#555;
+  margin:2px 3px;
+}
+.badge.phone{background:#e3f2fd;color:#1565c0}
+.badge.watch{background:#e8f5e9;color:#2e7d32}
+.badge.custom{background:#fff3e0;color:#e65100}
+.badge.hybrid{background:#f3e5f5;color:#7b1fa2}
+
+/* === 表格 === */
+table{width:100%;border-collapse:collapse;font-size:0.9rem;margin:0.75rem 0}
+th{text-align:left;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em;color:#888;padding:0.4rem 0.75rem;border-bottom:2px solid #ddd}
+td{padding:0.55rem 0.75rem;border-bottom:1px solid #eee;color:#444;vertical-align:top}
+tr:last-child td{border-bottom:none}
+.score{font-weight:600;font-size:0.85rem;white-space:nowrap}
+.s5{color:#2e7d32}.s4{color:#558b2f}.s3{color:#f57f17}.s2{color:#e65100}.s1{color:#c62828}
+
+/* === 头部 === */
+.header{
+  padding:3rem 0 2rem;
+  text-align:center;
+}
+.header .meta{font-size:0.8rem;color:#888;margin-top:0.5rem}
+
+/* === 推荐卡片 === */
+.reco{display:flex;gap:12px;align-items:flex-start;padding:1.25rem 1.5rem;margin:0.75rem 0 1.25rem}
+.reco-icon{font-size:1.5rem;flex-shrink:0;margin-top:2px}
+.reco-list{list-style:none;padding:0;margin:0}
+.reco-list li{padding:3px 0;font-size:0.9rem;color:#444;line-height:1.5}
+.reco-list li::before{content:"→ ";color:#888;font-size:0.8rem}
+
+/* === 比较表 === */
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:0.75rem 0}
+.compare-item{background:rgba(255,255,255,0.5);border-radius:10px;padding:1rem;border:1px solid #e8e8e8}
+.compare-item h4{font-size:0.8rem;font-weight:600;color:#666;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.04em}
+.compare-item ul{list-style:none;padding:0;margin:0}
+.compare-item li{padding:2px 0;font-size:0.82rem;color:#555;line-height:1.5}
+.compare-item .pro{color:#2e7d32}.compare-item .con{color:#c62828}
+
+/* === 底部 === */
+.footer{margin-top:3rem;padding:1.5rem 0;text-align:center;border-top:1px solid #e0e0e0;font-size:0.78rem;color:#999;line-height:1.6}
+
+@media(max-width:640px){
+  .card{padding:1.1rem 1.25rem}
+  .compare-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+  <h1>硬件选择调研报告</h1>
+  <p style="max-width:560px;margin:0.5rem auto 0;color:#666;font-size:0.95rem">
+    Verbal Self-Defense App · 为"玩笑回怼"需求选择最优硬件载体
+  </p>
+  <div class="meta">2026-06-05 · v1.0</div>
+</div>
+
+<div class="section-spacer"></div>
+
+<!-- === 需求回顾 === -->
+<section>
+  <h2>核心硬件需求</h2>
+  <p>APP的功能对硬件有明确要求。以下五个维度是选择硬件时的硬约束：</p>
+
+  <div class="compare-grid">
+    <div class="compare-item">
+      <h4>🎤 麦克风</h4>
+      <ul>
+        <li class="pro">✓ 始终在线监听</li>
+        <li class="pro">✓ 16kHz 采样率</li>
+        <li class="con">× 隐私：全本地处理</li>
+      </ul>
+    </div>
+    <div class="compare-item">
+      <h4>📳 震动</h4>
+      <ul>
+        <li class="pro">✓ 三级震动模式</li>
+        <li class="pro">✓ 可编程振幅</li>
+        <li class="con">× 需强线性马达</li>
+      </ul>
+    </div>
+    <div class="compare-item">
+      <h4>🔊 扬声器</h4>
+      <ul>
+        <li class="pro">✓ TTS 语音输出</li>
+        <li class="pro">✓ 清晰可听懂</li>
+        <li class="con">× 需要一定音量</li>
+      </ul>
+    </div>
+    <div class="compare-item">
+      <h4>💡 屏幕/灯</h4>
+      <ul>
+        <li class="pro">✓ 边沿灯效（橙→红）</li>
+        <li class="pro">✓ 手势识别区域</li>
+        <li class="con">× 熄屏下需可见</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- === 方案对比 === -->
+<section>
+  <h2>四种硬件方案对比</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>维度</th>
+        <th>📱 手机方案</th>
+        <th>⌚ Wear OS 手表</th>
+        <th>🔧 专用硬件</th>
+        <th>🎧 手机+耳机</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>麦克风</strong></td>
+        <td><span class="score s5">★★★★★</span><br>多麦降噪，始终在线</td>
+        <td><span class="score s3">★★★</span><br>单麦，环境音抑制弱</td>
+        <td><span class="score s5">★★★★★</span><br>可定制阵列</td>
+        <td><span class="score s5">★★★★★</span><br>耳机麦最清晰</td>
+      </tr>
+      <tr>
+        <td><strong>震动反馈</strong></td>
+        <td><span class="score s4">★★★★</span><br>线性马达，可编程</td>
+        <td><span class="score s5">★★★★★</span><br>贴肤震动，体感最强</td>
+        <td><span class="score s4">★★★★</span><br>可定制马达</td>
+        <td><span class="score s1">★</span><br>仅手机震动</td>
+      </tr>
+      <tr>
+        <td><strong>扬声器</strong></td>
+        <td><span class="score s5">★★★★★</span><br>大音量，清晰</td>
+        <td><span class="score s2">★★</span><br>极小，环境噪声下难听清</td>
+        <td><span class="score s4">★★★★</span><br>可定制</td>
+        <td><span class="score s5">★★★★★</span><br>耳机最清晰</td>
+      </tr>
+      <tr>
+        <td><strong>边沿灯效</strong></td>
+        <td><span class="score s3">★★★</span><br>软件模拟，熄屏需唤醒</td>
+        <td><span class="score s2">★★</span><br>小屏幕，灯效有限</td>
+        <td><span class="score s5">★★★★★</span><br>硬件 LED 灯带</td>
+        <td><span class="score s3">★★★</span><br>同手机方案</td>
+      </tr>
+      <tr>
+        <td><strong>AI 算力</strong></td>
+        <td><span class="score s5">★★★★★</span><br>旗舰芯片，NPU 加速</td>
+        <td><span class="score s2">★★</span><br>受限，量化模型可用</td>
+        <td><span class="score s4">★★★★</span><br>可装高性能芯片</td>
+        <td><span class="score s5">★★★★★</span><br>手机算力</td>
+      </tr>
+      <tr>
+        <td><strong>电池续航</strong></td>
+        <td><span class="score s3">★★★</span><br>常驻后台约 6-8h</td>
+        <td><span class="score s1">★</span><br>常驻后台约 2-4h</td>
+        <td><span class="score s4">★★★★</span><br>专用电池可优化</td>
+        <td><span class="score s3">★★★</span><br>同手机+耳机</td>
+      </tr>
+      <tr>
+        <td><strong>隐蔽性</strong></td>
+        <td><span class="score s2">★★</span><br>掏出手机明显</td>
+        <td><span class="score s5">★★★★★</span><br>抬腕即用，不易察觉</td>
+        <td><span class="score s4">★★★★</span><br>可做成饰品</td>
+        <td><span class="score s3">★★★</span><br>戴耳机较明显</td>
+      </tr>
+      <tr>
+        <td><strong>开发周期</strong></td>
+        <td><span class="score s5">★★★★★</span><br>Android 原生即可</td>
+        <td><span class="score s3">★★★</span><br>Wear OS 额外适配</td>
+        <td><span class="score s1">★</span><br>硬件开发 6-12 月</td>
+        <td><span class="score s4">★★★★</span><br>同手机</td>
+      </tr>
+      <tr>
+        <td><strong>成本</strong></td>
+        <td><span class="score s5">★★★★★</span><br>直接用现有手机</td>
+        <td><span class="score s3">★★★</span><br>需购手表 ¥1,500+</td>
+        <td><span class="score s1">★</span><br>开模 ¥50,000+</td>
+        <td><span class="score s3">★★★</span><br>需购耳机 ¥200+</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- === 推荐方案 === -->
+<section>
+  <h2>推荐方案</h2>
+
+  <div class="card reco" style="border-left:4px solid #1565c0">
+    <div class="reco-icon">🥇</div>
+    <div>
+      <h3 style="padding-top:0;color:#1565c0">方案 A：Android 手机（首推）</h3>
+      <p style="margin-bottom:0.5rem">
+        <strong>结论：先用手机把 APP 做出来、跑通验证，是唯一合理的起点。</strong> 手机是现成的开发环境，有最强生态、最成熟的工具链、最大的用户基数。先跑通 MVP 验证需求，之后再考虑硬件迁移。
+      </p>
+      <ul class="reco-list">
+        <li>开发成本几乎为零（现有手机即可）</li>
+        <li>Android Studio + Kotlin + Compose 直达目标</li>
+        <li>Google Play 分发方便迭代</li>
+        <li>边沿灯效可用软件 Overlay 模拟（已有实现）</li>
+        <li>验证通过后可以移植到 Wear OS 或专用硬件</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card reco" style="border-left:4px solid #2e7d32">
+    <div class="reco-icon">🥈</div>
+    <div>
+      <h3 style="padding-top:0;color:#2e7d32">方案 B：Phone + Wear OS 双端（中期目标）</h3>
+      <p style="margin-bottom:0.5rem">
+        手机跑核心计算（STT/LLM），手表做交互终端（震动+灯效+手势触发）。
+        蓝牙传数据，发挥各自优势。
+      </p>
+      <ul class="reco-list">
+        <li>手表贴肤震动体验远好于手机</li>
+        <li>抬腕即用，隐蔽性最佳</li>
+        <li>但：手表的开发量接近翻倍（Wear OS 独立 UI）</li>
+        <li>建议：APP 上线后再做手表端</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card reco" style="border-left:4px solid #e65100">
+    <div class="reco-icon">🥉</div>
+    <div>
+      <h3 style="padding-top:0;color:#e65100">方案 C：专用硬件（远期愿景）</h3>
+      <p style="margin-bottom:0.5rem">
+        如果 APP 验证了市场需求，再做专用硬件：
+        一个类似智能胸针/吊坠的独立设备，自带 LED 灯带+震动马达+扬声器。
+      </p>
+      <ul class="reco-list">
+        <li>完全定制体验最优</li>
+        <li>但：硬件开发周期 6-12 个月</li>
+        <li>开模+认证+首批量产至少 ¥50,000+</li>
+        <li>建议：日活 1000+ 时再考虑</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- === 手机推荐 === -->
+<section>
+  <h2>开发/测试推荐机型</h2>
+  <p>如果要用手机开发测试，以下机型在关键特性上表现最佳：</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>机型</th>
+        <th>震动马达</th>
+        <th>扬声器</th>
+        <th>AI 算力</th>
+        <th>推荐理由</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Google Pixel 9</strong></td>
+        <td><span class="score s4">★★★★</span></td>
+        <td><span class="score s4">★★★★</span></td>
+        <td><span class="score s5">★★★★★</span></td>
+        <td>Tensor G4 NPU 最强端侧 AI；原生 Android；AOSP 友好</td>
+      </tr>
+      <tr>
+        <td><strong>Samsung S25</strong></td>
+        <td><span class="score s5">★★★★★</span></td>
+        <td><span class="score s5">★★★★★</span></td>
+        <td><span class="score s4">★★★★</span></td>
+        <td>最强线性马达；AKG 调音双扬声器；One UI 功能最全</td>
+      </tr>
+      <tr>
+        <td><strong>OnePlus 13</strong></td>
+        <td><span class="score s4">★★★★</span></td>
+        <td><span class="score s4">★★★★</span></td>
+        <td><span class="score s4">★★★★</span></td>
+        <td>性价比最高；大电池 6000mAh；ColorOS 功能全面</td>
+      </tr>
+      <tr>
+        <td><strong>Xiaomi 15</strong></td>
+        <td><span class="score s3">★★★</span></td>
+        <td><span class="score s4">★★★★</span></td>
+        <td><span class="score s5">★★★★★</span></td>
+        <td>骁龙 8 Elite 性能强；MIUI 功能丰富；价格适中</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- === 结论 === -->
+<section>
+  <h2>结论与路线图</h2>
+
+  <div class="card" style="border-left:4px solid #1565c0;background:rgba(227,242,253,0.4);backdrop-filter:blur(12px)">
+    <p style="margin-bottom:0;font-weight:500;color:#1565c0">
+      先用现有 Android 手机开发 → 验证核心需求 → MVP 上线 → 根据用户反馈决定硬件方向。
+    </p>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:1rem">
+    <div style="flex:1;min-width:160px;background:rgba(255,255,255,0.5);border-radius:8px;padding:0.75rem 1rem;border:1px solid #eee">
+      <div style="font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.03em">Phase 0-1</div>
+      <div style="font-weight:600;color:#1565c0;margin-top:4px">📱 手机方案</div>
+      <div style="font-size:0.8rem;color:#666">当前阶段 · 开发测试</div>
+    </div>
+    <div style="flex:1;min-width:160px;background:rgba(255,255,255,0.5);border-radius:8px;padding:0.75rem 1rem;border:1px solid #eee">
+      <div style="font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.03em">Phase 2-3</div>
+      <div style="font-weight:600;color:#2e7d32;margin-top:4px">⌚ 手表联动</div>
+      <div style="font-size:0.8rem;color:#666">MVP 验证后扩展</div>
+    </div>
+    <div style="flex:1;min-width:160px;background:rgba(255,255,255,0.5);border-radius:8px;padding:0.75rem 1rem;border:1px solid #eee">
+      <div style="font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.03em">Phase 4+</div>
+      <div style="font-weight:600;color:#e65100;margin-top:4px">🔧 专用硬件</div>
+      <div style="font-size:0.8rem;color:#666">用户验证后决策</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- === 附录 === -->
+<section>
+  <h2>附录：APP 功能硬件依赖清单</h2>
+  <p>每个核心功能对应的 Android API 和硬件要求：</p>
+
+  <table>
+    <thead>
+      <tr><th>功能</th><th>Android API</th><th>硬件要求</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>始终在线监听</td><td><code>MediaRecorder</code> / <code>AudioRecord</code></td><td>麦克风（所有手机都有）</td></tr>
+      <tr><td>三级震动</td><td><code>VibrationEffect</code> + 振幅控制</td><td>线性马达（旗舰机标配）</td></tr>
+      <tr><td>边沿光效</td><td><code>WindowManager</code> Overlay</td><td>OLED 屏幕（软件实现）</td></tr>
+      <tr><td>TTS 语音输出</td><td><code>TextToSpeech</code> API</td><td>扬声器（所有手机都有）</td></tr>
+      <tr><td>敲击检测</td><td><code>SensorManager</code> (加速度计)</td><td>加速度计（所有手机都有）</td></tr>
+      <tr><td>端侧 STT/LLM</td><td>ONNX / NNAPI / TFLite</td><td>NPU 或强劲 CPU（旗舰机）</td></tr>
+      <tr><td>前台 Service</td><td>Foreground Service API</td><td>无特殊硬件要求</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="footer">
+  3rd Career Exploration — Verbal Self-Defense App Project<br>
+  Generated June 5, 2026 &bull; Designed with PPVI design principles
+</div>
+
+</div>
+</body>
+</html>
