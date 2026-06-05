@@ -736,26 +736,26 @@ pre code{background:transparent;padding:0;color:inherit;font-size:inherit}
 
   <div class="card">
     <h3 style="padding-top:0">4. User Interaction Flow</h3>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-top:0.5rem">
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:0.5rem">
       <div style="display:flex;gap:10px;align-items:flex-start">
         <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">1</div>
-        <div><strong>被动监听</strong> — APP 后台运行，持续检测环境语音</div>
+        <div><strong>Passive Listening</strong> — App runs in background, continuously detecting ambient speech</div>
       </div>
       <div style="display:flex;gap:10px;align-items:flex-start">
         <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">2</div>
-        <div><strong>等级预警</strong> — 检测到针对性语言，屏幕边沿亮起橙/红灯+震动</div>
+        <div><strong>Threat Alert</strong> — Targeted language detected, edge lights up orange/red + vibration</div>
       </div>
       <div style="display:flex;gap:10px;align-items:flex-start">
         <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">3</div>
-        <div><strong>首发预设</strong> — 双击屏幕，预设话术经TTS即时外放（&lt;200ms）</div>
+        <div><strong>First Retort</strong> — Double-tap screen, preset retort via TTS (&lt;200ms)</div>
       </div>
       <div style="display:flex;gap:10px;align-items:flex-start">
         <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">4</div>
-        <div><strong>AI生成后续</strong> — 后台开始生成第二句，10秒内屏幕显示AI推荐</div>
+        <div><strong>AI Follow-Up</strong> — Backend generates next retort, shows recommendation within 10s</div>
       </div>
       <div style="display:flex;gap:10px;align-items:flex-start">
         <div style="background:#1565c0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">5</div>
-        <div><strong>确认发声</strong> — 瞟一眼→双击确认，或滑动换一条AI建议</div>
+        <div><strong>Confirm & Speak</strong> — Glance at suggestion, double-tap to deploy, or swipe for alternatives</div>
       </div>
     </div>
   </div>
@@ -939,51 +939,188 @@ pre code{background:transparent;padding:0;color:inherit;font-size:inherit}
 
 <div class="section-spacer"></div>
 
-<!-- === DOCUMENTS & REFERENCES === -->
-<section id="documents">
-  <h2>Documents & References</h2>
-  <p>Research reports, design studies, and supporting documents for the Verbal Self-Defense App project.</p>
+<!-- === DESIGN EXPLORATION === -->
+<section id="design-exploration">
+  <h2>Design Exploration & Product Evolution</h2>
+  <p>A systematic exploration of six distinct design methodologies applied to the Verbal Self-Defense App — each revealing different visual DNA for the same product. Below each, we examine how this aesthetic could extend beyond pure software into hardware-integrated scenarios.</p>
+
+  <div class="grid-2">
+    <div class="card" style="border-left:3px solid #1a1a2e">
+      <h3 style="padding-top:0;display:flex;align-items:center;gap:6px;font-size:1rem">
+        <span style="font-size:1rem">01</span> PPVI — Glassmorphism
+      </h3>
+      <p style="font-size:0.85rem;color:#555;margin-bottom:0.5rem;line-height:1.5">
+        Restrained elegance. Dark gradient base with translucent glass cards, subtle noise textures, and monochrome hierarchy. Color used sparingly — only where attention is needed.
+      </p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0.75rem">
+        <span class="tag">backdrop-filter:blur</span>
+        <span class="tag">radial gradient noise</span>
+        <span class="tag">#f5f5f5 base</span>
+        <span class="tag">clamp() type</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <a href="https://70a67fb735344e18b006b16454737030.app.codebuddy.work/01-ppvi.html" style="color:#1565c0;text-decoration:none;font-size:0.82rem;font-weight:500">Open Preview ↗</a>
+        <span style="font-size:0.7rem;color:#999">| cloudstudio sandbox</span>
+      </div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #b87a5a">
+      <h3 style="padding-top:0;display:flex;align-items:center;gap:6px;font-size:1rem">
+        <span style="font-size:1rem">02</span> Esther Design System
+      </h3>
+      <p style="font-size:0.85rem;color:#555;margin-bottom:0.5rem;line-height:1.5">
+        Brand-first identity. Warm neutral palette with signature accent colors, serif headings for personality, and deliberate rhythm between dense and airy sections.
+      </p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0.75rem">
+        <span class="tag">Noto Serif SC</span>
+        <span class="tag">warm neutrals</span>
+        <span class="tag">4px spacing grid</span>
+        <span class="tag">brand accent</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <a href="https://70a67fb735344e18b006b16454737030.app.codebuddy.work/02-esther-design-system.html" style="color:#1565c0;text-decoration:none;font-size:0.82rem;font-weight:500">Open Preview ↗</a>
+        <span style="font-size:0.7rem;color:#999">| cloudstudio sandbox</span>
+      </div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #7c4dff">
+      <h3 style="padding-top:0;display:flex;align-items:center;gap:6px;font-size:1rem">
+        <span style="font-size:1rem">03</span> Hallmark
+      </h3>
+      <p style="font-size:0.85rem;color:#555;margin-bottom:0.5rem;line-height:1.5">
+        Anti-slop structural design. 21 macro layouts, 20 theme systems, 57 anti-pattern checks. Eliminates generic AI visual tropes through systematic structure diversity.
+      </p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0.75rem">
+        <span class="tag">57 slop gates</span>
+        <span class="tag">macro structures</span>
+        <span class="tag">theme system</span>
+        <span class="tag">audit mode</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <a href="https://70a67fb735344e18b006b16454737030.app.codebuddy.work/03-hallmark.html" style="color:#1565c0;text-decoration:none;font-size:0.82rem;font-weight:500">Open Preview ↗</a>
+        <span style="font-size:0.7rem;color:#999">| cloudstudio sandbox</span>
+      </div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #2e7d32">
+      <h3 style="padding-top:0;display:flex;align-items:center;gap:6px;font-size:1rem">
+        <span style="font-size:1rem">04</span> Taste Skill
+      </h3>
+      <p style="font-size:0.85rem;color:#555;margin-bottom:0.5rem;line-height:1.5">
+        Frontend anti-slop methodology. Three tuning knobs — DESIGN_VARIANCE, MOTION_INTENSITY, VISUAL_DENSITY — calibrated to eliminate the default AI look.
+      </p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0.75rem">
+        <span class="tag">3 tuning knobs</span>
+        <span class="tag">anti-slop</span>
+        <span class="tag">design variance</span>
+        <span class="tag">motion intensity</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <a href="https://70a67fb735344e18b006b16454737030.app.codebuddy.work/04-taste-skill.html" style="color:#1565c0;text-decoration:none;font-size:0.82rem;font-weight:500">Open Preview ↗</a>
+        <span style="font-size:0.7rem;color:#999">| cloudstudio sandbox</span>
+      </div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #e65100">
+      <h3 style="padding-top:0;display:flex;align-items:center;gap:6px;font-size:1rem">
+        <span style="font-size:1rem">05</span> Frontend Design
+      </h3>
+      <p style="font-size:0.85rem;color:#555;margin-bottom:0.5rem;line-height:1.5">
+        Production-grade implementation focus. Tailwind utility-first, animation systems, responsive containers. Bridges the gap between design intent and shipping code.
+      </p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0.75rem">
+        <span class="tag">Tailwind</span>
+        <span class="tag">container queries</span>
+        <span class="tag">motion system</span>
+        <span class="tag">production</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <a href="https://70a67fb735344e18b006b16454737030.app.codebuddy.work/05-frontend-design.html" style="color:#1565c0;text-decoration:none;font-size:0.82rem;font-weight:500">Open Preview ↗</a>
+        <span style="font-size:0.7rem;color:#999">| cloudstudio sandbox</span>
+      </div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #7b1fa2">
+      <h3 style="padding-top:0;display:flex;align-items:center;gap:6px;font-size:1rem">
+        <span style="font-size:1rem">06</span> UI/UX Pro Max
+      </h3>
+      <p style="font-size:0.85rem;color:#555;margin-bottom:0.5rem;line-height:1.5">
+        Full-stack UX intelligence. Covers everything from micro-interactions and loading states to accessibility, internationalization, and design tokens.
+      </p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0.75rem">
+        <span class="tag">micro-interactions</span>
+        <span class="tag">design tokens</span>
+        <span class="tag">a11y</span>
+        <span class="tag">i18n</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <a href="https://70a67fb735344e18b006b16454737030.app.codebuddy.work/06-ui-ux-pro-max.html" style="color:#1565c0;text-decoration:none;font-size:0.82rem;font-weight:500">Open Preview ↗</a>
+        <span style="font-size:0.7rem;color:#999">| cloudstudio sandbox</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="border-left:3px solid #1a1a2e;background:rgba(26,26,46,0.04);margin-top:0.75rem">
+    <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">
+      <div style="font-size:1.5rem;flex-shrink:0">🔮</div>
+      <div>
+        <h3 style="padding-top:0;margin-bottom:0.25rem">From App to Ecosystem</h3>
+        <p style="font-size:0.9rem;color:#555;margin-bottom:0.5rem">
+          The six design explorations above serve a single UI, but the Verbal Self-Defense concept naturally extends beyond a phone screen. The same interaction flow — listen → detect → alert → respond — maps to form factors that feel more native to the use case:
+        </p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:0.5rem">
+          <div style="background:rgba(255,255,255,0.5);border-radius:8px;padding:0.75rem;border:1px solid #e0e0e0">
+            <div style="font-weight:600;font-size:0.85rem;color:#1a1a2e">📱 Phone App</div>
+            <div style="font-size:0.78rem;color:#666;margin-top:2px">Current phase. Full AI pipeline, edge light overlay, TTS output. Best compute, most accessible.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.5);border-radius:8px;padding:0.75rem;border:1px solid #e0e0e0">
+            <div style="font-weight:600;font-size:0.85rem;color:#1a1a2e">⌚ Phone + Wearable</div>
+            <div style="font-size:0.78rem;color:#666;margin-top:2px">Phone computes, watch delivers haptics + gesture trigger. Discreet vibration directly on skin.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.5);border-radius:8px;padding:0.75rem;border:1px solid #e0e0e0">
+            <div style="font-weight:600;font-size:0.85rem;color:#1a1a2e">🎧 Phone + Earbuds</div>
+            <div style="font-size:0.78rem;color:#666;margin-top:2px">Best mic placement (ear level). Retort played through earbuds. Subtle and always ready.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.5);border-radius:8px;padding:0.75rem;border:1px solid #e0e0e0">
+            <div style="font-weight:600;font-size:0.85rem;color:#1a1a2e">🔧 Dedicated Device</div>
+            <div style="font-size:0.78rem;color:#666;margin-top:2px">Future. Smart badge/pendant with LED strip + vibration motor. Fully autonomous, maximum subtlety.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- === RESEARCH & REFERENCES === -->
+<section id="research">
+  <h2>Research & References</h2>
+  <p>Hardware feasibility studies and project specifications that inform the development roadmap.</p>
 
   <div class="grid-2">
     <div class="card" style="border-left:3px solid #1565c0">
       <h3 style="padding-top:0;display:flex;align-items:center;gap:8px">
-        <span style="font-size:1.1rem">📄</span> Research Reports
+        <span style="font-size:1.1rem">📄</span> Microphone Hardware Research
       </h3>
-      <p style="font-size:0.9rem;margin-bottom:0.75rem">Hardware and feasibility studies that informed the project architecture.</p>
+      <p style="font-size:0.9rem;margin-bottom:0.5rem">Comprehensive comparison of three audio capture device categories — smartphone, smartwatch, and AI recording card — across range, stealth, battery life, and compute capability.</p>
+      <p style="font-size:0.88rem;color:#555">Key finding: <strong>AI recording cards (DingTalk A1 / TicNote)</strong> offer 5-8m pickup range with 45h battery, making them the optimal long-term hardware partner for this app.</p>
+      <div style="margin-top:0.5rem">
+        <a href="https://github.com/wherejiahe-bot/3rd-career-exploration/blob/main/verbal-self-defense-app/mic-research-report.md" style="color:#1565c0;text-decoration:none;font-size:0.85rem;font-weight:500">Read Full Report ↗</a>
+      </div>
+    </div>
+
+    <div class="card" style="border-left:3px solid #2e7d32">
+      <h3 style="padding-top:0;display:flex;align-items:center;gap:8px">
+        <span style="font-size:1.1rem">📋</span> Project Specifications
+      </h3>
+      <p style="font-size:0.9rem;margin-bottom:0.5rem">Formal design and implementation documents guiding the development process.</p>
       <ul style="color:#444;font-size:0.88rem;padding-left:1.1rem;line-height:1.9">
-        <li><a href="https://github.com/wherejiahe-bot/3rd-career-exploration/blob/main/verbal-self-defense-app/mic-research-report.md" style="color:#1565c0;text-decoration:none;font-weight:500">Microphone & Audio Hardware Research</a> — Device comparison for ambient audio capture</li>
+        <li><a href="https://github.com/wherejiahe-bot/3rd-career-exploration/blob/main/verbal-self-defense-app/design-spec-v1.html" style="color:#1565c0;text-decoration:none;font-weight:500">Design Specification v1.0</a> — 9-chapter product design spec covering all feature areas</li>
+        <li><a href="https://github.com/wherejiahe-bot/3rd-career-exploration/blob/main/verbal-self-defense-app/implementation-plan.md" style="color:#1565c0;text-decoration:none;font-weight:500">Implementation Plan</a> — 9 tasks covering all development phases from scaffold to distribution</li>
       </ul>
     </div>
-
-    <div class="card" style="border-left:3px solid #7b1fa2">
-      <h3 style="padding-top:0;display:flex;align-items:center;gap:8px">
-        <span style="font-size:1.1rem">🎨</span> Design System Comparisons
-      </h3>
-      <p style="font-size:0.9rem;margin-bottom:0.75rem">Six visual design variants applied to the same content, each using a different design methodology.</p>
-      <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
-        <tr><th style="text-align:left;font-weight:600;color:#888;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em;padding-bottom:4px;border-bottom:1px solid #eee">#</th><th style="text-align:left;font-weight:600;color:#888;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em;padding-bottom:4px;border-bottom:1px solid #eee">Style</th><th style="text-align:left;font-weight:600;color:#888;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em;padding-bottom:4px;border-bottom:1px solid #eee">Preview</th></tr>
-        <tr><td style="padding:4px 0;border:none">01</td><td style="padding:4px 0;border:none">PPVI — Glassmorphism</td><td style="padding:4px 0;border:none"><a href="https://70a67fb735344e18b006b16454737030.app.codebuddy.work/01-ppvi.html" style="color:#1565c0;text-decoration:none">Open ↗</a></td></tr>
-        <tr><td style="padding:4px 0;border:none">02</td><td style="padding:4px 0;border:none">Esther Design System</td><td style="padding:4px 0;border:none"><a href="https://70a67fb735344e18b006b16454737030.app.codebuddy.work/02-esther-design-system.html" style="color:#1565c0;text-decoration:none">Open ↗</a></td></tr>
-        <tr><td style="padding:4px 0;border:none">03</td><td style="padding:4px 0;border:none">Hallmark</td><td style="padding:4px 0;border:none"><a href="https://70a67fb735344e18b006b16454737030.app.codebuddy.work/03-hallmark.html" style="color:#1565c0;text-decoration:none">Open ↗</a></td></tr>
-        <tr><td style="padding:4px 0;border:none">04</td><td style="padding:4px 0;border:none">Taste Skill</td><td style="padding:4px 0;border:none"><a href="https://70a67fb735344e18b006b16454737030.app.codebuddy.work/04-taste-skill.html" style="color:#1565c0;text-decoration:none">Open ↗</a></td></tr>
-        <tr><td style="padding:4px 0;border:none">05</td><td style="padding:4px 0;border:none">Frontend Design</td><td style="padding:4px 0;border:none"><a href="https://70a67fb735344e18b006b16454737030.app.codebuddy.work/05-frontend-design.html" style="color:#1565c0;text-decoration:none">Open ↗</a></td></tr>
-        <tr><td style="padding:4px 0;border:none">06</td><td style="padding:4px 0;border:none">UI/UX Pro Max</td><td style="padding:4px 0;border:none"><a href="https://70a67fb735344e18b006b16454737030.app.codebuddy.work/06-ui-ux-pro-max.html" style="color:#1565c0;text-decoration:none">Open ↗</a></td></tr>
-      </table>
-    </div>
   </div>
-
-  <div class="card" style="border-left:3px solid #2e7d32">
-    <h3 style="padding-top:0;display:flex;align-items:center;gap:8px">
-      <span style="font-size:1.1rem">📋</span> Project Specifications
-    </h3>
-    <p style="font-size:0.9rem;margin-bottom:0">Additional project documents hosted on GitHub:</p>
-    <ul style="color:#444;font-size:0.88rem;padding-left:1.1rem;line-height:1.9;margin-top:0.5rem">
-      <li><a href="https://github.com/wherejiahe-bot/3rd-career-exploration/blob/main/verbal-self-defense-app/design-spec-v1.html" style="color:#1565c0;text-decoration:none;font-weight:500">Design Specification v1.0</a> — 9-chapter product design spec</li>
-      <li><a href="https://github.com/wherejiahe-bot/3rd-career-exploration/blob/main/verbal-self-defense-app/implementation-plan.md" style="color:#1565c0;text-decoration:none;font-weight:500">Implementation Plan</a> — 9 tasks covering all development phases</li>
-    </ul>
-  </div>
-
-  <p style="font-size:0.82rem;color:#999;margin-top:0.5rem">Note: Design system comparison pages are hosted on CloudStudio sandbox and may require a moment to load on first access.</p>
 </section>
 
 </div>
