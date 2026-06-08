@@ -155,10 +155,18 @@
     background: #1c1c1e; color: #f0ebe4;
     font-size: 10px; font-weight: 400;
     padding: 7px 13px; border-radius: 8px;
-    white-space: nowrap; z-index: 30;
+    z-index: 30;
     line-height: 1.5;
-    max-width: 260px;
+    max-width: 280px;
+    min-width: 180px;
     text-align: left;
+    white-space: normal;
+    word-break: break-word;
+  }
+  /* Last column tooltips go left to avoid screen edge */
+  tbody td:last-child .change-tip {
+    left: auto; right: 0;
+    transform: none;
   }
   .change-cell:hover .change-tip { display: block; }
 
@@ -389,15 +397,15 @@
   </div>
   <div class="summary-card">
     <div class="rank c2">🥉 霎哈嘉内容创作</div>
-    <div class="label">翻译+推送+知识库</div>
-    <div class="score-line">49/60 <span class="diff-none">NEW</span></div>
-    <div class="delta"><span class="diff-none">本期新增，低成本自然产出</span></div>
+    <div class="label">翻译+推送+知识库·公益</div>
+    <div class="score-line">48/60 <span class="diff-up">▲+1</span></div>
+    <div class="delta">行为验证：每天实际投入时间最多</div>
   </div>
   <div class="summary-card">
     <div class="rank c3">④ 体呼吸</div>
     <div class="label">丹道·自己练透</div>
-    <div class="score-line">46/60 <span class="diff-down">▼-3</span></div>
-    <div class="delta"><span class="diff-down">进展缓慢，当日常功夫不当项目</span></div>
+    <div class="score-line">43/60 <span class="diff-down">▼-6</span></div>
+    <div class="delta"><span class="diff-down">行为验证：几乎不出现在每日时间线</span></div>
   </div>
   <div class="summary-card">
     <div class="rank c3">⑤ 写小说（AI辅助）</div>
@@ -472,7 +480,7 @@
 <tr>
   <td>📝 霎哈嘉内容创作<br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">翻译+推送+知识库·公益不收费</span><span class="new-badge">NEW</span></td>
   <td><span class="star">★★★★★</span></td>
-  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
   <td><span class="star">★★★★★</span></td>
   <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
   <td><span class="star">★★★★★</span></td>
@@ -483,13 +491,13 @@
   <td><span class="star">★★★★★</span></td>
   <td><span class="star">★★★★★</span></td>
   <td><span class="star">★★★★★</span></td>
-  <td class="total-c">47</td>
-  <td class="change-cell"><span class="diff-none">NEW</span><span class="change-tip">本期新增。基于已有amruta推送+霎哈嘉RAG+web-deploy工作流。⑨收钱从3→1：明确公益不收费，传播灵性内容不图钱</span></td>
+  <td class="total-c">48</td>
+  <td class="change-cell"><span class="diff-up">▲+1</span><span class="change-tip">②想做4→5：时间证明——每天实际上都在做amruta推送、霎哈嘉RAG、知识库维护，这是投入时间最多的项目之一。行为＞意愿</span></td>
 </tr>
 <tr>
   <td>🧘 体呼吸<br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">丹道·自己练透再教</span></td>
   <td><span class="star">★★★★★</span></td>
-  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
   <td><span class="star">★★★★★</span></td>
   <td><span class="star">★★★★★</span></td>
   <td><span class="star">★★★★★</span></td>
@@ -499,14 +507,14 @@
   <td><span class="star">★★</span><span class="star-e">★★★</span></td>
   <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
   <td><span class="star">★★★★★</span></td>
-  <td><span class="star">★★★★★</span></td>
-  <td class="total-c">46</td>
-  <td class="change-cell"><span class="diff-down">▼-3</span><span class="change-tip">意愿微降，定位从"项目"调为"日常练习"——不当项目追，当功夫养</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td class="total-c">43</td>
+  <td class="change-cell"><span class="diff-down">▼-3</span><span class="change-tip">行为验证：②想做3→2（几乎没有出现在每日时间线中）、⑫启动5→3（从未实际开始练）。说想做和实际做是两回事</span></td>
 </tr>
 <tr>
   <td>✍️ 写小说<span style="font-size:10px;color:var(--accent);font-weight:600;margin-left:6px;">AI辅助</span><br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">LLM辅助创作·Claude/DeepSeek</span></td>
   <td><span class="star">★★★★★</span></td>
-  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
   <td><span class="star">★★★★★</span></td>
   <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
   <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
@@ -516,14 +524,14 @@
   <td><span class="star">★★★</span><span class="star-e">★★</span></td>
   <td><span class="star">★★★</span><span class="star-e">★★</span></td>
   <td><span class="star">★★★★★</span></td>
-  <td><span class="star">★★★★★</span></td>
-  <td class="total-c" style="color:#30d158;">45</td>
-  <td class="change-cell"><span class="diff-up">▲+7</span><span class="change-tip">AI化更新：④轻脑2→4（LLM代写降认知负担）、⑤不耗3→4（不再纯手动）、⑨收钱1→3（AI快速出内容）、⑫启动4→5（即开即用）</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td class="total-c">41</td>
+  <td class="change-cell"><span class="diff-down">▼-4</span><span class="change-tip">行为验证：②想做4→2（每天时间线中从未出现写小说）、⑫启动5→3（AI工具在手但从未开始）。"可以试试"≠"真的会试"</span></td>
 </tr>
 <tr>
   <td>🤖 AI训练师<br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">数据标注平台</span></td>
   <td><span class="star">★★★★★</span></td>
-  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
   <td><span class="star">★★★</span><span class="star-e">★★</span></td>
   <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
   <td><span class="star">★★★</span><span class="star-e">★★</span></td>
@@ -533,9 +541,9 @@
   <td><span class="star">★★★★★</span></td>
   <td><span class="star">★★★</span><span class="star-e">★★</span></td>
   <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
-  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
-  <td class="total-c">45</td>
-  <td class="change-cell"><span class="diff-down">▼-2</span><span class="change-tip">状态梳理跑通后关注度自然下降。注意：AI训练师≠AI训练包工头（后者已删除），前者是个人接单</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">43</td>
+  <td class="change-cell"><span class="diff-down">▼-2</span><span class="change-tip">行为验证：②想做3→2（从未出现在每日时间线）、⑫启动3→2（从未找过平台或开始接单）。想法归想法，行动归行动</span></td>
 </tr>
 <tr>
   <td>🖨️ 3D打印创业<span style="font-size:10px;color:#30d158;font-weight:600;margin-left:6px;">NEW</span><br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">Bambu P1S·摆摊卖玩偶·¥2838已投入</span></td>
@@ -557,7 +565,7 @@
 <tr>
   <td>💬 心理咨询<br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">倾听陪伴型</span></td>
   <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
-  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
   <td><span class="star">★★★</span><span class="star-e">★★</span></td>
   <td><span class="star">★★</span><span class="star-e">★★★</span></td>
   <td><span class="star">★★</span><span class="star-e">★★★</span></td>
@@ -567,14 +575,14 @@
   <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
   <td><span class="star">★★★</span><span class="star-e">★★</span></td>
   <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
-  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
-  <td class="total-c">43</td>
-  <td class="change-cell"><span class="diff-down">▼-2</span><span class="change-tip">与状态梳理有重叠，且状态梳理已跑通收钱，心理咨询作为独立项的优先级下降</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">40</td>
+  <td class="change-cell"><span class="diff-down">▼-3</span><span class="change-tip">行为验证：②想做3→2（从未出现在时间线中）、⑫启动4→2（从未开始实践）。完全停留在"想法"阶段</span></td>
 </tr>
 <tr>
   <td>🔮 玄学咨询<span style="font-size:10px;color:#30d158;font-weight:600;margin-left:6px;">NEW</span><br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">算卦·1v1收费·需太初之母授权</span></td>
   <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
-  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
   <td><span class="star">★★★</span><span class="star-e">★★</span></td>
   <td><span class="star">★★</span><span class="star-e">★★★</span></td>
   <td><span class="star">★★</span><span class="star-e">★★★</span></td>
@@ -584,14 +592,14 @@
   <td><span class="star">★★★★★</span></td>
   <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
   <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
-  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
-  <td class="total-c" style="color:#30d158;">42</td>
-  <td class="change-cell"><span class="diff-none">NEW</span><span class="change-tip">本期新增。6.8已验证算卦可收费(200元/h)，但只有~3人经太初之母授权可算。短板：④轻脑2/⑤不耗2（非常费脑子），长处：⑥互动5/⑨收钱5（直接变现）。注意玄学咨询≠状态梳理≠玄学代码技术</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">40</td>
+  <td class="change-cell"><span class="diff-down">▼-2</span><span class="change-tip">行为验证：②想做3→2（费脑子+只有授权才做，不是主动想做的事）、⑫启动3→2（每次都要问太初之母，不能随时启动）。可收费但不可持续</span></td>
 </tr>
 <tr>
   <td>💻 玄学代码技术<br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">在玄学领域公司做技术开发</span></td>
   <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
-  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
   <td><span class="star">★★★</span><span class="star-e">★★</span></td>
   <td><span class="star">★★★</span><span class="star-e">★★</span></td>
   <td><span class="star">★★</span><span class="star-e">★★★</span></td>
@@ -601,9 +609,9 @@
   <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
   <td><span class="star">★★★</span><span class="star-e">★★</span></td>
   <td><span class="star">★★</span><span class="star-e">★★★</span></td>
-  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
-  <td class="total-c">31</td>
-  <td class="change-cell"><span class="diff-none">改名</span><span class="change-tip">原"玄学技术岗"→"玄学代码技术"，聚焦在玄学公司做代码工作。占星归属此类（术数命理技术）</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td class="total-c">29</td>
+  <td class="change-cell"><span class="diff-down">▼-2</span><span class="change-tip">行为验证：②想做2→1（从未找过玄学公司的工作）、⑫启动2→1（要投简历+面试，门槛不低）。属于"概念上存在但行为上为零"的项目</span></td>
 </tr>
 <tr>
   <td>🌾 农业<br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">合肥布米农场·有机水稻·线上共修</span></td>
