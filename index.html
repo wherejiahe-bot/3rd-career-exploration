@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>霎哈嘉+X · 评估导航</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f2ee;
+    --card: rgba(255,255,255,.82);
+    --card-border: rgba(0,0,0,.06);
+    --accent: #b87a5a;
+    --accent-soft: rgba(184,122,90,.12);
+    --accent-light: rgba(184,122,90,.06);
+    --text: #1c1c1e;
+    --text-soft: #6e6e73;
+    --text-caption: #aeaeb2;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.04);
+    --transition: .2s cubic-bezier(.25,.1,.25,1);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter','Noto Sans SC',-apple-system,sans-serif;
+    line-height: 1.6;
+    padding: 32px 16px;
+    min-height: 100vh;
+  }
+  .container { max-width: 800px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 48px 0 32px;
+    position: relative;
+  }
+  .header::after {
+    content: ''; display: block;
+    width: 48px; height: 2px;
+    background: var(--accent);
+    margin: 16px auto 0;
+    border-radius: 1px;
+    opacity: .5;
+  }
+  .header h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(24px,4.5vw,36px);
+    font-weight: 900;
+    color: var(--text);
+    letter-spacing: 3px;
+  }
+  .header .sub {
+    color: var(--text-soft);
+    font-size: clamp(12px,2vw,15px);
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  .version-grid {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .version-card {
+    background: var(--card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-decoration: none;
+    color: var(--text);
+    display: block;
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  .version-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+    border-color: var(--accent);
+  }
+  .version-card:active {
+    transform: translateY(0);
+  }
+  .version-card .v-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+  }
+  .version-card .v-badge.v1 {
+    background: rgba(142,142,147,.12);
+    color: #8e8e93;
+  }
+  .version-card .v-badge.v2 {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .version-card h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .version-card .date {
+    font-size: 12px;
+    color: var(--text-caption);
+    margin-bottom: 10px;
+  }
+  .version-card .summary {
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.7;
+  }
+  .version-card .summary strong {
+    color: var(--text);
+  }
+  .version-card .arrow {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: var(--text-caption);
+    transition: color var(--transition), right var(--transition);
+  }
+  .version-card:hover .arrow {
+    color: var(--accent);
+    right: 16px;
+  }
+
+  .footer-info {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-caption);
+    padding: 20px 0;
+  }
+  .footer-info a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  @keyframes fadeUp {
+    from{opacity:0;transform:translateY(12px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  .header { animation: fadeUp .5s both; }
+  .version-card:nth-child(1) { animation: fadeUp .5s both .15s; }
+  .version-card:nth-child(2) { animation: fadeUp .5s both .25s; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>霎哈嘉+X · 评估导航</h1>
+  <div class="sub">十二维评估矩阵 · 多期版本</div>
+</div>
+
+<div class="version-grid">
+
+  <a href="v1/" class="version-card">
+    <span class="v-badge v1">第一期</span>
+    <h2>霎哈嘉+X · 十二维评估矩阵</h2>
+    <div class="date">2026-05-30</div>
+    <div class="summary">
+      <strong>10个项目 × 12维度</strong> · 首版全量分析<br>
+      排名：状态梳理(52) &gt; 体呼吸(49) &gt; AI训练师(47) &gt; 冥想带领(46)
+    </div>
+    <span class="arrow">→</span>
+  </a>
+
+  <a href="phase2/" class="version-card">
+    <span class="v-badge v2">第二期</span>
+    <h2>霎哈嘉+X · 第二期评估</h2>
+    <div class="date">2026-06-08 · 验证驱动更新</div>
+    <div class="summary">
+      <strong>基于9天真实生活验证更新</strong> · 含变动对比<br>
+      排名：状态梳理(54 ▲+2) &gt; 免费初班(50 NEW) &gt; 体呼吸(46 ▼-3)<br>
+      新增：免费初班与共修、霎哈嘉内容创作
+    </div>
+    <span class="arrow">→</span>
+  </a>
+
+</div>
+
+<div class="footer-info">
+  <a href="https://github.com/wherejiahe-bot/3rd-career-exploration" target="_blank">GitHub 仓库</a>
+</div>
+
+</div>
+</body>
+</html>
