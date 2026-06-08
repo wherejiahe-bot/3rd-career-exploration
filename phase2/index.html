@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>霎哈嘉+X · 第二期评估 · 2026-06-08</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f2ee;
+    --card: rgba(255,255,255,.82);
+    --card-border: rgba(0,0,0,.06);
+    --accent: #b87a5a;
+    --accent-soft: rgba(184,122,90,.12);
+    --accent-light: rgba(184,122,90,.06);
+    --text: #1c1c1e;
+    --text-soft: #6e6e73;
+    --text-caption: #aeaeb2;
+    --gold: #c49032;
+    --gold-empty: #e5ddd4;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.04);
+    --transition: .2s cubic-bezier(.25,.1,.25,1);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter','Noto Sans SC',-apple-system,sans-serif;
+    line-height: 1.6;
+    padding: 28px 16px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1260px; margin: 0 auto; }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    padding: 36px 0 20px;
+    position: relative;
+  }
+  .header::after {
+    content: ''; display: block;
+    width: 48px; height: 2px;
+    background: var(--accent);
+    margin: 14px auto 0;
+    border-radius: 1px;
+    opacity: .6;
+  }
+  .header h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(22px,4vw,34px);
+    font-weight: 900;
+    color: var(--text);
+    letter-spacing: 3px;
+  }
+  .header .sub {
+    color: var(--text-soft);
+    font-size: clamp(12px,2vw,15px);
+    margin-top: 4px;
+    font-weight: 300;
+  }
+  .header .badge {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 2px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-top: 10px;
+    font-weight: 500;
+  }
+
+  /* ── Phase note ── */
+  .phase-note {
+    max-width: 660px;
+    margin: 18px auto 24px;
+    padding: 14px 18px;
+    background: var(--card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    color: var(--text-soft);
+    line-height: 1.7;
+    text-align: left;
+  }
+  .phase-note strong { color: var(--accent); font-weight: 600; }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 6px 18px;
+    justify-content: center; padding: 8px 0 22px;
+    font-size: 12px; color: var(--text-soft);
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .star { color: var(--gold); font-size: 14px; }
+  .star-e { color: var(--gold-empty); }
+  .diff-up { color: #30d158; font-size: 11px; font-weight: 500; }
+  .diff-down { color: #ff453a; font-size: 11px; font-weight: 500; }
+  .diff-none { color: var(--text-caption); font-size: 11px; }
+
+  /* ── Dimension pills ── */
+  .dim-bar {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    justify-content: center; margin-bottom: 24px;
+  }
+  .dim-pill {
+    display: inline-flex; align-items: center; gap: 3px;
+    background: var(--card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    padding: 5px 12px; border-radius: 20px;
+    font-size: 11px; font-weight: 500; color: var(--text-soft);
+    cursor: help; position: relative;
+    transition: background var(--transition), border-color var(--transition);
+  }
+  .dim-pill:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .dim-pill .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 9px; font-weight: 700; margin-right: 2px;
+  }
+  .dim-pill:hover .num { background: var(--accent); color: #fff; }
+  .dim-pill .tip {
+    display: none; position: absolute;
+    bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: var(--text); color: #f0ebe4;
+    font-size: 10px; font-weight: 400;
+    padding: 6px 12px; border-radius: 8px;
+    white-space: nowrap; z-index: 20;
+    line-height: 1.4;
+  }
+  .dim-pill:hover .tip { display: block; }
+
+  /* ── Summary cards ── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px; margin-bottom: 28px;
+  }
+  .summary-card {
+    background: var(--card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 16px 12px;
+    text-align: center;
+    transition: transform var(--transition), box-shadow var(--transition);
+    cursor: default;
+  }
+  .summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .summary-card .rank {
+    font-size: 22px; font-weight: 700;
+    font-family: 'Noto Serif SC', serif;
+  }
+  .summary-card .label {
+    font-size: 12px; color: var(--text-soft); margin-top: 1px;
+  }
+  .summary-card .score-line {
+    font-size: 11px; color: var(--accent); font-weight: 500;
+    margin-top: 5px;
+  }
+  .summary-card .delta {
+    font-size: 10px; margin-top: 2px;
+  }
+  .summary-card.best {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, rgba(184,122,90,.08), rgba(184,122,90,.02));
+  }
+  .c1 { color: var(--accent); }
+  .c2 { color: #8a7a6a; }
+  .c3 { color: var(--text-caption); }
+
+  /* ── Table ── */
+  .tw {
+    background: var(--card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    overflow-x: auto;
+    padding: 2px;
+  }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 12px; min-width: 1080px;
+  }
+  thead th {
+    text-align: center; padding: 10px 6px;
+    font-weight: 600; color: var(--text);
+    border-bottom: 1.5px solid rgba(184,122,90,.2);
+    white-space: nowrap; position: sticky; top: 0;
+    background: var(--card); z-index: 2; font-size: 11px;
+  }
+  thead th:first-child { text-align: left; padding-left: 14px; min-width: 130px; }
+  thead th .dim-abbr {
+    display: block; font-size: 9px; font-weight: 400;
+    color: var(--text-caption); margin-top: 1px;
+  }
+  tbody td {
+    padding: 8px 6px; border-bottom: 1px solid rgba(0,0,0,.04);
+    vertical-align: middle; text-align: center; font-size: 11px;
+  }
+  tbody td:first-child {
+    font-weight: 600; padding-left: 14px;
+    text-align: left; white-space: nowrap;
+    font-size: 12px;
+  }
+  tbody tr:hover { background: var(--accent-light); }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr.new-option td:first-child { font-style: italic; }
+  .total-c { font-weight: 700; font-size: 14px; color: var(--accent); }
+  .bar-bg {
+    height: 2px; background: var(--gold-empty);
+    border-radius: 1px; margin-top: 2px; overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    border-radius: 1px;
+  }
+
+  /* ── Analysis section ── */
+  .analysis {
+    margin-top: 32px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .analysis-card {
+    background: var(--card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 18px;
+  }
+  .analysis-card h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px; font-weight: 700;
+    color: var(--accent); margin-bottom: 8px;
+    padding-bottom: 6px; border-bottom: 1px solid rgba(184,122,90,.15);
+  }
+  .analysis-card li, .analysis-card p {
+    font-size: 12px; color: var(--text);
+    padding: 3px 0; line-height: 1.7;
+    list-style: none;
+  }
+  .analysis-card li::before { content: '·'; color: var(--accent); margin-right: 5px; }
+  .analysis-card .highlight {
+    background: var(--accent-light);
+    border-left: 2px solid var(--accent);
+    padding: 8px 12px; margin: 6px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 12px;
+  }
+
+  /* ── new option badge ── */
+  .new-badge {
+    display: inline-block;
+    background: rgba(48,209,88,.12);
+    color: #30d158;
+    font-size: 10px; font-weight: 600;
+    padding: 1px 8px; border-radius: 10px;
+    margin-left: 4px;
+  }
+
+  @media (max-width: 768px) {
+    body { padding: 14px 10px; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .analysis { grid-template-columns: 1fr; }
+    table { font-size: 10px; min-width: 760px; }
+    thead th, tbody td { padding: 5px 3px; }
+  }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .header,.phase-note,.summary-grid,.tw,.analysis { animation: fadeUp .5s both; }
+  .phase-note { animation-delay: .08s; }
+  .summary-grid { animation-delay: .15s; }
+  .tw { animation-delay: .25s; }
+  .analysis { animation-delay: .35s; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>霎哈嘉+X · 第二期评估</h1>
+  <div class="sub">2026-06-08 · 基于近9天真实生活验证更新</div>
+  <div class="badge">第二期 · 验证驱动</div>
+</div>
+
+<div class="phase-note">
+  <strong>📌 第一期之后发生了什么（2026-05-30 → 06-08）</strong><br>
+  · 占星咨询实际做了——以霎哈嘉启迪方式、1小时、<strong>赚了200块、不费脑力</strong> → 验证"状态梳理"可行性<br>
+  · 户外初班做了——亭子旁小河边的集体冥想，念初阶书，<strong>"景色很好很享受"</strong><br>
+  · 系统性清淤序列验证——Mahakali108 → Bhairava21 → 负面毁灭口诀 → 格涅沙颂，清理后左额轮自清洁<br>
+  · 左脉体质确认——八字土旺（98%）需午火泄土，1-2天需一次深度火清理<br>
+  · 与母亲的相处模式——知道上限下限→不执着→在灵的状态感受→不起反应才是治本<br>
+  · 花小钱办大事成为核心思维原则<br>
+  · 5个时间点的每日冥想提醒自动化建立
+</div>
+
+<div class="legend">
+  <span class="legend-item"><span class="star">★★★★★</span> 完美</span>
+  <span class="legend-item"><span class="star">★★★★</span><span class="star-e">☆</span> 良好</span>
+  <span class="legend-item"><span class="star">★★★</span><span class="star-e">★★</span> 中等</span>
+  <span class="legend-item"><span class="star">★</span><span class="star-e">★★★★</span> 偏低</span>
+  <span class="legend-item"><span class="diff-up">▲</span> vs 第一期</span>
+  <span class="legend-item"><span class="diff-down">▼</span> vs 第一期</span>
+  <span class="legend-item"><span class="diff-none">—</span> 不变</span>
+  <span class="legend-item"><span class="new-badge">NEW</span> 本期新增</span>
+</div>
+
+<div class="dim-bar">
+  <span class="dim-pill"><span class="num">1</span> 教义合规<span class="tip">不碰霎哈嘉红线，可合法收费</span></span>
+  <span class="dim-pill"><span class="num">2</span> 你想做<span class="tip">内心真正想投入的意愿</span></span>
+  <span class="dim-pill"><span class="num">3</span> 配合静坐<span class="tip">利于修行状态，不冲突</span></span>
+  <span class="dim-pill"><span class="num">4</span> 轻脑子·闭环<span class="tip">不费大脑，有完成标志</span></span>
+  <span class="dim-pill"><span class="num">5</span> 不消耗<span class="tip">做了不累，不左脉消耗</span></span>
+  <span class="dim-pill"><span class="num">6</span> 与人互动<span class="tip">需要或可以和真人交流</span></span>
+  <span class="dim-pill"><span class="num">7</span> 能去爱<span class="tip">在工作中打开心、爱人</span></span>
+  <span class="dim-pill"><span class="num">8</span> 利己成长<span class="tip">对自己的灵性进步有直接帮助</span></span>
+  <span class="dim-pill"><span class="num">9</span> 直接收钱<span class="tip">干活就有钱，不绕弯子</span></span>
+  <span class="dim-pill"><span class="num">10</span> 身体轻松<span class="tip">身体负担小，不累</span></span>
+  <span class="dim-pill"><span class="num">11</span> 时间自由<span class="tip">想干就干，随时可停</span></span>
+  <span class="dim-pill"><span class="num">12</span> 马上启动<span class="tip">门槛低，现在就能做</span></span>
+</div>
+
+<h3 style="font-family:'Noto Serif SC',serif;font-size:15px;color:var(--text-soft);margin-bottom:10px;">🏆 综合排名（vs 第一期）</h3>
+<div class="summary-grid">
+  <div class="summary-card best">
+    <div class="rank c1">🥇 状态梳理</div>
+    <div class="label">启迪式咨询·已验证收钱</div>
+    <div class="score-line">54/60 <span class="diff-up">▲+2</span></div>
+    <div class="delta"><span class="diff-up">"直接收钱"已验证可行</span></div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c2">🥈 免费初班与共修</div>
+    <div class="label">户外亭子·念初阶书</div>
+    <div class="score-line">50/60 <span class="diff-up">▲+4</span></div>
+    <div class="delta"><span class="diff-up">实际体验确认喜爱</span></div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c2">🥉 体呼吸</div>
+    <div class="label">丹道·自己练透</div>
+    <div class="score-line">46/60 <span class="diff-down">▼-3</span></div>
+    <div class="delta"><span class="diff-down">进展缓慢，意愿微降</span></div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c3">④ AI训练师</div>
+    <div class="label">数据标注·轻脑力收钱</div>
+    <div class="score-line">45/60 <span class="diff-down">▼-2</span></div>
+    <div class="delta"><span class="diff-none">未启动，关注度下降</span></div>
+  </div>
+</div>
+
+<div class="tw">
+<table>
+<thead>
+<tr>
+  <th>项目</th>
+  <th>①教义</th>
+  <th>②想做</th>
+  <th>③静坐</th>
+  <th>④轻脑</th>
+  <th>⑤不耗</th>
+  <th>⑥互动</th>
+  <th>⑦去爱</th>
+  <th>⑧成长</th>
+  <th>⑨收钱</th>
+  <th>⑩轻松</th>
+  <th>⑪自由</th>
+  <th>⑫启动</th>
+  <th>总分/60</th>
+  <th>变动</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>🪷 状态梳理<br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">启迪式·不预测</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td class="total-c" style="font-weight:900;">54</td>
+  <td><span class="diff-up">▲+2</span></td>
+</tr>
+<tr>
+  <td>🌿 免费初班与共修<br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">户外亭子·念初阶书</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td class="total-c">50</td>
+  <td><span class="diff-up">▲+4</span></td>
+</tr>
+<tr>
+  <td>🧘 体呼吸<br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">丹道·自己练透再教</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td class="total-c">46</td>
+  <td><span class="diff-down">▼-3</span></td>
+</tr>
+<tr>
+  <td>🤖 AI训练师<br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">数据标注平台</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td class="total-c">45</td>
+  <td><span class="diff-down">▼-2</span></td>
+</tr>
+<tr>
+  <td>📝 霎哈嘉内容创作<br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">翻译+推送+知识库</span><span class="new-badge">NEW</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td class="total-c">49</td>
+  <td><span class="diff-none">NEW</span></td>
+</tr>
+<tr>
+  <td>💬 心理咨询<br><span style="font-size:10px;color:var(--text-caption);font-weight:400;">倾听陪伴型</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">43</td>
+  <td><span class="diff-down">▼-2</span></td>
+</tr>
+<tr>
+  <td>📊 Excel/VBA兼职</td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">43</td>
+  <td><span class="diff-down">▼-1</span></td>
+</tr>
+<tr>
+  <td>🏗️ AI训练包工头</td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">38</td>
+  <td><span class="diff-down">▼-1</span></td>
+</tr>
+<tr>
+  <td>✍️ 写小说</td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">38</td>
+  <td><span class="diff-down">▼-2</span></td>
+</tr>
+<tr>
+  <td>🌾 农业</td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">31</td>
+  <td><span class="diff-down">▼-2</span></td>
+</tr>
+<tr>
+  <td>🔮 玄学技术岗</td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">31</td>
+  <td><span class="diff-down">▼-2</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="analysis">
+<div class="analysis-card">
+  <h3>🏆 推荐方案（第二期）</h3>
+  <div class="highlight">
+    <strong>状态梳理（已经转起来了）+ 初班（灵性根基）</strong>
+  </div>
+  <p><strong>短线·状态梳理 → 验证完成，可以开跑</strong></p>
+  <li>今天验证了：1小时咨询，不费脑力，直接收到200块</li>
+  <li>以霎哈嘉启迪方式做，不做预测，帮人看见自己的状态</li>
+  <li>客户状态不对时不接本人咨询，只讲事</li>
+  <li>身体负担小，做完了还能继续生活</li>
+  <br>
+  <p><strong>中线·免费初班 → 非商业，但养人养心</strong></p>
+  <li>今天下午在亭子旁河边的体验很好——不是"业务"是"生活"</li>
+  <li>初班不需要变现，它的价值在"做了就舒服"</li>
+  <li>而且初班是天然的种子用户池</li>
+  <br>
+  <p><strong>备选·内容创作 → 低成本先跑着</strong></p>
+  <li>已有的amruta推送工作流+莎哈嘉RAG已经是内容生产线</li>
+  <li>变现路径还在摸索，但做起来不费劲，可以同时跑</li>
+</div>
+<div class="analysis-card">
+  <h3>💡 第二期关键结论</h3>
+  <li><strong>状态梳理从"计划"变成了"已验证"。</strong>9天前它还是一个猜想，今天它有了实际案例。这是最大的变化。</li>
+  <br>
+  <li><strong>初班是意外的惊喜。</strong>第一期没评估它。今天在亭子旁河边的体验——念初阶书、看河边景色——让你很享受。它不需要变成钱才能存在。</li>
+  <br>
+  <li><strong>AI训练师的优先级自然下降了。</strong>不是它不好，而是"状态梳理"跑通了，路径更短、更贴合你现在的能量状态。</li>
+  <br>
+  <li><strong>体呼吸的定位要调。</strong>它不是项目，它是你的日常练习。当项目来追会疲惫，当日常功夫来养反而自然。</li>
+  <br>
+  <li><strong>身体的限制变得更清晰了。</strong>左脉需要定期火清理、对抗妈妈容易消耗、肝热需要凉化——你的能量容量的天花板比9天前更清楚了，所以项目的选择更倾向于"做了一点就够"而不是"做大了才够"。</li>
+</div>
+</div>
+
+</div>
+</body>
+</html>
