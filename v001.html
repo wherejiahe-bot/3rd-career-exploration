@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>霎哈嘉+X · 十二维评估矩阵</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f0ea;
+    --card: #fffffff0;
+    --accent: #b87a5a;
+    --accent-soft: #e8d5c8;
+    --accent-light: #f5ebe4;
+    --text: #2b1d14;
+    --text-soft: #7a6a5e;
+    --text-muted: #b8a99a;
+    --gold: #d4a74a;
+    --gold-empty: #e8e0d8;
+    --border: #e8ddd2;
+    --radius: 14px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family:'Noto Sans SC',-apple-system,sans-serif;
+    line-height:1.6;
+    padding:32px 20px;
+    min-height:100vh;
+  }
+  .container { max-width:1220px; margin:0 auto; }
+
+  /* ── Header ── */
+  .header {
+    text-align:center;
+    padding:40px 0 28px;
+    position:relative;
+  }
+  .header::after {
+    content:''; display:block;
+    width:60px; height:3px;
+    background:var(--accent);
+    margin:16px auto 0;
+    border-radius:2px;
+  }
+  .header h1 {
+    font-family:'Noto Serif SC',serif;
+    font-size:clamp(24px,4.5vw,38px);
+    font-weight:900; color:var(--text);
+    letter-spacing:4px;
+  }
+  .header .sub {
+    color:var(--text-soft);
+    font-size:clamp(13px,2.2vw,16px);
+    margin-top:6px; font-weight:300;
+  }
+  .header .badge {
+    display:inline-block;
+    background:var(--accent-soft); color:var(--accent);
+    padding:3px 14px; border-radius:20px;
+    font-size:12px; margin-top:10px; font-weight:500;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    display:flex; flex-wrap:wrap; gap:8px 20px;
+    justify-content:center; padding:12px 0 28px;
+    font-size:13px; color:var(--text-soft);
+  }
+  .legend-item { display:flex; align-items:center; gap:5px; }
+  .star { color:var(--gold); font-size:15px; }
+  .star-e { color:var(--gold-empty); }
+
+  /* ── Dimension explainer ── */
+  .dim-bar {
+    display:flex; flex-wrap:wrap; gap:8px;
+    justify-content:center; margin-bottom:28px;
+  }
+  .dim-pill {
+    display:inline-flex; align-items:center; gap:4px;
+    background:var(--card); border:1px solid var(--border);
+    padding:6px 14px; border-radius:20px;
+    font-size:12px; font-weight:500; color:var(--text-soft);
+    cursor:help; position:relative;
+    transition:background .15s, border-color .15s;
+  }
+  .dim-pill:hover {
+    background:var(--accent-light);
+    border-color:var(--accent);
+    color:var(--accent);
+  }
+  .dim-pill .num {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:18px; height:18px; border-radius:50%;
+    background:var(--accent-soft); color:var(--accent);
+    font-size:10px; font-weight:700; margin-right:2px;
+  }
+  .dim-pill:hover .num { background:var(--accent); color:#fff; }
+  .dim-pill .tip {
+    display:none; position:absolute;
+    bottom:calc(100% + 10px); left:50%;
+    transform:translateX(-50%);
+    background:var(--text); color:#f0ebe4;
+    font-size:11px; font-weight:400;
+    padding:8px 14px; border-radius:8px;
+    white-space:nowrap; z-index:20;
+    line-height:1.5;
+  }
+  .dim-pill:hover .tip { display:block; }
+
+  /* ── Summary ── */
+  .summary-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:12px; margin-bottom:32px;
+  }
+  .summary-card {
+    background:var(--card); backdrop-filter:blur(8px);
+    border-radius:var(--radius); padding:18px 14px;
+    text-align:center;
+    border:1px solid var(--border);
+    transition:transform .2s,box-shadow .2s;
+    cursor:default;
+  }
+  .summary-card:hover {
+    transform:translateY(-2px);
+    box-shadow:0 6px 20px rgba(0,0,0,.05);
+  }
+  .summary-card .rank {
+    font-size:24px; font-weight:700;
+    font-family:'Noto Serif SC',serif;
+  }
+  .summary-card .label {
+    font-size:13px; color:var(--text-soft); margin-top:2px;
+  }
+  .summary-card .score-line {
+    font-size:12px; color:var(--accent); font-weight:500;
+    margin-top:6px;
+  }
+  .summary-card.best {
+    border-color:var(--accent);
+    background:var(--accent-light);
+  }
+  .c1 { color:var(--accent); }
+  .c2 { color:#8a7a6a; }
+  .c3 { color:var(--text-muted); }
+
+  /* ── Table ── */
+  .tw {
+    background:var(--card); border-radius:var(--radius);
+    border:1px solid var(--border); overflow-x:auto;
+    padding:2px;
+  }
+  table {
+    width:100%; border-collapse:collapse;
+    font-size:13px; min-width:1060px;
+  }
+  thead th {
+    text-align:left; padding:12px 8px;
+    font-weight:600; color:var(--text);
+    border-bottom:2px solid var(--accent-soft);
+    white-space:nowrap; position:sticky; top:0;
+    background:var(--card); z-index:2; font-size:12px;
+  }
+  thead th:first-child { padding-left:14px; min-width:140px; }
+  thead th .dim-abbr {
+    display:block; font-size:10px; font-weight:400;
+    color:var(--text-muted); margin-top:1px;
+  }
+  tbody td {
+    padding:10px 8px; border-bottom:1px solid var(--border);
+    vertical-align:middle; text-align:center;
+  }
+  tbody td:first-child {
+    font-weight:600; padding-left:14px;
+    text-align:left; white-space:nowrap;
+    font-size:13px;
+  }
+  tbody tr:hover { background:var(--accent-light); }
+  tbody tr:last-child td { border-bottom:none; }
+  .total-c { font-weight:700; font-size:14px; color:var(--accent); }
+  .bar-bg {
+    height:3px; background:var(--gold-empty);
+    border-radius:2px; margin-top:3px; overflow:hidden;
+  }
+  .bar-fill {
+    height:100%;
+    background:linear-gradient(90deg,var(--accent),var(--gold));
+    border-radius:2px;
+  }
+
+  /* ── Analysis ── */
+  .analysis {
+    margin-top:36px;
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  .analysis-card {
+    background:var(--card); border-radius:var(--radius);
+    border:1px solid var(--border); padding:20px;
+  }
+  .analysis-card h3 {
+    font-family:'Noto Serif SC',serif;
+    font-size:16px; font-weight:700;
+    color:var(--accent); margin-bottom:10px;
+    padding-bottom:8px; border-bottom:1px solid var(--accent-soft);
+  }
+  .analysis-card li, .analysis-card p {
+    font-size:13px; color:var(--text);
+    padding:4px 0; line-height:1.7;
+    list-style:none;
+  }
+  .analysis-card li::before { content:'·'; color:var(--accent); margin-right:6px; }
+
+  @media(max-width:768px) {
+    body { padding:16px 12px; }
+    .summary-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
+    .analysis { grid-template-columns:1fr; }
+    table { font-size:11px; min-width:800px; }
+    thead th, tbody td { padding:6px 4px; }
+  }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .header,.summary-grid,.tw,.analysis { animation:fadeUp .6s both; }
+  .summary-grid { animation-delay:.1s; }
+  .tw { animation-delay:.25s; }
+  .analysis { animation-delay:.4s; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>霎哈嘉+X · 十二维评估矩阵</h1>
+  <div class="sub">基于对陈家禾的深度了解 · 12维度 x 10个项目 · 五星评分制</div>
+  <div class="badge">2026-05-30 更新 · 结合灵性成长 &amp; 现实赚钱</div>
+</div>
+
+<div class="legend">
+  <span class="legend-item"><span class="star">★★★★★</span> 完美匹配</span>
+  <span class="legend-item"><span class="star">★★★★</span><span class="star-e">☆</span> 良好</span>
+  <span class="legend-item"><span class="star">★★★</span><span class="star-e">★★</span> 中等</span>
+  <span class="legend-item"><span class="star">★★</span><span class="star-e">★★★</span> 偏低</span>
+  <span class="legend-item"><span class="star">★</span><span class="star-e">★★★★</span> 不匹配</span>
+</div>
+
+<div class="dim-bar">
+  <span class="dim-pill"><span class="num">1</span> 教义合规<span class="tip">不碰霎哈嘉知识红线，可合法收费</span></span>
+  <span class="dim-pill"><span class="num">2</span> 你想做<span class="tip">你内心真正想投入的意愿程度</span></span>
+  <span class="dim-pill"><span class="num">3</span> 配合静坐<span class="tip">是否利于修行状态，不冲突</span></span>
+  <span class="dim-pill"><span class="num">4</span> 轻脑子·闭环<span class="tip">不费大脑，有明确完成标志</span></span>
+  <span class="dim-pill"><span class="num">5</span> 不消耗<span class="tip">做了不累，不左脉消耗</span></span>
+  <span class="dim-pill"><span class="num">6</span> 与人互动<span class="tip">需要或可以和真人交流</span></span>
+  <span class="dim-pill"><span class="num">7</span> 能去爱<span class="tip">在工作中打开心、爱人</span></span>
+  <span class="dim-pill"><span class="num">8</span> 利己成长<span class="tip">对自己的灵性进步有直接帮助</span></span>
+  <span class="dim-pill"><span class="num">9</span> 直接收钱<span class="tip">干活就有钱，不绕弯子</span></span>
+  <span class="dim-pill"><span class="num">10</span> 身体轻松<span class="tip">身体负担小，不累</span></span>
+  <span class="dim-pill"><span class="num">11</span> 时间自由<span class="tip">想干就干，随时可停</span></span>
+  <span class="dim-pill"><span class="num">12</span> 马上启动<span class="tip">门槛低，现在就能做</span></span>
+</div>
+
+<h3 style="font-family:'Noto Serif SC',serif;font-size:16px;color:var(--text-soft);margin-bottom:12px;">🏆 综合排名</h3>
+<div class="summary-grid">
+  <div class="summary-card best">
+    <div class="rank c1">🥇 状态梳理</div>
+    <div class="label">把你心里的噪音关小</div>
+    <div class="score-line">综合 ★★★★☆  |  52/60</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c2">🥈 体呼吸</div>
+    <div class="label">丹道·自己练透再教</div>
+    <div class="score-line">综合 ★★★★☆  |  49/60</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c2">🥈 AI训练师</div>
+    <div class="label">数据标注·轻脑力收钱</div>
+    <div class="score-line">综合 ★★★★   |  47/60</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c3">🥉 冥想带领</div>
+    <div class="label">免费·集体静坐</div>
+    <div class="score-line">综合 ★★★★   |  46/60</div>
+  </div>
+</div>
+
+<div class="tw">
+<table>
+<thead>
+<tr>
+  <th>项目</th>
+  <th>①教义<br><span class="dim-abbr">红线</span></th>
+  <th>②想做<br><span class="dim-abbr">意愿</span></th>
+  <th>③静坐<br><span class="dim-abbr">配合</span></th>
+  <th>④轻脑<br><span class="dim-abbr">闭环</span></th>
+  <th>⑤不耗<br><span class="dim-abbr">能量</span></th>
+  <th>⑥互动<br><span class="dim-abbr">有人</span></th>
+  <th>⑦去爱<br><span class="dim-abbr">开心</span></th>
+  <th>⑧成长<br><span class="dim-abbr">利己</span></th>
+  <th>⑨收钱<br><span class="dim-abbr">直接</span></th>
+  <th>⑩轻松<br><span class="dim-abbr">身体</span></th>
+  <th>⑪自由<br><span class="dim-abbr">时间</span></th>
+  <th>⑫启动<br><span class="dim-abbr">门槛</span></th>
+  <th>总分<br><span class="dim-abbr">/60</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>体呼吸</td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td class="total-c">49</td>
+</tr>
+<tr>
+  <td>AI训练师</td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td class="total-c">47</td>
+</tr>
+<tr>
+  <td style="color:var(--accent);font-weight:700;">🪷 状态梳理</td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td class="total-c" style="font-weight:900;">52</td>
+</tr>
+<tr>
+  <td>心理咨询</td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">45</td>
+</tr>
+<tr>
+  <td>玄学技术岗</td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">33</td>
+</tr>
+<tr>
+  <td>写小说</td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">40</td>
+</tr>
+<tr>
+  <td>农业</td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">33</td>
+</tr>
+<tr>
+  <td>冥想带领（免费）</td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td class="total-c">46</td>
+</tr>
+<tr>
+  <td>Excel/VBA兼职</td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">44</td>
+</tr>
+<tr>
+  <td>AI训练包工头</td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">39</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="analysis">
+<div class="analysis-card">
+  <h3>🏆 推荐的结合方案</h3>
+  <p><strong>中线 · 体呼吸（练自己）</strong></p>
+  <li>每天静坐时自然练，不当作产品，是自己的功夫</li>
+  <li>等体感够了，想分享就分享，不想就不做</li>
+  <br>
+  <p><strong>短线 · 状态梳理（收钱+爱人）</strong></p>
+  <li>帮人把心里的噪音关小，不算命不讲课</li>
+  <li>一对一倾听引导，1-2小时/人，收合理费用</li>
+  <li>这是"爱人"的工作方式——你的状态就是服务</li>
+  <br>
+  <p><strong>长线 · AI训练师（收钱+互动）</strong></p>
+  <li>轻脑力，直接收钱，每天2-4小时</li>
+  <li>在工作环境中自然与同频人互动</li>
+</div>
+<div class="analysis-card">
+  <h3>💡 关键结论</h3>
+  <li><strong>体呼吸很强，但它缺"人"。</strong>你一个人受不了，需要有人在身边。体呼吸是练自己的，不能替代跟人在一起的需求。</li>
+  <br>
+  <li><strong>"状态梳理"是最意外的全才。</strong>12个维度里11个★以上——唯独"直接收钱"有待验证，但比体呼吸的变现路径短得多。</li>
+  <br>
+  <li><strong>没有单一X能打满12个维度。</strong>你需要2-3个X并行：一个养身子（体呼吸），一个养钱包+养心（状态梳理或AI训练师）。</li>
+  <br>
+  <li><strong>不要等"练透"。</strong>体呼吸慢慢练，但赚钱和爱人不用等到体呼吸练透才开始。它们是两条腿，不是先后关系。</li>
+</div>
+</div>
+
+</div>
+</body>
+</html>
