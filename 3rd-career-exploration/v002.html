@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>霎哈嘉+X · 第二期评估 · 2026-06-09</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #f4f2ee; --card: rgba(255,255,255,.82); --card-border: rgba(0,0,0,.06); --accent: #b87a5a; --accent-soft: rgba(184,122,90,.12); --accent-light: rgba(184,122,90,.06); --text: #1c1c1e; --text-soft: #6e6e73; --text-caption: #aeaeb2; --gold: #c49032; --gold-empty: #e5ddd4; --radius: 16px; --radius-sm: 10px; --shadow: 0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04); --transition: .2s cubic-bezier(.25,.1,.25,1); }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Inter','Noto Sans SC',-apple-system,sans-serif; line-height:1.6; padding:28px 16px; min-height:100vh; }
+  .container { max-width:1060px; margin:0 auto; }
+  .header { text-align:center; padding:36px 0 20px; position:relative; }
+  .header::after { content:''; display:block; width:48px; height:2px; background:var(--accent); margin:14px auto 0; border-radius:1px; opacity:.6; }
+  .header h1 { font-family:'Noto Serif SC',serif; font-size:clamp(22px,4vw,34px); font-weight:900; color:var(--text); letter-spacing:3px; }
+  .header .sub { color:var(--text-soft); font-size:clamp(12px,2vw,15px); margin-top:4px; font-weight:300; }
+  .header .badge { display:inline-block; background:var(--accent-soft); color:var(--accent); padding:2px 14px; border-radius:20px; font-size:12px; margin-top:10px; font-weight:500; }
+  .phase-note { max-width:700px; margin:18px auto 24px; padding:14px 18px; background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius-sm); font-size:12px; color:var(--text-soft); line-height:1.7; }
+  .phase-note strong { color:var(--accent); font-weight:600; }
+  .legend { display:flex; flex-wrap:wrap; gap:6px 18px; justify-content:center; padding:8px 0 22px; font-size:12px; color:var(--text-soft); }
+  .legend-item { display:flex; align-items:center; gap:4px; }
+  .star { color:var(--gold); font-size:14px; } .star-e { color:var(--gold-empty); }
+  .diff-up { color:#30d158; font-size:11px; font-weight:500; } .diff-down { color:#ff453a; font-size:11px; font-weight:500; } .diff-none { color:var(--text-caption); font-size:11px; }
+  .dim-bar { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-bottom:24px; }
+  .dim-pill { display:inline-flex; align-items:center; gap:3px; background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); padding:5px 12px; border-radius:20px; font-size:11px; font-weight:500; color:var(--text-soft); cursor:help; position:relative; transition:background var(--transition),border-color var(--transition); }
+  .dim-pill:hover { background:var(--accent-light); border-color:var(--accent); color:var(--accent); }
+  .dim-pill .num { display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; border-radius:50%; background:var(--accent-soft); color:var(--accent); font-size:9px; font-weight:700; margin-right:2px; }
+  .dim-pill:hover .num { background:var(--accent); color:#fff; }
+  .dim-pill .tip { display:none; position:absolute; bottom:calc(100%+8px); left:50%; transform:translateX(-50%); background:var(--text); color:#f0ebe4; font-size:10px; font-weight:400; padding:6px 12px; border-radius:8px; white-space:nowrap; z-index:20; line-height:1.4; }
+  .dim-pill:hover .tip { display:block; }
+  .change-cell { position:relative; cursor:help; border-bottom:1px dotted var(--text-caption); }
+  .change-cell .change-tip { display:none; position:absolute; bottom:calc(100%+8px); left:50%; transform:translateX(-50%); background:#1c1c1e; color:#f0ebe4; font-size:10px; font-weight:400; padding:7px 13px; border-radius:8px; z-index:30; line-height:1.5; max-width:280px; min-width:180px; text-align:left; white-space:normal; word-break:break-word; }
+  tbody td:last-child .change-tip { left:auto; right:0; transform:none; }
+  .summary-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-bottom:28px; }
+  .summary-card { background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius); padding:16px 12px; text-align:center; transition:transform var(--transition),box-shadow var(--transition); cursor:default; }
+  .summary-card:hover { transform:translateY(-2px); box-shadow:var(--shadow); }
+  .summary-card .rank { font-size:22px; font-weight:700; font-family:'Noto Serif SC',serif; }
+  .summary-card .label { font-size:12px; color:var(--text-soft); margin-top:1px; }
+  .summary-card .score-line { font-size:11px; color:var(--accent); font-weight:500; margin-top:5px; }
+  .summary-card .delta { font-size:10px; margin-top:2px; }
+  .summary-card.best { border-color:var(--accent); background:linear-gradient(135deg,rgba(184,122,90,.08),rgba(184,122,90,.02)); }
+  .c1 { color:var(--accent); } .c2 { color:#8a7a6a; } .c3 { color:var(--text-caption); }
+  .tw { background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius); overflow-x:auto; padding:2px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; min-width:900px; }
+  thead th { text-align:center; padding:10px 6px; font-weight:600; color:var(--text); border-bottom:1.5px solid rgba(184,122,90,.2); white-space:nowrap; position:sticky; top:0; background:var(--card); z-index:2; font-size:11px; }
+  thead th:first-child { text-align:left; padding-left:14px; min-width:140px; }
+  tbody td { padding:8px 6px; border-bottom:1px solid rgba(0,0,0,.04); vertical-align:middle; text-align:center; font-size:11px; }
+  tbody td:first-child { font-weight:600; padding-left:14px; text-align:left; white-space:nowrap; font-size:12px; }
+  tbody tr:hover { background:var(--accent-light); }
+  tbody tr:last-child td { border-bottom:none; }
+  .total-c { font-weight:700; font-size:14px; color:var(--accent); }
+  .analysis { margin-top:32px; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .analysis-card { background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius); padding:18px; }
+  .analysis-card h3 { font-family:'Noto Serif SC',serif; font-size:15px; font-weight:700; color:var(--accent); margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid rgba(184,122,90,.15); }
+  .analysis-card li,.analysis-card p { font-size:12px; color:var(--text); padding:3px 0; line-height:1.7; list-style:none; }
+  .analysis-card li::before { content:'·'; color:var(--accent); margin-right:5px; }
+  .analysis-card .highlight { background:var(--accent-light); border-left:2px solid var(--accent); padding:8px 12px; margin:6px 0; border-radius:0 6px 6px 0; font-size:12px; }
+  .new-badge { display:inline-block; background:rgba(48,209,88,.12); color:#30d158; font-size:10px; font-weight:600; padding:1px 8px; border-radius:10px; margin-left:4px; }
+  .removed-item { opacity:.35; text-decoration:line-through; }
+  @media(max-width:768px) { body{padding:14px 10px} .summary-grid{grid-template-columns:repeat(2,1fr)} .analysis{grid-template-columns:1fr} table{font-size:10px;min-width:680px} thead th,tbody td{padding:5px 3px} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .header,.phase-note,.summary-grid,.tw,.analysis { animation:fadeUp .5s both; }
+  .phase-note{animation-delay:.08s} .summary-grid{animation-delay:.15s} .tw{animation-delay:.25s} .analysis{animation-delay:.35s}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>霎哈嘉+X · 第二期评估</h1>
+  <div class="sub">2026-06-09 · 6维精炼版（30分制）</div>
+  <div class="badge">第二期 · 6维极简版</div>
+</div>
+
+<div class="phase-note">
+  <strong>📌 维度演进：12维 → 11维 → 6维</strong><br>
+  · 删除①教义合规（所有项目都不碰红线，全是5分，无区分度）<br>
+  · 删除③配合静坐（冥想是独立日常，不列入项目评估）<br>
+  · ②想做+⑪启动合并 → <strong>「想做就启」</strong>（真想做的启动就快）<br>
+  · ④轻脑省耗+⑨身体轻松合并 → <strong>「轻脑轻松」</strong>（做完不累能继续）<br>
+  · ⑤互动+⑥去爱合并 → <strong>「传播」</strong>（带自觉机会+平台/面对面传播霎哈嘉）<br>
+  · 保留：⑦成长、⑧收钱、⑩自由<br>
+  · <strong style="color:#b87a5a;">核心变化：从"评估项目合不合格"转为"这个项目能不能帮你传播霎哈嘉+赚钱+自由"</strong>
+</div>
+
+<div class="dim-bar">
+  <span class="dim-pill"><span class="num">1</span> 想做就启<span class="tip">实际想做+今天就能开始？行为＞意愿</span></span>
+  <span class="dim-pill"><span class="num">2</span> 轻脑轻松<span class="tip">做完能直接干下一件事，不费脑不累身</span></span>
+  <span class="dim-pill"><span class="num">3</span> 传播<span class="tip">有带自觉机会，能传播霎哈嘉的语言/能量</span></span>
+  <span class="dim-pill"><span class="num">4</span> 成长<span class="tip">对个人灵性进步有直接帮助</span></span>
+  <span class="dim-pill"><span class="num">5</span> 收钱<span class="tip">已验证＞能收未验证＞无法收费</span></span>
+  <span class="dim-pill"><span class="num">6</span> 自由<span class="tip">时间灵活，想干就干随时可停</span></span>
+</div>
+
+<h3 style="font-family:'Noto Serif SC',serif;font-size:15px;color:var(--text-soft);margin-bottom:10px;">🏆 综合排名（6维·30分制）</h3>
+<div class="summary-grid">
+  <div class="summary-card best">
+    <div class="rank c1">🥇 视频创作</div><div class="label">状态梳理IP·每天在做</div>
+    <div class="score-line">27/30</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c2">🥈 免费初班</div><div class="label">户外亭子·公益不收费</div>
+    <div class="score-line">23/30</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c2">🥉 状态梳理</div><div class="label">1v1咨询·方向待定型</div>
+    <div class="score-line">24/30</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c3">④ AI技能搭建</div><div class="label">14+skill实战</div>
+    <div class="score-line">23/30</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c3">⑤ AI短视频</div><div class="label">MoneyPrinterTurbo</div>
+    <div class="score-line">22/30</div>
+  </div>
+</div>
+
+<div class="tw">
+<table>
+<thead>
+<tr>
+  <th>项目</th>
+  <th>①想做就启</th><th>②轻脑轻松</th><th>③传播</th>
+  <th>④成长</th><th>⑤收钱</th><th>⑥自由</th>
+  <th>总分</th><th>变动</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>🎥 状态梳理对应视频创作<br><span style="font-size:10px;color:var(--text-caption);">霎哈嘉语言→通俗·状态梳理IP</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c" style="font-weight:900;">27</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">6维重评。①5(每天在做)+②4(节奏型)+③5(平台传播霎哈嘉)+④5(灵性内容)+⑤3(能收未验证)+⑥5(自由)</span></td>
+</tr>
+<tr>
+  <td>🌿 免费初班<br><span style="font-size:10px;color:var(--text-caption);">户外亭子·念初阶书·公益不收费</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star-e">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">23</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">⑤收钱：★→绝不收费。公益项目，绝对不图钱。③④全满分(带自觉+灵性根基)，虽总分受限但不妨碍根基最稳</span></td>
+</tr>
+<tr>
+  <td>🪷 状态梳理<br><span style="font-size:10px;color:var(--text-caption);">启迪式咨询·1v1方向待明确</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">24</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">6维重评。③④全满分。①=3(模式未定型启动门槛略高)，②=3(有被感染风险)，⑤=3(未验证)</span></td>
+</tr>
+<tr>
+  <td>🔧 AI技能搭建服务<br><span style="font-size:10px;color:var(--text-caption);">WorkBuddy技能+自动化·14+实战</span><span class="new-badge">NEW</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c" style="color:#30d158;">23</td>
+  <td class="change-cell"><span class="diff-none">NEW</span><span class="change-tip">6维重评。③=4(有传播机会)，④=3(间接成长)，⑤=4(咨询/实施可收费)，⑥=5。①=3(搭给别人和自己心态不同)</span></td>
+</tr>
+<tr>
+  <td>🎬 AI短视频制作<br><span style="font-size:10px;color:var(--text-caption);">MoneyPrinterTurbo·霎哈嘉/佛教</span><span class="new-badge">NEW</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c" style="color:#30d158;">22</td>
+  <td class="change-cell"><span class="diff-none">NEW</span><span class="change-tip">6维重评。③=4(平台传播灵性)，④=4(传播即成长)，⑤=3(平台分成未验证)，①=3(已安装但未开始)</span></td>
+</tr>
+<tr>
+  <td>🧘 体呼吸<br><span style="font-size:10px;color:var(--text-caption);">丹道·自己练透再教</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">21</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">6维重评。②④⑤全满分(练功不累+直接灵性成长+自由)。①=2(几乎不做)，③=2(孤独练习无传播)，⑤=2(远处可收费)</span></td>
+</tr>
+<tr>
+  <td>💬 心理咨询<br><span style="font-size:10px;color:var(--text-caption);">倾听陪伴型</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">21</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">6维重评。③=5(直接带自觉)，④=4(灵性应用)。①=2(从未实践)，②=2(心力+易感染)</span></td>
+</tr>
+<tr>
+  <td>🔮 玄学咨询<br><span style="font-size:10px;color:var(--text-caption);">算卦·1v1收费·需太初之母授权</span><span class="new-badge">NEW</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c" style="color:#30d158;">21</td>
+  <td class="change-cell"><span class="diff-none">NEW</span><span class="change-tip">6维重评。③⑤全满分(直接带自觉+已验证200元)。②=1(极烧脑——唯一的1分项目)，①=2(仅授权才做)</span></td>
+</tr>
+<tr>
+  <td>🖨️ 3D打印创业<br><span style="font-size:10px;color:var(--text-caption);">Bambu P1S·摆摊卖玩偶·¥2838</span><span class="new-badge">NEW</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c" style="color:#30d158;">19</td>
+  <td class="change-cell"><span class="diff-none">NEW</span><span class="change-tip">6维重评。③=2(非灵性传播)，④=2(灵性关联弱)。①=4(已在玩)，⑤=4(可收未验证)，⑥=4(较灵活)</span></td>
+</tr>
+<tr>
+  <td>🤖 AI训练师<br><span style="font-size:10px;color:var(--text-caption);">数据标注平台</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">19</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">6维重评。⑤=5(平台直接发钱)，②=4(标注节奏型)。③=2(无传播)，④=2(无灵性)，①=2(从未找平台)</span></td>
+</tr>
+<tr>
+  <td>✍️ 写小说<br><span style="font-size:10px;color:var(--accent);font-weight:600;">AI辅助</span><br><span style="font-size:10px;color:var(--text-caption);">LLM辅助创作·Claude/DeepSeek</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">18</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">6维重评。①=2(从未写)，③=2(读者互动有限)，④=3(间接成长)。②=3(AI辅助不费脑)，⑥=5(自由)</span></td>
+</tr>
+<tr>
+  <td>🛡️ 语言防卫App<br><span style="font-size:10px;color:var(--text-caption);">Android实时回怼·已下Android Studio</span><span class="new-badge">NEW</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c" style="color:#30d158;">16</td>
+  <td class="change-cell"><span class="diff-none">NEW</span><span class="change-tip">6维重评。①=3(真实投入)，③④=2(非灵性工具无传播无成长)。②=2(开发烧脑)，⑤=3(可收费)，⑥=4</span></td>
+</tr>
+<tr>
+  <td>💻 玄学代码技术<br><span style="font-size:10px;color:var(--text-caption);">在玄学领域公司做技术开发</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">14</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">6维重评。⑤=4(技术岗工资稳)，②=3(熟悉领域)。①=1(从未找这类工作)，⑥=2(固定工时)</span></td>
+</tr>
+<tr>
+  <td>🌾 农业<br><span style="font-size:10px;color:var(--text-caption);">合肥布米农场·有机水稻·线上共修</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">13</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">6维重评。③=3(Bhumi大地母亲连接)，④=3(凉风+平静)。②=1(体力活后需休息)，①=2(非自愿但可接受)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div style="margin:14px 0 28px;font-size:11px;color:var(--text-caption);text-align:center;">
+  🗑️ 已删除：Excel/VBA兼职 · AI训练包工头 | 维度：12→11→6维(30分制)
+</div>
+
+<div class="analysis">
+<div class="analysis-card">
+  <h3>🏆 推荐方案</h3>
+  <div class="highlight"><strong>视频创作（跑起来）+ 初班（灵性根基）+ 状态梳理（待定型）</strong></div>
+  <p><strong>短线·视频创作 → 6维第一名，继续跑</strong></p>
+  <li>①想做就启=5(每天都在做)，③传播=5(平台传播霎哈嘉)，④成长=5(灵性内容)</li>
+  <li>节奏型工作(策划→录制→发布)，做完不累</li>
+  <li>⑤收钱=3是唯一短板——作为状态梳理IP宣传暂不独立收费</li>
+  <br>
+  <p><strong>中线·免费初班 → ③④全满分，绝对公益</strong></p>
+  <li>虽然⑤收钱=绝不（零分）拉了总分，但③传播+④成长双满分说明根基最扎实</li>
+  <p><strong>备选·状态梳理 → 和初班并列，但需定型</strong></p>
+</div>
+<div class="analysis-card">
+  <h3>💡 6维关键发现</h3>
+  <li><strong>传播取代了原来的教义/互动/去爱三个维度。</strong>新标准非常聚焦：能不能把霎哈嘉传出去？视频创作（③=5）、初班（③=5）、状态梳理（③=5）、玄学咨询（③=5）包揽了传播满分。反之，技术类项目（App开发、代码、农业）传播分都低。</li>
+  <br>
+  <li><strong>轻脑轻松是分水岭。</strong>所有传播满分项目里，只有玄学咨询②=1（极烧脑），所以从第一名跌到中游。这条维度真实反映了你的左脉体质——传播能力再强，体力跟不上也白搭。</li>
+  <br>
+  <li><strong>收钱不再是核心区分维度。</strong>6维里只有3个项目的收钱达到4+（AI训练师、玄学咨询已验证、AI技能搭建）。大部分项目在"能收未验证"这个区间。收钱重要，但不如传播和轻脑重要。</li>
+  <br>
+  <li><strong>要做的事情很清晰。</strong>视频创作每天跑着（27分），初班偶尔组织（24分），状态梳理方向定型（24分）。其他的都是"有比没有好"。</li>
+</div>
+</div>
+
+<div style="text-align:center;margin-top:40px;padding:20px 0;border-top:1px solid var(--card-border)">
+  <a href="v001.html" style="color:var(--text-soft);text-decoration:none;font-size:12px;margin-right:24px;">← 第一期</a>
+  <a href="index.html" style="color:var(--accent);text-decoration:none;font-size:13px;font-weight:500;">返回评估导航页</a>
+</div>
+
+</div>
+</body>
+</html>
