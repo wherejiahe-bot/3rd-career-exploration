@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>霎哈嘉+X · 第四期评估 · 2026-06-22</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #f4f2ee; --card: rgba(255,255,255,.82); --card-border: rgba(0,0,0,.06); --accent: #b87a5a; --accent-soft: rgba(184,122,90,.12); --accent-light: rgba(184,122,90,.06); --text: #1c1c1e; --text-soft: #6e6e73; --text-caption: #aeaeb2; --gold: #c49032; --gold-empty: #e5ddd4; --radius: 16px; --radius-sm: 10px; --shadow: 0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04); --transition: .2s cubic-bezier(.25,.1,.25,1); --green: #30d158; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Inter','Noto Sans SC',-apple-system,sans-serif; line-height:1.6; padding:28px 16px; min-height:100vh; }
+  .container { max-width:1060px; margin:0 auto; }
+  .header { text-align:center; padding:36px 0 20px; position:relative; }
+  .header::after { content:''; display:block; width:48px; height:2px; background:var(--accent); margin:14px auto 0; border-radius:1px; opacity:.6; }
+  .header h1 { font-family:'Noto Serif SC',serif; font-size:clamp(22px,4vw,34px); font-weight:900; color:var(--text); letter-spacing:3px; }
+  .header .sub { color:var(--text-soft); font-size:clamp(12px,2vw,15px); margin-top:4px; font-weight:300; }
+  .header .badge { display:inline-block; background:var(--accent-soft); color:var(--accent); padding:2px 14px; border-radius:20px; font-size:12px; margin-top:10px; font-weight:500; }
+  .phase-note { max-width:700px; margin:18px auto 24px; padding:14px 18px; background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius-sm); font-size:12px; color:var(--text-soft); line-height:1.7; }
+  .phase-note strong { color:var(--accent); font-weight:600; }
+  .legend { display:flex; flex-wrap:wrap; gap:6px 18px; justify-content:center; padding:8px 0 22px; font-size:12px; color:var(--text-soft); }
+  .legend-item { display:flex; align-items:center; gap:4px; }
+  .star { color:var(--gold); font-size:14px; } .star-e { color:var(--gold-empty); }
+  .diff-up { color:var(--green); font-size:11px; font-weight:500; } .diff-down { color:#ff453a; font-size:11px; font-weight:500; } .diff-none { color:var(--text-caption); font-size:11px; }
+  .dim-bar { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-bottom:24px; }
+  .dim-pill { display:inline-flex; align-items:center; gap:3px; background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); padding:5px 12px; border-radius:20px; font-size:11px; font-weight:500; color:var(--text-soft); cursor:help; position:relative; transition:background var(--transition),border-color var(--transition); }
+  .dim-pill:hover { background:var(--accent-light); border-color:var(--accent); color:var(--accent); }
+  .dim-pill .num { display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; border-radius:50%; background:var(--accent-soft); color:var(--accent); font-size:9px; font-weight:700; margin-right:2px; }
+  .dim-pill:hover .num { background:var(--accent); color:#fff; }
+  .dim-pill .tip { display:none; position:absolute; bottom:calc(100%+8px); left:50%; transform:translateX(-50%); background:var(--text); color:#f0ebe4; font-size:10px; font-weight:400; padding:6px 12px; border-radius:8px; white-space:nowrap; z-index:20; line-height:1.4; }
+  .dim-pill:hover .tip { display:block; }
+  .change-cell { position:relative; cursor:help; border-bottom:1px dotted var(--text-caption); }
+  .change-cell .change-tip { display:none; position:absolute; bottom:calc(100%+8px); left:50%; transform:translateX(-50%); background:#1c1c1e; color:#f0ebe4; font-size:10px; font-weight:400; padding:7px 13px; border-radius:8px; z-index:30; line-height:1.5; max-width:280px; min-width:180px; text-align:left; white-space:normal; word-break:break-word; }
+  tbody td:last-child .change-tip { left:auto; right:0; transform:none; }
+  .summary-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-bottom:28px; }
+  .summary-card { background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius); padding:16px 12px; text-align:center; transition:transform var(--transition),box-shadow var(--transition); cursor:default; }
+  .summary-card:hover { transform:translateY(-2px); box-shadow:var(--shadow); }
+  .summary-card .rank { font-size:22px; font-weight:700; font-family:'Noto Serif SC',serif; }
+  .summary-card .label { font-size:12px; color:var(--text-soft); margin-top:1px; }
+  .summary-card .score-line { font-size:11px; color:var(--accent); font-weight:500; margin-top:5px; }
+  .summary-card .delta { font-size:10px; margin-top:2px; }
+  .summary-card.best { border-color:var(--accent); background:linear-gradient(135deg,rgba(184,122,90,.08),rgba(184,122,90,.02)); }
+  .c1 { color:var(--accent); } .c2 { color:#8a7a6a; } .c3 { color:var(--text-caption); }
+  .tw { background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius); overflow-x:auto; padding:2px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; min-width:900px; }
+  thead th { text-align:center; padding:10px 6px; font-weight:600; color:var(--text); border-bottom:1.5px solid rgba(184,122,90,.2); white-space:nowrap; position:sticky; top:0; background:var(--card); z-index:2; font-size:11px; }
+  thead th:first-child { text-align:left; padding-left:14px; min-width:140px; }
+  tbody td { padding:8px 6px; border-bottom:1px solid rgba(0,0,0,.04); vertical-align:middle; text-align:center; font-size:11px; }
+  tbody td:first-child { font-weight:600; padding-left:14px; text-align:left; white-space:nowrap; font-size:12px; }
+  tbody tr:hover { background:var(--accent-light); }
+  tbody tr:last-child td { border-bottom:none; }
+  .total-c { font-weight:700; font-size:14px; color:var(--accent); }
+  .total-c.up { color:var(--green); }
+  .analysis { margin-top:32px; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .analysis-card { background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius); padding:18px; }
+  .analysis-card h3 { font-family:'Noto Serif SC',serif; font-size:15px; font-weight:700; color:var(--accent); margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid rgba(184,122,90,.15); }
+  .analysis-card li,.analysis-card p { font-size:12px; color:var(--text); padding:3px 0; line-height:1.7; list-style:none; }
+  .analysis-card li::before { content:'·'; color:var(--accent); margin-right:5px; }
+  .analysis-card .highlight { background:var(--accent-light); border-left:2px solid var(--accent); padding:8px 12px; margin:6px 0; border-radius:0 6px 6px 0; font-size:12px; }
+  .new-badge { display:inline-block; background:rgba(48,209,88,.12); color:var(--green); font-size:10px; font-weight:600; padding:1px 8px; border-radius:10px; margin-left:4px; }
+  .merge-badge { display:inline-block; background:rgba(184,122,90,.12); color:var(--accent); font-size:10px; font-weight:600; padding:1px 8px; border-radius:10px; margin-left:4px; }
+  .removed-item { opacity:.35; text-decoration:line-through; }
+  @media(max-width:768px) { body{padding:14px 10px} .summary-grid{grid-template-columns:repeat(2,1fr)} .analysis{grid-template-columns:1fr} table{font-size:10px;min-width:680px} thead th,tbody td{padding:5px 3px} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .header,.phase-note,.summary-grid,.tw,.analysis { animation:fadeUp .5s both; }
+  .phase-note{animation-delay:.08s} .summary-grid{animation-delay:.15s} .tw{animation-delay:.25s} .analysis{animation-delay:.35s}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>霎哈嘉+X · 第四期评估</h1>
+  <div class="sub">2026-06-22 · 情绪梳理师APP上线 · Codex/Claw-No2突破</div>
+  <div class="badge">第四期 · 18项目 · 6维</div>
+</div>
+
+<div class="phase-note">
+  <strong>📌 本期变化：17→18个项目</strong><br>
+  · <strong style="color:var(--green);">新增</strong> 情绪梳理师APP（6/16上线，语音+视频双工作流，灵性智慧传播工具）<br>
+  · <strong style="color:var(--green);">▲2</strong> AI技能搭建服务 24→26（Codex调试完成、Claw-No2飞书桥接v3、free-models NVIDIA反向代理、SOUL.md重构）<br>
+  · 其余16个项目评分未变——本周精力集中在基础设施工具链与情绪梳理师APP<br>
+  · 💡 主题：工具即玩具 · 基础设施就绪 · 自动化传播矩阵成型
+</div>
+
+<div class="dim-bar">
+  <span class="dim-pill"><span class="num">1</span> 想做就启<span class="tip">实际想做+今天就能开始？行为＞意愿</span></span>
+  <span class="dim-pill"><span class="num">2</span> 轻脑轻松<span class="tip">做完能直接干下一件事，不费脑不累身</span></span>
+  <span class="dim-pill"><span class="num">3</span> 传播<span class="tip">有带自觉机会，能传播霎哈嘉的语言/能量</span></span>
+  <span class="dim-pill"><span class="num">4</span> 成长<span class="tip">对个人灵性进步有直接帮助</span></span>
+  <span class="dim-pill"><span class="num">5</span> 收钱<span class="tip">已验证＞能收未验证＞无法收费</span></span>
+  <span class="dim-pill"><span class="num">6</span> 自由<span class="tip">时间灵活，想干就干随时可停</span></span>
+</div>
+
+<h3 style="font-family:'Noto Serif SC',serif;font-size:15px;color:var(--text-soft);margin-bottom:10px;">🏆 综合排名（6维·30分制）</h3>
+<div class="summary-grid">
+  <div class="summary-card best">
+    <div class="rank c1">🥇 视频创作</div><div class="label">情绪梳理师APP带动·日常持续</div>
+    <div class="score-line">27/30</div>
+    <div class="delta diff-none">—</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c2">🥈 AI技能搭建</div><div class="label">Codex+Claw-No2+反向代理爆发</div>
+    <div class="score-line">26/30</div>
+    <div class="delta diff-up">▲2</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c2">🥈 情绪梳理师APP</div><div class="label">6/16上线·语音+视频双工作流</div>
+    <div class="score-line">24/30</div>
+    <div class="delta" style="color:var(--green);">NEW</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c3">④ 状态梳理</div><div class="label">1v1方向待定型</div>
+    <div class="score-line">24/30</div>
+    <div class="delta diff-none">—</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c3">⑤ 免费初班</div><div class="label">户外亭子·公益不收费</div>
+    <div class="score-line">23/30</div>
+    <div class="delta diff-none">—</div>
+  </div>
+</div>
+
+<div class="tw">
+<table>
+<thead>
+<tr>
+  <th>项目</th>
+  <th>①想做就启</th><th>②轻脑轻松</th><th>③传播</th>
+  <th>④成长</th><th>⑤收钱</th><th>⑥自由</th>
+  <th>总分</th><th>变动</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>🎥 状态梳理对应视频创作<br><span style="font-size:10px;color:var(--text-caption);">情绪梳理师APP视频工作流推动持续输出</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c" style="font-weight:900;">27</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。①5(情绪梳理师APP视频工作流持续输出)+③5(平台传播)+④5(灵性内容)+②4(节奏型)</span></td>
+</tr>
+<tr>
+  <td>🔧 AI技能搭建服务<br><span style="font-size:10px;color:var(--text-caption);">Codex调试完善·Claw-No2飞书桥接v3·free-models反向代理</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td class="total-c up" style="font-weight:900;">26</td>
+  <td class="change-cell"><span class="diff-up">▲2</span><span class="change-tip">①4→5：Codex/Claw-No2 v3/free-models反向代理/SOUL.md重构，一周密集搭建每天在做。④3→4：飞书全链路+反向代理打通让AI能力大幅提升，对技术+灵性传播均有成长。②=4，③=4，⑤=4，⑥=5不变。</span></td>
+</tr>
+<tr>
+  <td>🧠 情绪梳理师APP<br><span style="font-size:10px;color:var(--text-caption);">实时语音监听+分析+霎哈嘉知识库·6/16上线</span><span class="new-badge">NEW</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c up">24</td>
+  <td class="change-cell"><span class="diff-none">NEW</span><span class="change-tip">6维初评。①=5(已上线+双工作流，一键视频发布坐等接单+语音实时分析)，②=4(自动化运行不费心)，③=4(带霎哈嘉智慧)，④=4(灵性应用实践)，⑤=4(收费模式清晰)，⑥=4(灵活)</span></td>
+</tr>
+<tr>
+  <td>🪷 状态梳理<br><span style="font-size:10px;color:var(--text-caption);">启迪式咨询·1v1方向待明确</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">24</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。③④全满分。①=3(方向未定型)，②=3(有被感染风险)</span></td>
+</tr>
+<tr>
+  <td>🌿 免费初班<br><span style="font-size:10px;color:var(--text-caption);">户外亭子·念初阶书·公益不收费</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star-e">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">23</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。公益项目不收费，③④全满分</span></td>
+</tr>
+<tr>
+  <td>📖 霎哈嘉文章AI翻译流水线<br><span style="font-size:10px;color:var(--text-caption);">amruta-actions·GitHub Actions自动化</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star-e">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">23</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。③=5(直接翻译Shri Mataji讲话)，⑥=5(GitHub Actions全自动)</span></td>
+</tr>
+<tr>
+  <td>🎬 AI短视频制作<br><span style="font-size:10px;color:var(--text-caption);">MoneyPrinterTurbo·霎哈嘉/佛教</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">22</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>🧘 体呼吸<br><span style="font-size:10px;color:var(--text-caption);">丹道·自己练透再教</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">21</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。②④⑥全满分。</span></td>
+</tr>
+<tr>
+  <td>💬 心理咨询<br><span style="font-size:10px;color:var(--text-caption);">倾听陪伴型</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">21</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。③=5(直接带自觉)。</span></td>
+</tr>
+<tr>
+  <td>🔮 玄学咨询<br><span style="font-size:10px;color:var(--text-caption);">算卦·1v1收费·需太初之母授权</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">21</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。③⑤全满分。</span></td>
+</tr>
+<tr>
+  <td>🕉️ 100天神意照黄庭打卡<br><span style="font-size:10px;color:var(--text-caption);">每日修行·自动化记录</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star-e">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">20</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。纯个人修行。</span></td>
+</tr>
+<tr>
+  <td>🖨️ 3D打印创业<br><span style="font-size:10px;color:var(--text-caption);">Bambu P1S·摆摊卖玩偶</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">19</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>🤖 AI训练师<br><span style="font-size:10px;color:var(--text-caption);">数据标注平台</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">19</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。⑤=5(平台直接发钱)。</span></td>
+</tr>
+<tr>
+  <td>💰 UUMit接任务/知识商品<br><span style="font-size:10px;color:var(--text-caption);">平台接任务+创建知识商品·自动化巡航</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td class="total-c">19</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。巡航自动化持续运行中。</span></td>
+</tr>
+<tr>
+  <td>✍️ 写小说<br><span style="font-size:10px;color:var(--accent);font-weight:600;">AI辅助</span><br><span style="font-size:10px;color:var(--text-caption);">LLM辅助创作</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">18</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。从未启动。</span></td>
+</tr>
+<tr>
+  <td>🛡️ 语言防卫App<br><span style="font-size:10px;color:var(--text-caption);">Android实时回怼·6/16说继续搞</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">16</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。6/16日记提及需要硬件支持(换硬盘修服务器)。</span></td>
+</tr>
+<tr>
+  <td>💻 玄学代码技术<br><span style="font-size:10px;color:var(--text-caption);">在玄学领域公司做技术开发</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">14</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>🌾 农业<br><span style="font-size:10px;color:var(--text-caption);">合肥布米农场·有机水稻</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">13</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div style="margin:14px 0 28px;font-size:11px;color:var(--text-caption);text-align:center;">
+  6维(30分制) | 17→18项目 | 新增：情绪梳理师APP | AI技能搭建 ▲2
+</div>
+
+<div class="analysis">
+<div class="analysis-card">
+  <h3>🏆 推荐方案</h3>
+  <div class="highlight"><strong>情绪梳理师APP（双工作流跑起来）+ 视频创作（内容输出）+ AI技能搭建（基础设施）</strong></div>
+  <p><strong>短线·情绪梳理师APP → 本期最大亮点</strong></p>
+  <li>①=5(已上线，每天在用)，双工作流(视频+语音)同时覆盖了内容输出和咨询场景</li>
+  <li>一键发布视频坐等接单——实现了"不费力"的内容+收费闭环</li>
+  <li>与视频创作形成协作：APP的视频工作流=视频创作的自动化版</li>
+  <br>
+  <p><strong>中线·AI技能搭建 → 基础设施就绪期</strong></p>
+  <li>Codex调试完成 + Claw-No2飞书v3打通 + free-models反向代理 + SOUL.md重构</li>
+  <li>"我的玩具弄好了，接下来可以玩了"——心态转变比技术突破更值</li>
+  <li>基础设施已就绪，接下来任何AI相关项目启动成本都会降低</li>
+  <br>
+  <p><strong>备选·翻译流水线(23分)+视频创作(27分)=内容双引擎</strong></p>
+  <li>翻译流水线(自动化)+视频创作(主动输出)+情绪梳理师APP(工具化)=传播矩阵成型</li>
+</div>
+<div class="analysis-card">
+  <h3>💡 本周关键发现</h3>
+  <li><strong>情绪梳理师APP从想法到上线只需1天。</strong>6/16日记突然提到"情绪梳理师APP正式上线"，两个工作流同时就绪。说明AI基础设施成熟后，创意到产品的转化速度极快。</li>
+  <br>
+  <li><strong>基础设施爆发周：Codex+Claw-No2+反向代理+SOUL。</strong>这一周见证了密集的底层搭建——Codex调试(19-20日)、Claw-No2飞书v3打通(21日)、free-models NVIDIA反向代理(21日)、SOUL.md重构(21日)。AI技能搭建因此从24→26分(▲2)。</li>
+  <br>
+  <li><strong>"工具即玩具"心态突破。</strong>6/20凌晨"我的玩具弄好了，接下来可以玩了"——这不是懈怠，而是从"必须做好"到"可以玩着做"的自由转变。工作不再有压迫感。</li>
+  <br>
+  <li><strong>灵性层面持续深化。</strong>6/18北美冥想班学到5点阻碍自查法，6/21扩展为6点(加"长时间在连接状态里")。6/19两次短暂静坐(2+3分钟)效果立竿见影——放下一切先入静的态度。</li>
+  <br>
+  <li><strong>模型"三层困局"浮现。</strong>好用的要花钱、免费的慢、快的中文不好——目前GPT OSS 120B做主力。free-models NVIDIA反向代理接入GLM-4.7 Flash / DS R1是缓解方案之一。</li>
+</div>
+</div>
+
+<div style="text-align:center;margin-top:40px;padding:20px 0;border-top:1px solid var(--card-border)">
+  <a href="v003.html" style="color:var(--text-soft);text-decoration:none;font-size:12px;margin-right:24px;">← 第三期</a>
+  <a href="index.html" style="color:var(--accent);text-decoration:none;font-size:13px;font-weight:500;">返回评估导航页</a>
+</div>
+
+</div>
+</body>
+</html>
