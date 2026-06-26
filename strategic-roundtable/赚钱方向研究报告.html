@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026赚钱方向研究报告</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg: #fefcf6;
+  --bg-deep: #faf6eb;
+  --ink: #1A1A2E;
+  --ink-muted: #4A4A5A;
+  --ink-subtle: #888;
+  --accent-blue: #2B7FD8;
+  --accent-gold: #F4D758;
+  --accent-green: #2E9E55;
+  --accent-red: #E84A5F;
+  --radius: 12px;
+  --space: clamp(60px,10vh,120px);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--accent-gold);color:var(--ink)}
+h1,h2,h3{font-family:'Noto Serif SC',serif;font-weight:700;letter-spacing:.02em}
+
+/* hero */
+.hero{
+  min-height:60vh;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+  padding:2rem;
+  background:linear-gradient(180deg,var(--bg-deep) 0%,var(--bg) 100%);
+  position:relative;overflow:hidden;
+}
+.hero-deco{
+  position:absolute;top:-15%;right:-8%;
+  font-size:clamp(10rem,20vw,22rem);
+  font-weight:900;color:rgba(46,158,85,.04);
+  pointer-events:none;user-select:none;line-height:1;
+}
+.hero h1{
+  font-size:clamp(2rem,5vw,3.6rem);
+  font-weight:900;max-width:16ch;margin-bottom:.5em;position:relative;z-index:1;
+}
+.hero .sub{
+  font-size:clamp(.9rem,1.6vw,1.1rem);
+  color:var(--ink-muted);max-width:28rem;position:relative;z-index:1;
+}
+.hero-meta{
+  display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;
+  font-size:.8rem;color:var(--ink-subtle);margin-top:2rem;position:relative;z-index:1;
+}
+
+/* container */
+.container{max-width:900px;margin:0 auto;padding:0 1.5rem}
+
+/* section */
+.section{padding:var(--space) 0}
+.section-title{
+  font-size:clamp(1.2rem,3vw,1.8rem);
+  margin-bottom:2rem;position:relative;display:inline-block;
+}
+.section-title::after{
+  content:'';position:absolute;bottom:-6px;left:0;
+  width:clamp(2rem,5vw,3.5rem);height:3px;
+  background:var(--accent-gold);border-radius:2px;
+}
+
+/* priority cards */
+.prio-grid{display:grid;gap:1.5rem;margin-bottom:2.5rem}
+.prio-card{
+  background:#fff;border-radius:var(--radius);
+  padding:clamp(24px,2.5vw,32px);
+  box-shadow:0 1px 3px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.03);
+  border-left:3px solid transparent;
+  transition:box-shadow .25s,transform .25s;
+}
+.prio-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.06),0 8px 32px rgba(0,0,0,.04);transform:translateY(-2px)}
+.prio-card.green{border-left-color:var(--accent-green)}
+.prio-card.yellow{border-left-color:var(--accent-gold)}
+.prio-card.blue{border-left-color:var(--accent-blue)}
+.prio-card .badge{
+  display:inline-block;
+  font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  padding:.15rem .7rem;border-radius:20px;
+  margin-bottom:.6rem;
+}
+.prio-card.green .badge{background:var(--accent-green);color:#fff}
+.prio-card.yellow .badge{background:var(--accent-gold);color:var(--ink)}
+.prio-card.blue .badge{background:var(--accent-blue);color:#fff}
+.prio-card h3{font-size:1.1rem;margin-bottom:.8rem}
+.prio-card .stats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.8rem 0}
+.prio-card .stat{}
+.prio-card .stat .label{font-size:.7rem;color:var(--ink-subtle);text-transform:uppercase;letter-spacing:.05em}
+.prio-card .stat .value{font-size:.95rem;font-weight:500;color:var(--ink-muted)}
+.prio-card .why{font-size:.9rem;color:var(--ink-muted);padding-top:.8rem;border-top:1px solid rgba(0,0,0,.05)}
+
+/* content ideas table */
+.content-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));
+  gap:1rem;
+}
+.content-card{
+  background:#fff;border-radius:var(--radius);
+  padding:1.5rem;box-shadow:0 1px 2px rgba(0,0,0,.04);
+}
+.content-card .title{font-weight:700;font-size:.95rem;margin-bottom:.3rem}
+.content-card .example{font-size:.85rem;color:var(--ink-muted);line-height:1.5;margin-bottom:.4rem}
+.content-card .tag{
+  display:inline-block;font-size:.7rem;padding:.15rem .5rem;
+  border-radius:10px;background:var(--bg-deep);color:var(--ink-muted);
+}
+
+/* action steps */
+.actions{margin-top:2rem}
+.act-card{
+  background:var(--bg-deep);border-radius:var(--radius);
+  padding:1.2rem 1.5rem;margin-bottom:.8rem;
+  display:flex;align-items:flex-start;gap:1rem;
+}
+.act-card .num{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--accent-blue);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;font-weight:700;flex-shrink:0;margin-top:2px;
+}
+.act-card .ht{font-size:.85rem;color:var(--ink-muted)}
+
+/* footer */
+.footer{
+  text-align:center;padding:clamp(50px,8vh,100px) 1.5rem;
+  color:var(--ink-subtle);font-size:.85rem;
+  border-top:1px solid rgba(0,0,0,.05);
+}
+
+@media(max-width:500px){
+  .prio-card .stats{grid-template-columns:1fr}
+  .hero{min-height:45vh;padding:2rem 1rem}
+}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .5s,transform .5s}
+.reveal.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-deco" aria-hidden="true">💰</div>
+  <h1>2026 个人赚钱方向研究</h1>
+  <p class="sub">山东滕州 · 30h/周 · AI/Agent技能 · 1万启动金 · 上午行动力最佳</p>
+  <div class="hero-meta">
+    <span>📅 2026年6月26日</span>
+    <span>⚡ 能露脸</span>
+    <span>📍 滕州</span>
+  </div>
+</header>
+
+<div class="container">
+  <section class="section">
+    <h2 class="section-title">一、平台搜索结果</h2>
+
+    <div class="prio-grid">
+      <!-- 1 -->
+      <div class="prio-card green reveal">
+        <div class="badge">最高优先 · 今天就能动手</div>
+        <h3>1. 本地美团/大众点评 AI 代运营</h3>
+        <p style="color:var(--ink-muted);font-size:.9rem">帮本地餐馆/小店自动回美团评论、生成团购文案</p>
+        <div class="stats">
+          <div class="stat"><div class="label">启动成本</div><div class="value">&lt;500元</div></div>
+          <div class="stat"><div class="label">预期收入</div><div class="value">2,500–10,000/月</div></div>
+          <div class="stat"><div class="label">启动时间</div><div class="value">今天下楼谈第一家</div></div>
+          <div class="stat"><div class="label">来源</div><div class="value">Indie Hackers</div></div>
+        </div>
+        <div class="why">✅ <strong>为什么适合你：</strong>滕州本地，零竞争，直接走进去谈</div>
+      </div>
+
+      <!-- 2 -->
+      <div class="prio-card green reveal">
+        <div class="badge">最高优先 · 今天就能动手</div>
+        <h3>2. 个人IP知识付费（战略圆桌内容）</h3>
+        <p style="color:var(--ink-muted);font-size:.9rem">用Jung/Mankiw/Munger/Musk拆解普通人问题，短视频→知识星球/咨询</p>
+        <div class="stats">
+          <div class="stat"><div class="label">启动成本</div><div class="value">0–1,000元</div></div>
+          <div class="stat"><div class="label">预期收入</div><div class="value">3,000–8,000/月</div></div>
+          <div class="stat"><div class="label">启动时间</div><div class="value">今天就能录</div></div>
+          <div class="stat"><div class="label">养成期</div><div class="value">3–6个月</div></div>
+        </div>
+        <div class="why">✅ <strong>为什么适合你：</strong>项目评估排名第一（27/30），能露脸，内容差异化强</div>
+      </div>
+
+      <!-- 3 -->
+      <div class="prio-card green reveal">
+        <div class="badge">最高优先 · 这周内</div>
+        <h3>3. AI Agent 模板/工具包</h3>
+        <p style="color:var(--ink-muted);font-size:.9rem">把Hermes/Codex配置、Prompt模板打包卖</p>
+        <div class="stats">
+          <div class="stat"><div class="label">启动成本</div><div class="value">&lt;100元</div></div>
+          <div class="stat"><div class="label">预期收入</div><div class="value">2,500–6,000/月</div></div>
+          <div class="stat"><div class="label">启动时间</div><div class="value">这周内</div></div>
+          <div class="stat"><div class="label">类型</div><div class="value">被动收入</div></div>
+        </div>
+        <div class="why">✅ <strong>为什么适合你：</strong>已有技能直接打包，一次性做好长期卖</div>
+      </div>
+    </div>
+
+    <!-- 次优先 -->
+    <h3 style="font-family:'Noto Serif SC',serif;font-size:1.1rem;margin:2rem 0 1rem">🟡 次优先（适合同步养）</h3>
+    <div class="prio-grid">
+      <div class="prio-card yellow reveal">
+        <div class="badge">次优先</div>
+        <h3>4. AI清晨流程教练 "MorningBreeze"</h3>
+        <div class="stats">
+          <div class="stat"><div class="label">启动成本</div><div class="value">&lt;1,000元</div></div>
+          <div class="stat"><div class="label">预期收入</div><div class="value">2,500–5,000/月</div></div>
+        </div>
+        <div class="why">✅ 你每天做静坐，这是你的独特卖点</div>
+      </div>
+
+      <div class="prio-card yellow reveal">
+        <div class="badge">次优先</div>
+        <h3>5. AI视频翻译/配音</h3>
+        <div class="stats">
+          <div class="stat"><div class="label">启动成本</div><div class="value">&lt;5,000元</div></div>
+          <div class="stat"><div class="label">预期收入</div><div class="value">3,000–6,000/月</div></div>
+        </div>
+        <div class="why">✅ 单人可操作，需求上升期</div>
+      </div>
+
+      <div class="prio-card yellow reveal">
+        <div class="badge">次优先</div>
+        <h3>6. 工厂审批AI填表</h3>
+        <div class="stats">
+          <div class="stat"><div class="label">启动成本</div><div class="value">&lt;2,000元</div></div>
+          <div class="stat"><div class="label">预期收入</div><div class="value">3,000–9,000/月</div></div>
+        </div>
+        <div class="why">✅ B2B高留存，本地就有需求</div>
+      </div>
+    </div>
+
+    <!-- 可关注 -->
+    <h3 style="font-family:'Noto Serif SC',serif;font-size:1.1rem;margin:2rem 0 1rem">🔵 可关注</h3>
+    <div class="prio-grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr))">
+      <div class="prio-card blue reveal"><div class="badge">可关注</div><h3>7. 中文AI面试教练</h3><div class="stats"><div class="stat"><div class="label">启动</div><div class="value">&lt;3,000</div></div><div class="stat"><div class="label">收入</div><div class="value">可达9,900/月</div></div></div></div>
+      <div class="prio-card blue reveal"><div class="badge">可关注</div><h3>8. AI英语家教（新概念）</h3><div class="stats"><div class="stat"><div class="label">启动</div><div class="value">&lt;1,000</div></div><div class="stat"><div class="label">收入</div><div class="value">5,000–10,000/月</div></div></div></div>
+      <div class="prio-card blue reveal"><div class="badge">可关注</div><h3>9. 微信CRM自动化</h3><div class="stats"><div class="stat"><div class="label">启动</div><div class="value">&lt;3,000</div></div><div class="stat"><div class="label">收入</div><div class="value">3,000+/月</div></div></div></div>
+      <div class="prio-card blue reveal"><div class="badge">可关注</div><h3>10. 霎哈嘉冥想伴侣App</h3><div class="stats"><div class="stat"><div class="label">启动</div><div class="value">&lt;500</div></div><div class="stat"><div class="label">收入</div><div class="value">1,000–5,000/月</div></div></div></div>
+    </div>
+  </section>
+
+  <!-- Content section -->
+  <section class="section">
+    <h2 class="section-title">二、短视频内容方向</h2>
+    <div class="content-grid">
+      <div class="content-card reveal">
+        <div class="title">🎯 圆桌拆解</div>
+        <div class="example">"让马斯克芒格荣格曼昆帮你做一个决定"</div>
+        <div class="tag">高互动</div>
+      </div>
+      <div class="content-card reveal">
+        <div class="title">🤖 AI实操</div>
+        <div class="example">"我用AI Agent帮楼下餐馆自动回了100条评论"</div>
+        <div class="tag">高收藏</div>
+      </div>
+      <div class="content-card reveal">
+        <div class="title">💭 走心分享</div>
+        <div class="example">"我每天5点起来做的事（不是赚钱）"</div>
+        <div class="tag">高关注</div>
+      </div>
+      <div class="content-card reveal">
+        <div class="title">🧠 认知输出</div>
+        <div class="example">"芒格的100个思维模型，普通人用这3个就够了"</div>
+        <div class="tag">高转发</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Action -->
+  <section class="section">
+    <h2 class="section-title">三、本周行动</h2>
+    <div class="actions">
+      <div class="act-card reveal">
+        <div class="num">1</div>
+        <div><strong>今天：下楼找3家餐馆</strong><br><span class="ht">话术："老板，我帮你自动回美团评论，免费试一个月" · 用时：1小时</span></div>
+      </div>
+      <div class="act-card reveal">
+        <div class="num">2</div>
+        <div><strong>今天：录第一条视频</strong><br><span class="ht">用圆桌框架拆一个普通人问题，小红书+抖音双发 · 用时：30分钟</span></div>
+      </div>
+      <div class="act-card reveal">
+        <div class="num">3</div>
+        <div><strong>这周内：打包Agent模板</strong><br><span class="ht">现有工作流配置，定价99元，小红书/知识星球 · 用时：2小时</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer class="footer">
+  <p style="font-family:'Noto Serif SC',serif;font-size:1rem;color:var(--ink-muted);margin-bottom:.5rem">真正的方向不是在书桌上选出来的，是在街上走出来的。</p>
+  <p>报告完 · 如需深入某个方向，随时说 🕉</p>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&(e.target.classList.add('visible'),obs.unobserve(e.target))})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(e=>obs.observe(e))
+</script>
+</body>
+</html>

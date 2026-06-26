@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>战略认知圆桌 · 四维分析报告</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@400;500;700&family=Fraunces:opsz,wght,SOFT@9..144,300,0;9..144,600,0;9..144,700,0&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg: #fefcf6;
+  --bg-deep: #faf6eb;
+  --ink: #1A1A2E;
+  --ink-muted: #4A4A5A;
+  --ink-subtle: #888;
+  --accent-blue: #2B7FD8;
+  --accent-gold: #F4D758;
+  --accent-red: #E84A5F;
+  --radius: 12px;
+  --space: clamp(80px,12vh,160px);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--accent-gold);color:var(--ink)}
+h1,h2,h3,.section-label{
+  font-family:'Noto Serif SC',serif;
+  font-weight:700;
+  letter-spacing:.02em;
+}
+h4,.role-name{font-family:'Fraunces',serif;font-weight:600}
+
+/* header */
+.hero{
+  min-height:70vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:2rem;
+  background:linear-gradient(180deg,var(--bg-deep) 0%,var(--bg) 100%);
+  position:relative;
+  overflow:hidden;
+}
+.hero-deco{
+  position:absolute;
+  top:-20%;right:-10%;
+  font-size:clamp(12rem,25vw,28rem);
+  font-family:'Fraunces',serif;
+  font-weight:300;
+  color:rgba(43,127,216,.04);
+  letter-spacing:-.05em;
+  pointer-events:none;
+  user-select:none;
+  line-height:1;
+}
+.hero h1{
+  font-size:clamp(2.4rem,6vw,4.8rem);
+  font-weight:900;
+  max-width:14ch;
+  margin-bottom:.6em;
+  position:relative;
+  z-index:1;
+}
+.hero .sub{
+  font-size:clamp(1rem,2vw,1.3rem);
+  color:var(--ink-muted);
+  max-width:32rem;
+  margin-bottom:2rem;
+  position:relative;
+  z-index:1;
+}
+.hero-meta{
+  display:flex;gap:2rem;flex-wrap:wrap;justify-content:center;
+  font-size:.85rem;color:var(--ink-subtle);position:relative;z-index:1;
+}
+.hero-meta span{display:flex;align-items:center;gap:.4rem}
+
+/* container */
+.container{max-width:1100px;margin:0 auto;padding:0 1.5rem}
+
+/* section */
+.section{
+  padding:var(--space) 0;
+  scroll-margin-top:2rem;
+}
+.section-label{
+  font-size:clamp(.7rem,.9vw,.8rem);
+  text-transform:uppercase;
+  letter-spacing:.15em;
+  color:var(--accent-blue);
+  margin-bottom:.5rem;
+  font-weight:400;
+}
+.section-title{
+  font-size:clamp(1.6rem,4vw,2.6rem);
+  margin-bottom:2.5rem;
+  position:relative;
+  display:inline-block;
+}
+.section-title::after{
+  content:'';
+  position:absolute;bottom:-8px;left:0;
+  width:clamp(3rem,8vw,5rem);
+  height:3px;
+  background:var(--accent-gold);
+  border-radius:2px;
+}
+.section-intro{
+  font-size:1.05rem;
+  color:var(--ink-muted);
+  max-width:36rem;
+  margin-bottom:2.5rem;
+}
+
+/* role card grid */
+.role-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,370px),1fr));
+  gap:clamp(1.2rem,2vw,2rem);
+}
+.role-card{
+  background:#fff;
+  border-radius:var(--radius);
+  padding:clamp(28px,3vw,40px);
+  box-shadow:0 1px 3px rgba(0,0,0,.04),0 4px 20px rgba(0,0,0,.03);
+  transition:box-shadow .25s,transform .25s;
+  position:relative;
+  overflow:hidden;
+}
+.role-card:hover{
+  box-shadow:0 2px 8px rgba(0,0,0,.06),0 8px 40px rgba(0,0,0,.04);
+  transform:translateY(-3px);
+}
+.role-card .deco-num{
+  position:absolute;
+  top:-12px;right:12px;
+  font-family:'Fraunces',serif;
+  font-size:4.5rem;
+  font-weight:300;
+  line-height:1;
+  opacity:.06;
+  pointer-events:none;
+}
+.role-header{
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  margin-bottom:1rem;
+}
+.role-avatar{
+  width:44px;height:44px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;
+  flex-shrink:0;
+}
+.role-avatar.jung{background:#F0EBF8;color:#7B1FA2}
+.role-avatar.mankiw{background:#E3F2FD;color:#1565C0}
+.role-avatar.munger{background:#FFF3E0;color:#E65100}
+.role-avatar.musk{background:#FBE9E7;color:#BF360C}
+.role-name{font-size:1.15rem}
+.role-title{font-size:.78rem;color:var(--ink-subtle)}
+.role-content{font-size:.95rem;color:var(--ink-muted);line-height:1.8}
+.role-content strong{color:var(--ink)}
+.role-content .hl-blue{color:var(--accent-blue)}
+.role-content .hl-red{color:var(--accent-red)}
+
+/* callout */
+.callout{
+  background:var(--bg-deep);
+  border-radius:var(--radius);
+  padding:clamp(28px,3vw,36px);
+  margin:2rem 0;
+  border-left:3px solid var(--accent-gold);
+}
+.callout-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:1.1rem;
+  margin-bottom:.5rem;
+  display:flex;align-items:center;gap:.5rem;
+}
+
+/* integration */
+.integration-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));
+  gap:1rem;
+  margin-bottom:2rem;
+}
+.integ-item{
+  background:#fff;
+  border-radius:var(--radius);
+  padding:1.5rem;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+.integ-item .persp{
+  font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;
+  margin-bottom:.3rem;
+}
+.integ-item .persp.jung{color:#7B1FA2}
+.integ-item .persp.mankiw{color:#1565C0}
+.integ-item .persp.munger{color:#E65100}
+.integ-item .persp.musk{color:#BF360C}
+.integ-item .judgment{font-size:.92rem;color:var(--ink-muted);line-height:1.6}
+
+/* action steps */
+.action-steps{counter-reset:step;display:grid;gap:.8rem;margin:2rem 0}
+.action-step{
+  background:#fff;border-radius:var(--radius);
+  padding:1.2rem 1.5rem;display:flex;align-items:flex-start;gap:1rem;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+  counter-increment:step;
+}
+.action-step::before{
+  content:counter(step);
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:1.3rem;color:var(--accent-blue);
+  flex-shrink:0;width:1.5rem;text-align:center;
+}
+
+/* footer */
+.footer{
+  text-align:center;
+  padding:clamp(60px,10vh,120px) 1.5rem;
+  color:var(--ink-subtle);
+  font-size:.85rem;
+  border-top:1px solid rgba(0,0,0,.05);
+}
+.footer .quote{
+  font-family:'Noto Serif SC',serif;
+  font-size:1.1rem;color:var(--ink-muted);
+  max-width:24rem;margin:0 auto 1rem;
+}
+.footer .sig{font-family:'Fraunces',serif;font-weight:300;font-style:italic}
+
+@media(max-width:600px){
+  .hero{min-height:55vh;padding:2rem 1rem}
+  .role-card{padding:1.5rem}
+  .integration-grid{grid-template-columns:1fr}
+  .action-step{padding:1rem}
+}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s,transform .6s}
+.reveal.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-deco" aria-hidden="true">SR</div>
+  <h1>战略认知圆桌</h1>
+  <p class="sub">四种顶级思维框架同时拆解一个问题 · 荣格·曼昆·芒格·马斯克</p>
+  <div class="hero-meta">
+    <span>🕉 霎哈嘉瑜伽 · 冷静深观</span>
+    <span>🧘 2026年6月 · 滕州</span>
+  </div>
+</header>
+
+<div class="container">
+  <section class="section">
+    <div class="section-label">问题</div>
+    <h2 class="section-title">一个普通人，有AI技能，该怎么开始赚钱？</h2>
+    <p class="section-intro">四个候选方向：① 本地美团AI代运营 ② Agent模板工具包 ③ 个人IP知识付费 ④ AI视频翻译配音。四位智者，四种视角，一个回答。</p>
+  </section>
+</div>
+
+<div class="container">
+  <section class="section" id="reports">
+    <div class="section-label">第一轮 · 四角分析</div>
+    <h2 class="section-title">各自独立的判断</h2>
+    <div class="role-grid">
+      <!-- Jung -->
+      <div class="role-card reveal">
+        <div class="deco-num">01</div>
+        <div class="role-header">
+          <div class="role-avatar jung">🌙</div>
+          <div><div class="role-name">Carl Jung</div><div class="role-title">心理学 · 深层动机</div></div>
+        </div>
+        <div class="role-content">
+          <p>你面临的选择不是"做什么赚钱"的问题。深层的问题是——<strong class="hl-blue">你现在在用什么身份做事？</strong></p>
+          <p>你白天有主业、有家庭、有静坐修习。额外拿出30h/周去赚钱，这个"赚钱的你"和"修习静坐的你"是同一人吗？</p>
+          <p style="margin:1rem 0">代运营 → "我是本地服务商"<br>模板包 → "我是技术创作者"<br>知识付费 → "我是思想输出者"<br>AI配音 → "我是技术服务商"</p>
+          <p>你内心深处真正认同哪一个？</p>
+          <p><strong>最诚实的问法：</strong>如果没人知道你在做什么，也没人给你认可——你还会做哪个？</p>
+          <p style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(0,0,0,.06)"><span style="background:linear-gradient(180deg,transparent 50%,rgba(244,215,88,.25) 50%)">你的阴影：</span> 你渴望被认可，但你害怕暴露。选哪个，暴露你的真实状态。</p>
+        </div>
+      </div>
+      <!-- Mankiw -->
+      <div class="role-card reveal">
+        <div class="deco-num">02</div>
+        <div class="role-header">
+          <div class="role-avatar mankiw">📊</div>
+          <div><div class="role-name">Greg Mankiw</div><div class="role-title">经济学 · 资源配置</div></div>
+        </div>
+        <div class="role-content">
+          <p><strong>机会成本分析：</strong>你的稀缺资源是时间（30h/周×4=120h/月）和信誉。</p>
+          <p style="margin:1rem 0">代运营：5店×500=2,500/月 → <strong>21元/h</strong><br>模板包：研发80h→后边际成本≈0 → <strong>利润率最高</strong><br>知识付费：首月0→复利效应 → <strong>长期最大</strong><br>AI配音：线性 → <strong>无规模经济</strong></p>
+          <p><span style="background:linear-gradient(180deg,transparent 50%,rgba(244,215,88,.25) 50%)">边际分析：</span>代运营第6-10店边际收益递减。模板包从第2份开始边际成本近乎0。<br>知识付费第10条视频后收益急速上升。</p>
+          <p style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(0,0,0,.06)"><strong>最优路径：</strong>代运营养现金流 → 模板包做杠杆 → 知识付费建护城河。三步走，不跳级。</p>
+        </div>
+      </div>
+      <!-- Munger -->
+      <div class="role-card reveal">
+        <div class="deco-num">03</div>
+        <div class="role-header">
+          <div class="role-avatar munger">🧠</div>
+          <div><div class="role-name">Charlie Munger</div><div class="role-title">模型思维 · 逆向思考</div></div>
+        </div>
+        <div class="role-content">
+          <p><strong>逆向思考：</strong>什么情况下你一定失败？</p>
+          <p style="margin:1rem 0">① 根本不存在需求<br>② 高估自己的执行力<br>③ 被沉没成本困住<br>④ 别人说"好"你就信了</p>
+          <p><span style="background:linear-gradient(180deg,transparent 50%,rgba(244,215,88,.25) 50%)">心理偏误检查：</span>可得性启发——看到别人代运营赚钱就觉得好做，没看到放弃率。社会认同——跟风因为"大家都在做"。</p>
+          <p style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(0,0,0,.06)"><strong>护城河：</strong>代运营靠本地关系，很浅但暂时没人抢。知识付费靠独特性，无人能复制。<br><strong>检验标准：</strong>6周。代运营开路，30%精力打磨模板。6周无满意结果→重估。</p>
+        </div>
+      </div>
+      <!-- Musk -->
+      <div class="role-card reveal">
+        <div class="deco-num">04</div>
+        <div class="role-header">
+          <div class="role-avatar musk">🚀</div>
+          <div><div class="role-name">Elon Musk</div><div class="role-title">第一性原理 · 质疑前提</div></div>
+        </div>
+        <div class="role-content">
+          <p><strong>第一性原理：</strong>收入 = 创造的价值 × 触达的人数</p>
+          <p>代运营：价值=帮餐馆省时间。触达=滕州本地。极限：1人最多5家店。</p>
+          <p>模板包/知识付费：触达=全网。<strong>这就是应该押注的结构。</strong></p>
+          <p style="margin:1rem 0"><span style="background:linear-gradient(180deg,transparent 50%,rgba(244,215,88,.25) 50%)">质疑前提：</span></p>
+          <p>"需要1万启动资金" → 代运营0元启动。1万只是安心感。<br>"只有30h/周" → 集中做一件事vs分散做四件，产出差10倍。<br>"能力不够" → AI时代个体产能是十年前的10倍。</p>
+          <p style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(0,0,0,.06)"><strong>今天就能验证两件事：</strong>走3家餐馆问"要不要免费代管评论"，发一条视频。哪件你不敢做，哪件就是你应该先做的。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="container">
+  <div class="callout reveal">
+    <div class="callout-title">⚡ 最大分歧</div>
+    <p>荣格说代运营可能是"面具驱动"（为安全选它），曼昆说代运营就是最优经济起点。两者不矛盾——<strong>经济上选代运营没错，但如果只因为"不用露脸"，那要警惕。</strong></p>
+    <p style="margin-top:.5rem">马斯克说"今天就验证"，芒格说"先想清楚护城河"。冲突是节奏问题——验证和思考不是二选一。</p>
+  </div>
+</div>
+
+<!-- Integration -->
+<div class="container" style="background:var(--bg-deep);border-radius:20px;padding:clamp(40px,5vw,60px) clamp(1.5rem,3vw,3rem);margin-top:var(--space)">
+  <section class="section" style="padding:0" id="integration">
+    <div class="section-label">最终 · 整合判断</div>
+    <h2 class="section-title">四维聚焦，一个回答</h2>
+    <div class="integration-grid">
+      <div class="integ-item"><div class="persp jung">JUNG</div><div class="judgment">选代运营是"安全牌"，选知识付费是"真我牌"—看你敢不敢站出来</div></div>
+      <div class="integ-item"><div class="persp mankiw">MANKIW</div><div class="judgment">代运营养现金流→模板做杠杆→知识付费建护城河，三步最优</div></div>
+      <div class="integ-item"><div class="persp munger">MUNGER</div><div class="judgment">代运营浅护城河但不恋战，6周检验真理</div></div>
+      <div class="integ-item"><div class="persp musk">MUSK</div><div class="judgment">今天就能验证两件事。哪件不敢做就先做哪件</div></div>
+    </div>
+    <h3 style="font-family:'Noto Serif SC',serif;font-size:1.2rem;margin:2rem 0 1rem">本周行动方案</h3>
+    <div class="action-steps">
+      <div class="action-step"><div><strong>第一轮（今天～明天）</strong><br><span style="font-size:.9rem;color:var(--ink-muted)">走3家餐馆"免费代管美团评论"；手机录3分钟"用马斯克方法拆解问题"视频</span></div></div>
+      <div class="action-step"><div><strong>第二轮（有反馈后）</strong><br><span style="font-size:.9rem;color:var(--ink-muted)">打包第一个Agent模板，定价99元，放小红书/知识星球</span></div></div>
+      <div class="action-step"><div><strong>第三轮（有数据后）</strong><br><span style="font-size:.9rem;color:var(--ink-muted)">哪条路反馈最积极→倾斜80%精力做那个</span></div></div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">🕉 超越框架</div>
+      <p>这些分析都是头脑的兵棋推演。</p>
+      <p style="font-family:'Noto Serif SC',serif;font-size:1.1rem;margin-top:.5rem"><strong>是你今天能不能坐下来，老实做一件你害怕但知道该做的事。</strong></p>
+    </div>
+  </section>
+</div>
+
+<footer class="footer">
+  <p class="quote">"But all this analysis comes from the mind. The real answer lives where the mind stops."</p>
+  <p class="sig">Strategic Cognitive Roundtable · 2026</p>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&(e.target.classList.add('visible'),obs.unobserve(e.target))})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(e=>obs.observe(e))
+</script>
+</body>
+</html>

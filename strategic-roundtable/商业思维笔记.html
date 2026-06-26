@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商业思维笔记</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg: #fefcf6;
+  --bg-deep: #faf6eb;
+  --ink: #1A1A2E;
+  --ink-muted: #4A4A5A;
+  --ink-subtle: #888;
+  --accent-blue: #2B7FD8;
+  --accent-gold: #F4D758;
+  --accent-green: #2E9E55;
+  --accent-red: #E84A5F;
+  --radius: 12px;
+  --space: clamp(50px,8vh,100px);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--accent-gold);color:var(--ink)}
+h1,h2,h3{font-family:'Noto Serif SC',serif;font-weight:700;letter-spacing:.02em}
+
+/* hero */
+.hero{
+  min-height:35vh;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+  padding:2rem;
+  background:linear-gradient(180deg,var(--bg-deep) 0%,var(--bg) 100%);
+  position:relative;overflow:hidden;
+}
+.hero h1{
+  font-size:clamp(1.8rem,4vw,3rem);
+  font-weight:900;position:relative;z-index:1;
+}
+.hero .sub{
+  font-size:.9rem;color:var(--ink-subtle);
+  margin-top:.5rem;position:relative;z-index:1;
+}
+
+/* container */
+.container{max-width:720px;margin:0 auto;padding:0 1.5rem}
+.section{padding:var(--space) 0}
+
+/* note card */
+.note-card{
+  background:#fff;
+  border-radius:var(--radius);
+  padding:clamp(24px,3vw,36px);
+  margin-bottom:1.5rem;
+  box-shadow:0 1px 2px rgba(0,0,0,.04),0 3px 12px rgba(0,0,0,.03);
+  transition:box-shadow .25s,transform .25s;
+}
+.note-card:hover{
+  box-shadow:0 2px 6px rgba(0,0,0,.06),0 6px 24px rgba(0,0,0,.04);
+  transform:translateY(-2px);
+}
+.note-card .date{
+  display:inline-block;
+  font-size:.75rem;font-weight:500;
+  color:var(--accent-blue);text-transform:uppercase;letter-spacing:.08em;
+  margin-bottom:.8rem;
+}
+.note-card .title{
+  font-family:'Noto Serif SC',serif;
+  font-size:1.1rem;font-weight:700;
+  margin-bottom:1rem;
+}
+.note-card p{margin-bottom:.8rem;color:var(--ink-muted);font-size:.95rem}
+.note-card ul,.note-card ol{padding-left:1.4rem;margin-bottom:.8rem;color:var(--ink-muted);font-size:.95rem}
+.note-card li{margin-bottom:.3rem;line-height:1.7}
+.note-card li strong{color:var(--ink)}
+.note-card blockquote{
+  background:var(--bg-deep);
+  border-radius:8px;
+  padding:1rem 1.5rem;
+  margin:.8rem 0;
+  border-left:3px solid var(--accent-gold);
+  font-size:.9rem;
+  color:var(--ink-muted);
+}
+
+/* highlight numbers for lists */
+.note-card ol li::marker{color:var(--accent-blue);font-weight:700;font-size:.9rem}
+
+/* tag */
+.tag{
+  display:inline-block;
+  font-size:.7rem;padding:.15rem .6rem;
+  border-radius:10px;
+  background:var(--bg-deep);
+  color:var(--ink-muted);
+  margin-right:.3rem;
+  margin-top:.5rem;
+}
+.tag.green{background:rgba(46,158,85,.1);color:var(--accent-green)}
+.tag.gold{background:rgba(244,215,88,.2);color:#7A6A1C}
+.tag.blue{background:rgba(43,127,216,.1);color:var(--accent-blue)}
+
+.divider{
+  text-align:center;color:var(--ink-subtle);
+  font-size:.7rem;margin:2rem 0;letter-spacing:.15em;
+}
+
+.footer{
+  text-align:center;padding:clamp(40px,6vh,80px) 1.5rem;
+  color:var(--ink-subtle);font-size:.85rem;
+}
+
+@media(max-width:500px){
+  .hero{min-height:25vh}
+  .note-card{padding:1.2rem}
+}
+.reveal{opacity:0;transform:translateY(15px);transition:opacity .4s,transform .4s}
+.reveal.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<header class="hero">
+  <h1>📝 商业思维笔记</h1>
+  <p class="sub">从信息差、卖点转换、一人公司到AI时代的生存策略 · 持续积累</p>
+</header>
+<div class="container">
+
+  <!-- Note 1: 知识付费组装贴牌 -->
+  <div class="note-card reveal">
+    <div class="date">2026-06-25</div>
+    <div class="title">知识付费的「组装贴牌」模式</div>
+    <p>小红书博主「周小满」卖了 2 万块的「战略圆桌会议」提示词。</p>
+    <p>拆开看，就是把自己蒸馏过的大佬 + 网上已被蒸馏过的大佬，混在一起打成合集。抹掉来源渠道信息，换了个名字包装，上线卖钱。</p>
+    <p><strong>核心手法：</strong>蒸馏 → 合集 → 去源 → 贴牌 → 上架。零研发成本，纯信息差套利。</p>
+    <p>提示词本身不稀缺，稀缺的是"帮你整理好、包装好、告诉你该用在哪"这一步。</p>
+    <blockquote><strong>卖点转换：</strong>不是卖「提示词合集」，而是卖「长脑子」「打破思维僵局」——把工具包装成认知升级，用户买的不是文字，是"变聪明"的希望。</blockquote>
+    <div><span class="tag gold">信息差套利</span><span class="tag green">零成本启动</span><span class="tag">卖点转换</span></div>
+  </div>
+
+  <!-- Note 2: 先验证后放大 -->
+  <div class="note-card reveal">
+    <div class="date">2026-06-11</div>
+    <div class="title">先验证，后放大</div>
+    <p>清华奶爸（陈然）——免费考证网站案例。先手动跑通整个流程，确认有需求、能落地，再用 AI 把效率放大 10-100 倍。</p>
+    <p><strong>商业嗅觉 > 技术能力。</strong> 技术是杠杆，方向才是本金。</p>
+    <p><strong>盈利模式：</strong>免费网站获流量 → 接商业联盟广告变现。不卖课、不收会员，流量本身就是产品。</p>
+    <div class="divider">— — —</div>
+    <p><strong>清华奶爸商业思维 7 条：</strong></p>
+    <ol>
+      <li><strong>"付费变免费"流量洼地</strong> — 原来几万美金买专业数据库/题库的刚需，用 AI 做成免费工具。用户从付费变免费，自然流量巨大。</li>
+      <li><strong>先闭环，后提效</strong> — 先用最笨的方法跑通验证，确认有人愿意付费，再上 AI 放大。很多人顺序反了：先折腾 AI 提效，但商业模式本身就不赚钱。</li>
+      <li><strong>增值服务变现</strong> — 基础免费 + 高级定制/咨询收费。免费是获客手段，增值是利润来源。</li>
+      <li><strong>AI 降低技术门槛</strong> — 现在不需要会写代码，会写提示词就能搭产品。发现痛点的能力 > 写代码的能力。</li>
+      <li><strong>"一人公司"取代全职工作</strong> — 核心技能 + AI 放大 = 一个人服务全球。</li>
+      <li><strong>广告/联盟/线索分发</strong> — 三种不卖课的变现方式。用户更愿意用免费产品，信任值积累后再转化。</li>
+      <li><strong>找到 AI 能力边界内的「被动收入」模式</strong> — AI 处理中间环节，你在两边躺着赚。</li>
+    </ol>
+    <div><span class="tag green">先验证后放大</span><span class="tag blue">一人公司</span><span class="tag gold">被动收入</span></div>
+  </div>
+
+  <!-- Note 3: Spicy Brain -->
+  <div class="note-card reveal">
+    <div class="date">2026-06-25</div>
+    <div class="title">3 个月 AI 产品赚 50 万</div>
+    <p>来源：Spicy Brain 播客。提炼 10 条核心认知：</p>
+    <ol>
+      <li><strong>赚需求的钱，不是模型的钱</strong> — 真实痛点 + 极简产品 + 个人 IP + 信息差 = 变现公式。技术只是最后一公里。</li>
+      <li><strong>套壳不是问题，赚到钱才是本事</strong> — "哪个产品不是套壳？有本事你也套。"别被"套壳羞耻"困住。</li>
+      <li><strong>产品为 IP 服务，不是反过来</strong> — "今年只有一个确定性导向——好好做 IP。"</li>
+      <li><strong>跟聪明人待在一起，拿一手信息</strong> — 信息差不是搜出来的，是圈子给的。</li>
+      <li><strong>让人偷你的 idea，是最便宜的验证方式</strong> — 别人能拿你 idea 做出来，说明方向对了。你直接在他基础上迭代。</li>
+      <li><strong>先用小产品试水，有声量再切赛道</strong> — 不要一上来就梭哈。</li>
+      <li><strong>利用「懊悔」情感做社交传播</strong> — 用户的懊悔情绪自带传播力。</li>
+      <li><strong>没有技术壁垒，就做 branding 和人群差异化</strong> — "大家互相抄，打差异化做 branding。"</li>
+      <li><strong>研究用户行为 > 研究技术</strong> — 你不用产品不是因为贵，而是不知道有更好的替代。</li>
+      <li><strong>必须「在牌桌上」</strong> — 能不能抓住风口不重要，重要的是你一直在牌桌上。</li>
+    </ol>
+    <div><span class="tag green">IP驱动</span><span class="tag gold">信息差</span><span class="tag blue">在牌桌上</span></div>
+  </div>
+
+  <!-- Note 4: 卖已火的产品 -->
+  <div class="note-card reveal">
+    <div class="date">2026-06-25</div>
+    <div class="title">卖已火的产品，换卖点重新卖</div>
+    <p>不需要自己从 0 造产品。找市场上已经卖火的产品，换个卖点、换个人群、换个包装方式重新卖。</p>
+    <p><strong>核心逻辑：</strong>产品本身经过市场验证了，你不用赌需求。你要赌的是「怎么卖」。</p>
+    <p><strong>三个切入点：</strong></p>
+    <ul>
+      <li><strong>换卖点：</strong>别人卖"工具"，你卖"认知升级"</li>
+      <li><strong>换人群：</strong>别人卖给程序员，你卖给设计师</li>
+      <li><strong>换形式：</strong>别人卖课程，你卖社群+陪伴</li>
+    </ul>
+    <div><span class="tag gold">市场验证</span><span class="tag green">微创新</span><span class="tag">卖点转换</span></div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <p>持续积累 · 随时打开 🕉</p>
+</footer>
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&(e.target.classList.add('visible'),obs.unobserve(e.target))})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(e=>obs.observe(e))
+</script>
+</body>
+</html>

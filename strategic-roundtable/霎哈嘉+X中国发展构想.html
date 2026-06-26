@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>霎哈嘉+X · 中国发展构想</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg: #fefcf6;
+  --bg-deep: #faf6eb;
+  --ink: #1A1A2E;
+  --ink-muted: #4A4A5A;
+  --ink-subtle: #888;
+  --accent-blue: #2B7FD8;
+  --accent-gold: #F4D758;
+  --accent-green: #2E9E55;
+  --accent-red: #E84A5F;
+  --radius: 12px;
+  --space: clamp(60px,10vh,120px);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--accent-gold);color:var(--ink)}
+h1,h2,h3{font-family:'Noto Serif SC',serif;font-weight:700;letter-spacing:.02em}
+
+.hero{
+  min-height:65vh;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+  padding:2rem;
+  background:linear-gradient(180deg,var(--bg-deep) 0%,var(--bg) 100%);
+  position:relative;overflow:hidden;
+}
+.hero-deco{
+  position:absolute;top:-18%;left:-8%;
+  font-size:clamp(14rem,28vw,30rem);
+  font-weight:900;color:rgba(43,127,216,.03);
+  pointer-events:none;user-select:none;line-height:1;
+  font-family:'Noto Serif SC',serif;
+}
+.hero h1{
+  font-size:clamp(2rem,5vw,3.8rem);
+  font-weight:900;margin-bottom:.4em;position:relative;z-index:1;
+}
+.hero .sub{
+  font-size:clamp(1rem,1.8vw,1.2rem);
+  color:var(--ink-muted);max-width:30rem;position:relative;z-index:1;
+  font-family:'Noto Serif SC',serif;
+}
+.hero .tagline{
+  font-size:.85rem;color:var(--ink-subtle);
+  margin-top:2rem;position:relative;z-index:1;
+  max-width:28rem;
+  padding:1rem 1.5rem;border-top:1px solid rgba(0,0,0,.06);
+}
+
+.container{max-width:820px;margin:0 auto;padding:0 1.5rem}
+.section{padding:var(--space) 0}
+.section-title{
+  font-size:clamp(1.2rem,2.5vw,1.6rem);
+  margin-bottom:1.5rem;
+  position:relative;display:inline-block;
+}
+.section-title .num{
+  font-family:'Fraunces',serif;font-weight:300;
+  font-size:.7rem;color:var(--accent-blue);
+  text-transform:uppercase;letter-spacing:.12em;
+  display:block;margin-bottom:.2rem;
+}
+.section-title::after{
+  content:'';position:absolute;bottom:-6px;left:0;
+  width:clamp(2rem,4vw,3rem);height:3px;
+  background:var(--accent-gold);border-radius:2px;
+}
+
+p{margin-bottom:1rem;color:var(--ink-muted)}
+p strong{color:var(--ink)}
+ul,ol{padding-left:1.5rem;margin-bottom:1rem;color:var(--ink-muted);line-height:2}
+li strong{color:var(--ink)}
+blockquote{
+  background:var(--bg-deep);
+  border-radius:var(--radius);
+  padding:1.5rem 2rem;
+  margin:1.5rem 0;
+  border-left:3px solid var(--accent-blue);
+  font-size:.95rem;
+  color:var(--ink-muted);
+}
+blockquote strong{color:var(--ink)}
+
+/* table style */
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.9rem}
+th{background:var(--bg-deep);text-align:left;padding:.6rem .8rem;font-weight:700;color:var(--ink);border-bottom:2px solid var(--accent-gold)}
+td{padding:.6rem .8rem;border-bottom:1px solid rgba(0,0,0,.06);color:var(--ink-muted)}
+tr:hover td{background:var(--bg-deep)}
+
+/* code block */
+code{background:var(--bg-deep);padding:.15rem .4rem;border-radius:4px;font-size:.85rem}
+pre{background:var(--bg-deep);border-radius:var(--radius);padding:1.2rem;overflow-x:auto;margin:1.2rem 0;font-size:.85rem;line-height:1.6;border:1px solid rgba(0,0,0,.04)}
+
+/* callout */
+.callout{
+  background:var(--bg-deep);border-radius:var(--radius);
+  padding:1.5rem;margin:1.5rem 0;
+  border-left:3px solid var(--accent-gold);
+}
+.callout-title{font-family:'Noto Serif SC',serif;font-size:1.05rem;margin-bottom:.5rem}
+
+/* 2-col for tables in content */
+@media(min-width:640px){
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+}
+
+/* rating stars */
+.stars{color:var(--accent-gold);letter-spacing:.1em}
+
+.footer{
+  text-align:center;padding:clamp(50px,8vh,100px) 1.5rem;
+  color:var(--ink-subtle);font-size:.85rem;
+  border-top:1px solid rgba(0,0,0,.05);
+  max-width:500px;margin:0 auto;
+}
+.footer .quote{font-family:'Noto Serif SC',serif;font-size:.95rem;color:var(--ink-muted);margin-bottom:1rem}
+
+@media(max-width:600px){
+  .hero{min-height:45vh;padding:2rem 1rem}
+  table{font-size:.8rem}
+}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .5s,transform .5s}
+.reveal.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-deco" aria-hidden="true">🕉</div>
+  <h1>霎哈嘉+X</h1>
+  <p class="sub">中国发展构想</p>
+  <div class="tagline">以带自觉为核心 · 以短视频为载体 · 以发展为场景的终身项目</div>
+</header>
+
+<div class="container">
+  <!-- 一 -->
+  <section class="section reveal">
+    <h2 class="section-title"><span class="num">一</span>霎哈嘉的本质</h2>
+    <p>霎哈嘉瑜伽（Sahaja Yoga）<strong>不是宗教</strong>。</p>
+    <ul>
+      <li>它不要求信仰、不设教条、不拜偶像</li>
+      <li>核心是一套可验证的灵性科学：通过唤醒内在的灵量（Kundalini），使人达到无思虑的自觉状态</li>
+      <li>它以团体的形式发展——集体共修、互助、分享经验是自然形态</li>
+    </ul>
+  </section>
+
+  <!-- 二 -->
+  <section class="section reveal">
+    <h2 class="section-title"><span class="num">二</span>中国的政策环境</h2>
+    <p><strong>国安局已经介入并检查过。</strong></p>
+    <p>结论：</p>
+    <ul>
+      <li>✅ <strong>可以发展</strong> — 不是被禁止</li>
+      <li>⚠️ <strong>私底下发展，不要大张旗鼓</strong></li>
+    </ul>
+    <p>所以策略是：小而美、口碑传播、不搞大规模公开聚会。</p>
+  </section>
+
+  <!-- 三 -->
+  <section class="section reveal">
+    <h2 class="section-title"><span class="num">三</span>中国人的心理障碍</h2>
+    <h3 style="font-size:1.05rem;margin:1.2rem 0 .5rem">1. 教育背景</h3>
+    <p>几十年的唯物主义教育，将"灵性""能量"等概念与"封建迷信"划等号。对"冥想""静坐"有先入为主的抵触。</p>
+    <h3 style="font-size:1.05rem;margin:1.2rem 0 .5rem">2. 环境因素</h3>
+    <p>中国宗教环境的连续发展历史复杂，人们对"宗教"元素敏感。看到团体、集体、崇拜等元素立刻联想到负面案例。</p>
+    <div class="callout"><strong>应对策略：</strong> 不用宗教术语（"神""崇拜""信仰"），用日常语言（"静坐""放松""找到内在的平静"），以结果说话。</div>
+  </section>
+
+  <!-- 四 -->
+  <section class="section reveal">
+    <h2 class="section-title"><span class="num">四</span>核心策略：霎哈嘉+X 模式</h2>
+    <div class="callout" style="border-left-color:var(--accent-green);background:rgba(46,158,85,.04)">
+      <div class="callout-title">核心公式</div>
+      <p><strong>付费服务（生存）+ 免费送霎哈嘉体验（使命）= 可持续</strong></p>
+    </div>
+    <p>并非"免费为主，收费为辅"，而是：</p>
+    <ul>
+      <li>先做付费服务（咨询/讲课），建立信任，展现价值</li>
+      <li>在服务的<strong>最后</strong>，免费赠送霎哈嘉的冥想体验和知识分享</li>
+      <li>自觉/冥想始终免费——这是不可逾越的底线</li>
+      <li>付费是生存手段，带自觉是最终使命，两者不是割裂的，而是递进的</li>
+    </ul>
+
+    <h3 style="font-size:1.05rem;margin:2rem 0 .8rem">两个轮子</h3>
+    <pre>轮子一（收费）            →    轮子二（免费）
+咨询服务 / 讲课服务       →    霎哈嘉冥想体验 + 知识分享
+（解决实际痛点）          →    （带自觉，送终极礼物）</pre>
+
+    <h3 style="font-size:1.05rem;margin:2rem 0 .8rem">为什么这个模式成立</h3>
+    <ol>
+      <li><strong>中国人对"免费灵性"有戒心</strong> — 直接说"免费带冥想"，大多数人觉得是传销</li>
+      <li><strong>付费建立信任</strong> — 你收了钱、提供了真实价值，你说的话有分量</li>
+      <li><strong>服务末尾送冥想</strong> — 是一个"超预期"的惊喜，不是"营销套路"</li>
+      <li><strong>不亏心</strong> — 冥想真的能帮到他们，而且你没收冥想一分钱</li>
+    </ol>
+  </section>
+
+  <!-- 五 -->
+  <section class="section reveal">
+    <h2 class="section-title"><span class="num">五</span>内容引擎：战略认知圆桌</h2>
+    <p>把四种顶级思维模型放在一起，组成"圆桌会议"，从多个角度拆解真实问题：</p>
+    <table>
+      <tr><th>角色</th><th>视角</th><th>管什么</th></tr>
+      <tr><td><strong>Jung</strong></td><td>心理学</td><td>动机、认知盲区、行为背后的思维模式</td></tr>
+      <tr><td><strong>Mankiw</strong></td><td>经济学</td><td>资源配置、机会成本、投入产出比</td></tr>
+      <tr><td><strong>Munger</strong></td><td>模型思维</td><td>风险评估、逻辑严密性、框架是否站得住</td></tr>
+      <tr><td><strong>Musk</strong></td><td>第一性原理</td><td>破除假设、跳出框架、追问前提是否成立</td></tr>
+    </table>
+
+    <h3 style="font-size:1.05rem;margin:2rem 0 .8rem">技术实现</h3>
+    <p>GitHub 上没有直接叫"战略认知圆桌"的开源项目——这个框架是原创概念。推荐用 CrewAI / AutoGen / Swarm / MetaGPT 搭建。</p>
+
+    <h3 style="font-size:1.05rem;margin:2rem 0 .8rem">目前进展</h3>
+    <p>Hermes Agent 已安装全部 4 个角色 Skill + 战略认知圆桌 Skill：</p>
+    <table>
+      <tr><th>角色</th><th>状态</th><th>来源</th></tr>
+      <tr><td>马斯克 ⭐25k</td><td>✅ 已安装</td><td>alchaincyf/elon-musk-skill</td></tr>
+      <tr><td>芒格 ⭐25k</td><td>✅ 已安装</td><td>alchaincyf/munger-skill</td></tr>
+      <tr><td>荣格 🆕</td><td>✅ 已安装</td><td>自行蒸馏</td></tr>
+      <tr><td>曼昆 🆕</td><td>✅ 已安装</td><td>自行蒸馏</td></tr>
+      <tr><td>圆桌 🆕</td><td>✅ 已安装</td><td>自定义回合</td></tr>
+    </table>
+  </section>
+
+  <!-- 六 -->
+  <section class="section reveal">
+    <h2 class="section-title"><span class="num">六</span>霎哈嘉内容本身的做法</h2>
+    <p><strong>定位：</strong>情绪梳理 / 内观疗愈 / 能量感知——不说"霎哈嘉"，说"情绪管理""静心方法"。</p>
+    <p><strong>输出形式：</strong>短视频（抖音/小红书/B站）+ 直播带冥想。</p>
+    <p><strong>引流路径：</strong>战略圆桌短视频 → 付费咨询 → 免费送冥想 → 私域带自觉。</p>
+
+    <h3 style="font-size:1.05rem;margin:2rem 0 .8rem">术语翻译</h3>
+    <table>
+      <tr><th>霎哈嘉术语</th><th>对外说法</th></tr>
+      <tr><td>自觉（Self-Realization）</td><td>打开内在开关 / 唤醒生命能量</td></tr>
+      <tr><td>灵量（Kundalini）</td><td>内在的能量 / 生命力</td></tr>
+      <tr><td>轮穴（Chakra）</td><td>能量中心 / 身体的能量点</td></tr>
+      <tr><td>静坐（Meditation）</td><td>静心 / 内观 / 放松练习</td></tr>
+      <tr><td>普祭（Puja）</td><td>感恩 / 敬拜自然之力</td></tr>
+      <tr><td>集体（Collective）</td><td>同修 / 一起练习的伙伴</td></tr>
+    </table>
+  </section>
+
+  <!-- 七 -->
+  <section class="section reveal">
+    <h2 class="section-title"><span class="num">七</span>你的个人优势</h2>
+    <p>山东滕州，30多岁，有家庭。每天做静坐、连接母亲，持续的灵性修习者。AI/Agent 深度爱好者。</p>
+
+    <h3 style="font-size:1.05rem;margin:2rem 0 .8rem">独特壁垒</h3>
+    <ol>
+      <li><strong>你真正在修</strong> — 不是"研究灵性"的理论派，是每天静坐、做功课的实践者</li>
+      <li><strong>你懂技术</strong> — 比传统灵性导师更懂AI、短视频、自动化</li>
+      <li><strong>你对自己诚实</strong> — 日记里能看清自己的"占小便宜心理""装逼心理"，不骗自己</li>
+      <li><strong>你不急</strong> — 这是终身项目，不是赚快钱</li>
+    </ol>
+
+    <h3 style="font-size:1.05rem;margin:2rem 0 .8rem">需要注意的倾向</h3>
+    <ul>
+      <li>注意不要太执着于工具调试而影响睡眠</li>
+      <li>牙龈萎缩提醒你：熬夜消耗肾气，修行需要身体这个容器</li>
+      <li>你有"把玩具组装好就满足了"的特性——小心一直停留在"准备阶段"</li>
+      <li>行动力在上午比较好，可以利用这个时段做最重要的内容输出</li>
+    </ul>
+  </section>
+
+  <!-- 八 -->
+  <section class="section reveal">
+    <h2 class="section-title"><span class="num">八</span>每天做什么（终身项目节奏）</h2>
+    <h3 style="font-size:1.05rem;margin:1.2rem 0 .5rem">🧘 个人修习（每日，不可动摇）</h3>
+    <ul>
+      <li>静坐（每日 ≥ 30 分钟）</li>
+      <li>连接母亲（每日开机第一件事）</li>
+      <li>读母亲讲话（从 RAG 或本地资料库）</li>
+      <li>轮穴功课（根据当天状态调整）</li>
+    </ul>
+    <h3 style="font-size:1.05rem;margin:1.2rem 0 .5rem">📹 内容生产（每周）</h3>
+    <ul>
+      <li>3-5 条战略圆桌短视频（选题+录制+发布）</li>
+      <li>1 次带冥想直播或录播</li>
+      <li>跟进咨询线索和已带自觉的人</li>
+    </ul>
+  </section>
+
+  <!-- 十 -->
+  <section class="section reveal">
+    <h2 class="section-title"><span class="num">十</span>核心原则</h2>
+    <ol>
+      <li><strong>霎哈嘉不可编</strong> — 所有内容必须有来源（RAG 优先，其次 F:\霎哈嘉瑜伽\）</li>
+      <li><strong>用户指错 → 先信他，查原文</strong> — 不辩解，去查证</li>
+      <li><strong>免费带自觉是核心，付费是生存手段</strong> — 主次不能颠倒</li>
+      <li><strong>私底下发展，不搞大场面</strong> — 尊重国安局的结论</li>
+      <li><strong>用日常话，不用宗教词</strong> — 中国人听懂的才是有效的</li>
+      <li><strong>终身项目，不急一时</strong> — 每天做一点，比一次做很多更重要</li>
+      <li><strong>对自己诚实</strong> — 看清自己的模式（执着、拖延、装逼），不骗自己</li>
+      <li><strong>先入静，再做事</strong> — 2分钟入静比2小时焦虑有用</li>
+    </ol>
+    <blockquote>"我从没有想过会在香港开始，因为很多得到自觉的，之后就迷失了。……若你们有这个愿望，我们可以有一个中心，给别人医治，使人得到自觉，以及得到霎哈嘉瑜伽的知识和技巧。"</blockquote>
+  </section>
+</div>
+
+<footer class="footer">
+  <p class="quote">以带自觉为核心 · 以发展为场景 · 终身项目</p>
+  <p>🕉</p>
+</footer>
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&(e.target.classList.add('visible'),obs.unobserve(e.target))})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(e=>obs.observe(e))
+</script>
+</body>
+</html>

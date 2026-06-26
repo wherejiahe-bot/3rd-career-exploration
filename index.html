@@ -3,224 +3,320 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>霎哈嘉+X · 评估导航</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<title>霎哈嘉+X · 第三职业探索</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #f4f2ee;
-    --card: rgba(255,255,255,.82);
-    --card-border: rgba(0,0,0,.06);
-    --accent: #b87a5a;
-    --accent-soft: rgba(184,122,90,.12);
-    --accent-light: rgba(184,122,90,.06);
-    --text: #1c1c1e;
-    --text-soft: #6e6e73;
-    --text-caption: #aeaeb2;
-    --radius: 16px;
-    --radius-sm: 10px;
-    --shadow: 0 1px 3px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.04);
-    --transition: .2s cubic-bezier(.25,.1,.25,1);
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter','Noto Sans SC',-apple-system,sans-serif;
-    line-height: 1.6;
-    padding: 32px 16px;
-    min-height: 100vh;
-  }
-  .container { max-width: 800px; margin: 0 auto; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg: #fefcf6;
+  --bg-deep: #faf6eb;
+  --ink: #1A1A2E;
+  --ink-muted: #4A4A5A;
+  --ink-subtle: #888;
+  --accent-blue: #2B7FD8;
+  --accent-gold: #F4D758;
+  --accent-red: #E84A5F;
+  --accent-green: #2E9E55;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+::selection{background:var(--accent-gold);color:var(--ink)}
+h1,h2,h3,h4{font-family:'Noto Serif SC',serif;font-weight:700;letter-spacing:.02em}
 
-  .header {
-    text-align: center;
-    padding: 48px 0 32px;
-    position: relative;
-  }
-  .header::after {
-    content: ''; display: block;
-    width: 48px; height: 2px;
-    background: var(--accent);
-    margin: 16px auto 0;
-    border-radius: 1px;
-    opacity: .5;
-  }
-  .header h1 {
-    font-family: 'Noto Serif SC', serif;
-    font-size: clamp(24px,4.5vw,36px);
-    font-weight: 900;
-    color: var(--text);
-    letter-spacing: 3px;
-  }
-  .header .sub {
-    color: var(--text-soft);
-    font-size: clamp(12px,2vw,15px);
-    margin-top: 6px;
-    font-weight: 300;
-  }
+/* header */
+.header{
+  padding:clamp(48px,10vh,100px) 2rem 2rem;
+  text-align:center;
+  position:relative;
+}
+.header-deco{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(8rem,18vw,20rem);
+  font-weight:900;
+  color:rgba(43,127,216,.03);
+  position:absolute;top:-15%;right:-5%;
+  pointer-events:none;user-select:none;
+  line-height:1;
+}
+.header h1{
+  font-size:clamp(1.8rem,4vw,3rem);
+  font-weight:900;
+  position:relative;z-index:1;
+}
+.header .sub{
+  font-size:clamp(.9rem,1.4vw,1.05rem);
+  color:var(--ink-muted);
+  max-width:28rem;margin:0 auto;
+  position:relative;z-index:1;
+}
+.header .tagline{
+  font-size:.8rem;color:var(--ink-subtle);
+  margin-top:1.5rem;position:relative;z-index:1;
+  border-top:1px solid rgba(0,0,0,.05);
+  padding-top:1rem;display:inline-block;
+}
 
-  .version-grid {
-    display: grid;
-    gap: 14px;
-    margin-bottom: 32px;
-  }
-  .version-card {
-    background: var(--card);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-    padding: 24px;
-    text-decoration: none;
-    color: var(--text);
-    display: block;
-    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-    position: relative;
-    overflow: hidden;
-  }
-  .version-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
-    border-color: var(--accent);
-  }
-  .version-card:active {
-    transform: translateY(0);
-  }
-  .version-card .v-badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 12px;
-    border-radius: 12px;
-    margin-bottom: 8px;
-  }
-  .version-card .v-badge.v1 {
-    background: rgba(142,142,147,.12);
-    color: #8e8e93;
-  }
-  .version-card .v-badge.v2 {
-    background: var(--accent-soft);
-    color: var(--accent);
-  }
-  .version-card h2 {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .version-card .date {
-    font-size: 12px;
-    color: var(--text-caption);
-    margin-bottom: 10px;
-  }
-  .version-card .summary {
-    font-size: 13px;
-    color: var(--text-soft);
-    line-height: 1.7;
-  }
-  .version-card .summary strong {
-    color: var(--text);
-  }
-  .version-card .arrow {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 20px;
-    color: var(--text-caption);
-    transition: color var(--transition), right var(--transition);
-  }
-  .version-card:hover .arrow {
-    color: var(--accent);
-    right: 16px;
-  }
+/* section */
+.container{max-width:960px;margin:0 auto;padding:0 1.5rem}
+.nav-section{padding:clamp(32px,5vh,60px) 0}
 
-  .footer-info {
-    text-align: center;
-    font-size: 12px;
-    color: var(--text-caption);
-    padding: 20px 0;
-  }
-  .footer-info a {
-    color: var(--accent);
-    text-decoration: none;
-  }
+.section-label{
+  font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--accent-blue);margin-bottom:.5rem;font-weight:500;
+}
+.section-title{
+  font-size:clamp(1.1rem,2.5vw,1.5rem);
+  margin-bottom:1.5rem;
+  position:relative;display:inline-block;
+}
+.section-title::after{
+  content:'';position:absolute;bottom:-6px;left:0;
+  width:clamp(2rem,4vw,3rem);height:3px;
+  background:var(--accent-gold);border-radius:2px;
+}
 
-  @keyframes fadeUp {
-    from{opacity:0;transform:translateY(12px)}
-    to{opacity:1;transform:translateY(0)}
-  }
-  .header { animation: fadeUp .5s both; }
-  .version-card:nth-child(1) { animation: fadeUp .5s both .15s; }
-  .version-card:nth-child(2) { animation: fadeUp .5s both .25s; }
-  .version-card:nth-child(3) { animation: fadeUp .5s both .35s; }
-  .version-card:nth-child(4) { animation: fadeUp .5s both .45s; }
+/* card grid */
+.card-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));
+  gap:1rem;
+}
+.card{
+  background:#fff;
+  border-radius:var(--radius);
+  padding:1.5rem;
+  box-shadow:0 1px 2px rgba(0,0,0,.04),0 3px 12px rgba(0,0,0,.03);
+  transition:box-shadow .25s,transform .25s;
+  position:relative;
+  overflow:hidden;
+}
+.card:hover{
+  box-shadow:0 2px 8px rgba(0,0,0,.06),0 6px 24px rgba(0,0,0,.04);
+  transform:translateY(-3px);
+}
+.card .emoji{font-size:1.6rem;margin-bottom:.6rem}
+.card .name{
+  font-family:'Noto Serif SC',serif;
+  font-size:1rem;font-weight:700;
+  margin-bottom:.4rem;
+}
+.card .desc{
+  font-size:.82rem;color:var(--ink-muted);
+  line-height:1.6;margin-bottom:.8rem;
+}
+.card .stats{
+  display:flex;gap:.6rem;flex-wrap:wrap;
+  margin-bottom:.8rem;
+}
+.card .stat{
+  font-size:.7rem;padding:.15rem .5rem;
+  border-radius:8px;background:var(--bg-deep);
+  color:var(--ink-subtle);
+}
+.card .stat.blue{background:rgba(43,127,216,.08);color:var(--accent-blue)}
+.card .stat.gold{background:rgba(244,215,88,.15);color:#7A6A1C}
+.card .stat.green{background:rgba(46,158,85,.08);color:var(--accent-green)}
+.card .stat.red{background:rgba(232,74,95,.08);color:var(--accent-red)}
+
+.card .link{
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-size:.82rem;
+  color:var(--accent-blue);text-decoration:none;
+  font-weight:500;
+  transition:gap .2s;margin-top:.3rem;
+}
+.card .link:hover{gap:.5rem}
+.card .link::after{content:'→';transition:transform .2s}
+.card .link:hover::after{transform:translateX(3px)}
+.card.big{grid-column:1/-1}
+.card.big .name{font-size:1.15rem}
+
+/* list style */
+.doc-list{display:grid;gap:.7rem}
+.doc-item{
+  background:#fff;border-radius:var(--radius-sm);
+  padding:1rem 1.2rem;display:flex;align-items:center;gap:.8rem;
+  box-shadow:0 1px 2px rgba(0,0,0,.04);
+  transition:background .2s,transform .2s;
+  text-decoration:none;color:inherit;
+}
+.doc-item:hover{background:var(--bg-deep);transform:translateX(4px)}
+.doc-item .icon{font-size:1.2rem;flex-shrink:0}
+.doc-item .info{flex:1;min-width:0}
+.doc-item .title{font-size:.92rem;font-weight:500}
+.doc-item .meta{font-size:.75rem;color:var(--ink-subtle);margin-top:.1rem}
+.doc-item .size{font-size:.7rem;color:var(--ink-subtle);flex-shrink:0}
+
+/* divider */
+.divider{
+  text-align:center;font-size:.7rem;letter-spacing:.15em;
+  color:var(--ink-subtle);padding:1.5rem 0;
+  position:relative;
+}
+.divider::before,.divider::after{
+  content:'';position:absolute;top:50%;
+  height:1px;width:clamp(3rem,10vw,6rem);
+  background:rgba(0,0,0,.06);
+}
+.divider::before{left:0}
+.divider::after{right:0}
+
+/* footer */
+.footer{
+  text-align:center;
+  padding:clamp(40px,6vh,80px) 1.5rem;
+  font-size:.85rem;color:var(--ink-subtle);
+}
+
+@media(max-width:500px){
+  .header{padding:2rem 1rem 1.5rem}
+  .card-grid{grid-template-columns:1fr}
+}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .45s,transform .45s}
+.reveal.visible{opacity:1;transform:none}
 </style>
 </head>
 <body>
-<div class="container">
 
 <div class="header">
-  <h1>霎哈嘉+X · 评估导航</h1>
-  <div class="sub">十二维评估矩阵 · 多期版本</div>
+  <div class="header-deco" aria-hidden="true">3rd</div>
+  <h1>霎哈嘉+X · 第三职业探索</h1>
+  <p class="sub">以带自觉为核心 · 以发展为场景 · 以AI为杠杆</p>
+  <div class="tagline">🏠 山东滕州 · 终身项目</div>
 </div>
 
-<div class="version-grid">
-
-  <a href="v004.html" class="version-card" style="border-color: var(--accent);">
-    <span class="v-badge v2">V004 <span style="font-weight:400;">· 最新</span></span>
-    <h2>第四期 · 情绪梳理师APP上线 + 基础设施爆发</h2>
-    <div class="date">2026-06-22 · 新增情绪梳理师APP · AI搭建▲2</div>
-    <div class="summary">
-      <strong>18个项目（17→18）</strong> · 6维30分制 · 鼠标悬停看评分依据<br>
-      排名：视频创作(27) &gt; AI技能搭建(26 ▲2) &gt; 情绪梳理师APP(24 NEW) = 状态梳理(24)<br>
-      💡 主题：工具即玩具 · 基础设施就绪 · 自动化传播矩阵成型
+<div class="container">
+  <!-- 核心项目 -->
+  <div class="nav-section reveal">
+    <div class="section-label">核心导航</div>
+    <h2 class="section-title">项目总览</h2>
+    <div class="card-grid">
+      <a class="card big" href="v004.html" style="text-decoration:none;color:inherit">
+        <div class="emoji">📊</div>
+        <div class="name">十二维评估矩阵 · 排名总览</div>
+        <div class="desc">17个职业方向基于教义合规、内心意愿、静坐配合、轻脑子闭环等12个维度的五星评分与排名。</div>
+        <div class="stats">
+          <span class="stat blue">17 项目</span>
+          <span class="stat gold">12 维度</span>
+          <span class="stat green">🥇 视频创作 IP 27/30</span>
+        </div>
+        <span class="link">查看完整评估</span>
+      </a>
     </div>
-    <span class="arrow">→</span>
-  </a>
+  </div>
 
-  <a href="v003.html" class="version-card">
-    <span class="v-badge v2">V003</span>
-    <h2>第三期 · 6维精炼 + 3个新项目</h2>
-    <div class="date">2026-06-15 · 新增翻译流水线/UUMit/黄庭打卡</div>
-    <div class="summary">
-      <strong>17个项目（14→17）</strong> · 6维30分制 · 鼠标悬停看评分依据<br>
-      排名：视频创作(27) &gt; 状态梳理(24) = AI搭建(24) &gt; 翻译流水线(23) = 初班(23)<br>
-      💡 主题：建系统而非做内容。翻译流水线+自动化=不费力传播
+  <!-- 圆桌报告 -->
+  <div class="nav-section reveal">
+    <div class="section-label">战略认知圆桌</div>
+    <h2 class="section-title">2026年6月 · 四份深度报告</h2>
+    <div class="card-grid">
+      <a class="card" href="strategic-roundtable/圆桌分析报告.html" style="text-decoration:none;color:inherit">
+        <div class="emoji">🧠</div>
+        <div class="name">战略圆桌分析报告</div>
+        <div class="desc">荣格·曼昆·芒格·马斯克 四维聚焦，拆解"普通人怎么用AI开始赚钱"</div>
+        <div class="stats">
+          <span class="stat">🌙 Jung</span>
+          <span class="stat">📊 Mankiw</span>
+          <span class="stat">🧠 Munger</span>
+          <span class="stat">🚀 Musk</span>
+        </div>
+        <span class="link">阅读报告</span>
+      </a>
+
+      <a class="card" href="strategic-roundtable/赚钱方向研究报告.html" style="text-decoration:none;color:inherit">
+        <div class="emoji">💰</div>
+        <div class="name">2026 赚钱方向研究</div>
+        <div class="desc">10个线上创业方向优先排序，含启动成本、预期收入、本周行动方案</div>
+        <div class="stats">
+          <span class="stat green">3 个最高优先</span>
+          <span class="stat gold">3 个次优先</span>
+        </div>
+        <span class="link">查看方向</span>
+      </a>
+
+      <a class="card" href="strategic-roundtable/霎哈嘉+X中国发展构想.html" style="text-decoration:none;color:inherit">
+        <div class="emoji">🕉</div>
+        <div class="name">霎哈嘉+X 中国发展构想</div>
+        <div class="desc">以带自觉为核心的终身项目蓝图——策略、内容引擎、日常节奏、核心原则</div>
+        <div class="stats">
+          <span class="stat blue">10 章节</span>
+          <span class="stat gold">战略认知圆桌</span>
+        </div>
+        <span class="link">阅读构想</span>
+      </a>
+
+      <a class="card" href="strategic-roundtable/商业思维笔记.html" style="text-decoration:none;color:inherit">
+        <div class="emoji">📝</div>
+        <div class="name">商业思维笔记</div>
+        <div class="desc">从信息差套利到AI一人公司 —— 周小满贴牌模式、清华奶爸方法论、Spicy Brain 50万案例</div>
+        <div class="stats">
+          <span class="stat">4 篇笔记</span>
+          <span class="stat red">实战拆解</span>
+        </div>
+        <span class="link">阅读笔记</span>
+      </a>
     </div>
-    <span class="arrow">→</span>
-  </a>
+  </div>
 
-  <a href="v002.html" class="version-card">
-    <span class="v-badge v2">V002</span>
-    <h2>第二期 · 霎哈嘉+X 验证驱动更新</h2>
-    <div class="date">2026-06-09 · 算卦咨询验证 + 项目精简</div>
-    <div class="summary">
-      <strong>霎哈嘉+玄学咨询已验证收钱</strong> · 含变动对比 + 鼠标悬停看原因<br>
-      排名：状态梳理(54 ▲+2) &gt; 免费初班(50 ▲+4) &gt; 内容创作(49 NEW)<br>
-      删除：AI训练包工头、Excel/VBA兼职 · 写小说改AI辅助(45 ▲+7)
+  <!-- README -->
+  <div class="nav-section reveal">
+    <div class="section-label">项目定义</div>
+    <h2 class="section-title">源码与背景</h2>
+    <div class="doc-list">
+      <a class="doc-item" href="README.md">
+        <span class="icon">📄</span>
+        <div class="info">
+          <div class="title">README.md</div>
+          <div class="meta">霎哈嘉+X · 十二维评估矩阵 · 项目入口说明</div>
+        </div>
+        <span class="size">1.4K</span>
+      </a>
+      <a class="doc-item" href="https://github.com/wherejiahe-bot/3rd-career-exploration" target="_blank">
+        <span class="icon">🐙</span>
+        <div class="info">
+          <div class="title">GitHub 仓库</div>
+          <div class="meta">wherejiahe-bot/3rd-career-exploration · 查看全部提交历史</div>
+        </div>
+        <span class="size">→</span>
+      </a>
+      <a class="doc-item" href="2026赚钱方向研究报告.md">
+        <span class="icon">📘</span>
+        <div class="info">
+          <div class="title">2026赚钱方向研究报告（原始 MD）</div>
+          <div class="meta">AI 搜索生成的完整研究方向报告</div>
+        </div>
+        <span class="size">4.3K</span>
+      </a>
+      <a class="doc-item" href="霎哈嘉+x-中国发展构想.md">
+        <span class="icon">📘</span>
+        <div class="info">
+          <div class="title">霎哈嘉+x-中国发展构想（原始 MD）</div>
+          <div class="meta">项目主文档 · Markdown 源文件</div>
+        </div>
+        <span class="size">12K</span>
+      </a>
     </div>
-    <span class="arrow">→</span>
-  </a>
-
-  <a href="v001.html" class="version-card">
-    <span class="v-badge v1">V001</span>
-    <h2>第一期 · 霎哈嘉+X 十二维评估矩阵</h2>
-    <div class="date">2026-05-30</div>
-    <div class="summary">
-      <strong>10个项目 × 12维度</strong> · 首版全量分析<br>
-      排名：状态梳理(52) &gt; 体呼吸(49) &gt; AI训练师(47) &gt; 冥想带领(46)
-    </div>
-    <span class="arrow">→</span>
-  </a>
-
+  </div>
 </div>
 
-<div class="footer-info">
-  <a href="https://github.com/wherejiahe-bot/3rd-career-exploration" target="_blank">GitHub 仓库</a>
-</div>
+<footer class="footer">
+  <p>霎哈嘉不可编 · 先入静再做事 · 终身项目不急一时 🕉</p>
+</footer>
 
-</div>
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&(e.target.classList.add('visible'),obs.unobserve(e.target))})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(e=>obs.observe(e))
+</script>
 </body>
 </html>
-
