@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>霎哈嘉+X · 第六期评估 · 2026-07-06</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #f4f2ee; --card: rgba(255,255,255,.82); --card-border: rgba(0,0,0,.06); --accent: #b87a5a; --accent-soft: rgba(184,122,90,.12); --accent-light: rgba(184,122,90,.06); --text: #1c1c1e; --text-soft: #6e6e73; --text-caption: #aeaeb2; --gold: #c49032; --gold-empty: #e5ddd4; --radius: 16px; --radius-sm: 10px; --shadow: 0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04); --transition: .2s cubic-bezier(.25,.1,.25,1); --green: #30d158; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Inter','Noto Sans SC',-apple-system,sans-serif; line-height:1.6; padding:28px 16px; min-height:100vh; }
+  .container { max-width:1060px; margin:0 auto; }
+  .header { text-align:center; padding:36px 0 20px; position:relative; }
+  .header::after { content:''; display:block; width:48px; height:2px; background:var(--accent); margin:14px auto 0; border-radius:1px; opacity:.6; }
+  .header h1 { font-family:'Noto Serif SC',serif; font-size:clamp(22px,4vw,34px); font-weight:900; color:var(--text); letter-spacing:3px; }
+  .header .sub { color:var(--text-soft); font-size:clamp(12px,2vw,15px); margin-top:4px; font-weight:300; }
+  .header .badge { display:inline-block; background:var(--accent-soft); color:var(--accent); padding:2px 14px; border-radius:20px; font-size:12px; margin-top:10px; font-weight:500; }
+  .phase-note { max-width:700px; margin:18px auto 24px; padding:14px 18px; background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius-sm); font-size:12px; color:var(--text-soft); line-height:1.7; }
+  .phase-note strong { color:var(--accent); font-weight:600; }
+  .legend { display:flex; flex-wrap:wrap; gap:6px 18px; justify-content:center; padding:8px 0 22px; font-size:12px; color:var(--text-soft); }
+  .legend-item { display:flex; align-items:center; gap:4px; }
+  .star { color:var(--gold); font-size:14px; } .star-e { color:var(--gold-empty); }
+  .diff-up { color:var(--green); font-size:11px; font-weight:500; } .diff-down { color:#ff453a; font-size:11px; font-weight:500; } .diff-none { color:var(--text-caption); font-size:11px; }
+  .dim-bar { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-bottom:24px; }
+  .dim-pill { display:inline-flex; align-items:center; gap:3px; background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); padding:5px 12px; border-radius:20px; font-size:11px; font-weight:500; color:var(--text-soft); cursor:help; position:relative; transition:background var(--transition),border-color var(--transition); }
+  .dim-pill:hover { background:var(--accent-light); border-color:var(--accent); color:var(--accent); }
+  .dim-pill .num { display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; border-radius:50%; background:var(--accent-soft); color:var(--accent); font-size:9px; font-weight:700; margin-right:2px; }
+  .dim-pill:hover .num { background:var(--accent); color:#fff; }
+  .dim-pill .tip { display:none; position:absolute; bottom:calc(100%+8px); left:50%; transform:translateX(-50%); background:var(--text); color:#f0ebe4; font-size:10px; font-weight:400; padding:6px 12px; border-radius:8px; white-space:nowrap; z-index:20; line-height:1.4; }
+  .dim-pill:hover .tip { display:block; }
+  .change-cell { position:relative; cursor:help; border-bottom:1px dotted var(--text-caption); }
+  .change-cell .change-tip { display:none; position:absolute; bottom:calc(100%+8px); left:50%; transform:translateX(-50%); background:#1c1c1e; color:#f0ebe4; font-size:10px; font-weight:400; padding:7px 13px; border-radius:8px; z-index:30; line-height:1.5; max-width:280px; min-width:180px; text-align:left; white-space:normal; word-break:break-word; }
+  tbody td:last-child .change-tip { left:auto; right:0; transform:none; }
+  .summary-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-bottom:28px; }
+  .summary-card { background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius); padding:16px 12px; text-align:center; transition:transform var(--transition),box-shadow var(--transition); cursor:default; }
+  .summary-card:hover { transform:translateY(-2px); box-shadow:var(--shadow); }
+  .summary-card .rank { font-size:22px; font-weight:700; font-family:'Noto Serif SC',serif; }
+  .summary-card .label { font-size:12px; color:var(--text-soft); margin-top:1px; }
+  .summary-card .score-line { font-size:11px; color:var(--accent); font-weight:500; margin-top:5px; }
+  .summary-card .delta { font-size:10px; margin-top:2px; }
+  .summary-card.best { border-color:var(--accent); background:linear-gradient(135deg,rgba(184,122,90,.08),rgba(184,122,90,.02)); }
+  .c1 { color:var(--accent); } .c2 { color:#8a7a6a; } .c3 { color:var(--text-caption); }
+  .tw { background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius); overflow-x:auto; padding:2px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; min-width:900px; }
+  thead th { text-align:center; padding:10px 6px; font-weight:600; color:var(--text); border-bottom:1.5px solid rgba(184,122,90,.2); white-space:nowrap; position:sticky; top:0; background:var(--card); z-index:2; font-size:11px; }
+  thead th:first-child { text-align:left; padding-left:14px; min-width:140px; }
+  tbody td { padding:8px 6px; border-bottom:1px solid rgba(0,0,0,.04); vertical-align:middle; text-align:center; font-size:11px; }
+  tbody td:first-child { font-weight:600; padding-left:14px; text-align:left; white-space:nowrap; font-size:12px; }
+  tbody tr:hover { background:var(--accent-light); }
+  tbody tr:last-child td { border-bottom:none; }
+  .total-c { font-weight:700; font-size:14px; color:var(--accent); }
+  .total-c.up { color:var(--green); }
+  .analysis { margin-top:32px; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .analysis-card { background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius); padding:18px; }
+  .analysis-card h3 { font-family:'Noto Serif SC',serif; font-size:15px; font-weight:700; color:var(--accent); margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid rgba(184,122,90,.15); }
+  .analysis-card li,.analysis-card p { font-size:12px; color:var(--text); padding:3px 0; line-height:1.7; list-style:none; }
+  .analysis-card li::before { content:'·'; color:var(--accent); margin-right:5px; }
+  .analysis-card .highlight { background:var(--accent-light); border-left:2px solid var(--accent); padding:8px 12px; margin:6px 0; border-radius:0 6px 6px 0; font-size:12px; }
+  .new-badge { display:inline-block; background:rgba(48,209,88,.12); color:var(--green); font-size:10px; font-weight:600; padding:1px 8px; border-radius:10px; margin-left:4px; }
+  .merge-badge { display:inline-block; background:rgba(184,122,90,.12); color:var(--accent); font-size:10px; font-weight:600; padding:1px 8px; border-radius:10px; margin-left:4px; }
+  .removed-item { opacity:.35; text-decoration:line-through; }
+  @media(max-width:768px) { body{padding:14px 10px} .summary-grid{grid-template-columns:repeat(2,1fr)} .analysis{grid-template-columns:1fr} table{font-size:10px;min-width:680px} thead th,tbody td{padding:5px 3px} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .header,.phase-note,.summary-grid,.tw,.analysis { animation:fadeUp .5s both; }
+  .phase-note{animation-delay:.08s} .summary-grid{animation-delay:.15s} .tw{animation-delay:.25s} .analysis{animation-delay:.35s}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>霎哈嘉+X · 第六期评估</h1>
+  <div class="sub">2026-07-06 · 维护加固 · 战略落地 · Mother's Love诞生</div>
+  <div class="badge">第六期 · 19项目 · 6维</div>
+</div>
+
+<div class="phase-note">
+  <strong>📌 本期变化：19项目（+1），0项评分变动</strong><br>
+  · <strong style="color:var(--green);">新增</strong> Mother's Love内容传播项目（22分）——战略文档齐备，内容管线设计完毕，待启动<br>
+  · 本周被鲜明的划分为"维护周"：飞书桥接修复×3轮、amruta pipeline并行优化、7个提醒统一修复、Lark-Codex桥接WebSocket新建<br>
+  · 基础设施层面遭遇打击：DS2API上游DeepSeek封号（503无解），但整体链路仍维持运转<br>
+  · 灵性层面深度延续：注意力-亲近模式觉察、父亲条件化大突破、善意频率识别系统成型、三脉七轮确定语句贯通<br>
+  · 🧠 主题：维护加固周 · 战略落地开端 · 灵性觉察系统化
+</div>
+
+<div class="dim-bar">
+  <span class="dim-pill"><span class="num">1</span> 想做就启<span class="tip">实际想做+今天就能开始？行为＞意愿</span></span>
+  <span class="dim-pill"><span class="num">2</span> 轻脑轻松<span class="tip">做完能直接干下一件事，不费脑不累身</span></span>
+  <span class="dim-pill"><span class="num">3</span> 传播<span class="tip">有带自觉机会，能传播霎哈嘉的语言/能量</span></span>
+  <span class="dim-pill"><span class="num">4</span> 成长<span class="tip">对个人灵性进步有直接帮助</span></span>
+  <span class="dim-pill"><span class="num">5</span> 收钱<span class="tip">已验证＞能收未验证＞无法收费</span></span>
+  <span class="dim-pill"><span class="num">6</span> 自由<span class="tip">时间灵活，想干就干随时可停</span></span>
+</div>
+
+<h3 style="font-family:'Noto Serif SC',serif;font-size:15px;color:var(--text-soft);margin-bottom:10px;">🏆 综合排名（6维·30分制）</h3>
+<div class="summary-grid">
+  <div class="summary-card best">
+    <div class="rank c1">🥇 视频创作</div><div class="label">本周无新视频，APP工作流仍在</div>
+    <div class="score-line">27/30</div>
+    <div class="delta diff-none">—</div>
+  </div>
+  <div class="summary-card best">
+    <div class="rank c1">🥇 AI技能搭建</div><div class="label">维护周·DS2API被封·lark-codex-bridge新方向</div>
+    <div class="score-line">27/30</div>
+    <div class="delta diff-none">—</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c3">③ 情绪梳理师APP</div><div class="label">本周无APP层面新动作</div>
+    <div class="score-line">24/30</div>
+    <div class="delta diff-none">—</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c3">③ 状态梳理</div><div class="label">1v1方向待定型</div>
+    <div class="score-line">24/30</div>
+    <div class="delta diff-none">—</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c3">⑤ 翻译流水线</div><div class="label">amruta修复+并行优化(15→2min)</div>
+    <div class="score-line">24/30</div>
+    <div class="delta diff-none">—</div>
+  </div>
+</div>
+
+<div class="tw">
+<table>
+<thead>
+<tr>
+  <th>项目</th>
+  <th>①想做就启</th><th>②轻脑轻松</th><th>③传播</th>
+  <th>④成长</th><th>⑤收钱</th><th>⑥自由</th>
+  <th>总分</th><th>变动</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>🎥 状态梳理对应视频创作<br><span style="font-size:10px;color:var(--text-caption);">情绪梳理师APP视频工作流推动持续输出</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c" style="font-weight:900;">27</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。本周无新视频发布记录，但APP工作流持续可用。</span></td>
+</tr>
+<tr>
+  <td>🔧 AI技能搭建服务<br><span style="font-size:10px;color:var(--text-caption);">DS2API+codex-proxy+agents-router+hermes-switcher+lark-codex-bridge WebSocket</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td class="total-c" style="font-weight:900;">27</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。本周维护为主：飞书桥接全面修复×3轮（bridge.py重复发送/循环死锁/JSON模式）、amruta pipeline并行翻译优化(20线程15→2min)、CodeX飞书桥接v3(卡片消息+Typing标签)、7个提醒不通知修复、lark-codex-bridge WebSocket新建+测试通过。但DS2API上游DeepSeek封号(503无解)。整体链路维持，无新增突破。</span></td>
+</tr>
+<tr>
+  <td>🧠 情绪梳理师APP<br><span style="font-size:10px;color:var(--text-caption);">实时语音监听+分析+霎哈嘉知识库·6/16上线</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">24</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。本周无APP层面新动作。</span></td>
+</tr>
+<tr>
+  <td>🪷 状态梳理<br><span style="font-size:10px;color:var(--text-caption);">启迪式咨询·1v1方向待明确</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">24</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>📖 霎哈嘉文章AI翻译流水线<br><span style="font-size:10px;color:var(--text-caption);">amruta-actions·GitHub Actions自动化·Mistral Small 4句级对齐</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star-e">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">24</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。6/30修复amruta pipeline全线（并行翻译20线程15→2min），设每日cron备份。维护性修复，无新增技术升级。</span></td>
+</tr>
+<tr>
+  <td>🌿 免费初班<br><span style="font-size:10px;color:var(--text-caption);">户外亭子·念初阶书·公益不收费</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star-e">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">23</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。公益项目不收费，③④全满分。本周日记记录沈阳交流会感悟及带班可用语句。</span></td>
+</tr>
+<tr>
+  <td>🌷 Mother's Love内容传播<br><span style="font-size:10px;color:var(--accent);font-weight:600;">✨ 新增</span><br><span style="font-size:10px;color:var(--text-caption);">内容传播项目·三条内容线·短视频优先·三步自觉结尾</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star-e">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c" style="font-weight:900;">22</td>
+  <td class="change-cell"><span class="diff-up">🆕</span><span class="change-tip">第一期。7/5新建并完成5份战略文档（使命/战略/内容管线/资源索引/团队角色）。三大支柱：信息差套利+卖已火换卖点+一人公司AI放大。三条内容线：母亲语录/冥想引导/修习者见证。③=5、④=5、⑥=5。①=4(战略齐备待执行)、②=3(管线搭建中)、⑤=0(纯传播不收费)。总分22。</span></td>
+</tr>
+<tr>
+  <td>🎬 AI短视频制作<br><span style="font-size:10px;color:var(--text-caption);">MoneyPrinterTurbo·霎哈嘉/佛教</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">22</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。本周无短视频相关活动。</span></td>
+</tr>
+<tr>
+  <td>🧘 体呼吸<br><span style="font-size:10px;color:var(--text-caption);">丹道·自己练透再教</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">21</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>💬 心理咨询<br><span style="font-size:10px;color:var(--text-caption);">倾听陪伴型</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">21</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>🔮 玄学咨询<br><span style="font-size:10px;color:var(--text-caption);">算卦·1v1收费·需太初之母授权</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">21</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>🕉️ 100天神意照黄庭打卡<br><span style="font-size:10px;color:var(--text-caption);">每日修行·自动化记录·6/23恢复</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star-e">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">21</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。本周日记中未特别提及黄庭打卡，但项目持续活跃中。</span></td>
+</tr>
+<tr>
+  <td>🖨️ 3D打印创业<br><span style="font-size:10px;color:var(--text-caption);">Bambu P1S·摆摊卖玩偶</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">19</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>🤖 AI训练师<br><span style="font-size:10px;color:var(--text-caption);">数据标注平台</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">19</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>💰 UUMit接任务/知识商品<br><span style="font-size:10px;color:var(--text-caption);">平台接任务+创建知识商品·自动化巡航</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td class="total-c">19</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。巡航自动化持续运行中。</span></td>
+</tr>
+<tr>
+  <td>✍️ 写小说<br><span style="font-size:10px;color:var(--accent);font-weight:600;">AI辅助</span><br><span style="font-size:10px;color:var(--text-caption);">LLM辅助创作</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">18</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。从未启动。</span></td>
+</tr>
+<tr>
+  <td>🛡️ 语言防卫App<br><span style="font-size:10px;color:var(--text-caption);">Android实时回怼</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">16</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>💻 玄学代码技术<br><span style="font-size:10px;color:var(--text-caption);">在玄学领域公司做技术开发</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">14</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>🌾 农业<br><span style="font-size:10px;color:var(--text-caption);">合肥布米农场·有机水稻</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">13</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div style="margin:14px 0 28px;font-size:11px;color:var(--text-caption);text-align:center;">
+  6维(30分制) | 19项目(+1新增) | 0项评分变动 | 🥇 并列·视频创作/AI技能搭建(27) | 新增·Mother's Love(22)
+</div>
+
+<div class="analysis">
+<div class="analysis-card">
+  <h3>🏆 推荐方案</h3>
+  <div class="highlight"><strong>🥇并列保持不变（27）+ Mother's Love新入局（22）</strong></div>
+  <p><strong>短线·维护期 → 无新突破</strong></p>
+  <li>AI技能搭建（27）：本周是彻底的"维护加固周"——飞书桥接修复×3轮、amruta pipeline并行优化、7个提醒修复、lark-codex-bridge WebSocket新建。但DS2API上游DeepSeek封号(503无解)是重大打击。系统整体维持，但"从搭到造"的势头暂停。</li>
+  <li>视频创作（27）：APP工作流持续可用，但无新视频发布。</li>
+  <br>
+  <p><strong>战略级新增·Mother's Love → 内容传播正式立项</strong></p>
+  <li>7/5新建项目，5份战略文档齐备（使命/战略/内容管线/资源索引/团队角色）</li>
+  <li>三大策略支柱：信息差套利 + 卖已火换卖点 + 一人公司AI放大</li>
+  <li>三条内容线：母亲语录(每周2-3条) + 冥想引导(每周1-2条) + 修习者见证(每周1条)</li>
+  <li>优先短视频(60秒内)，内容末尾统一带三步自觉引导</li>
+  <li>平台选择：小红书⭐⭐⭐ · 视频号⭐⭐⭐ · 抖音⭐⭐</li>
+  <li>当前状态：战略完备待启动</li>
+  <br>
+  <p><strong>方向确认·Mother's Love = 霎哈嘉+X的传播引擎</strong></p>
+  <li>Mother's Love本质上是"霎哈嘉+X中国发展构想"的落地执行层——把战略文档里的"免费带自觉"拆成了可执行的内容管线。</li>
+</div>
+<div class="analysis-card">
+  <h3>💡 本周关键发现</h3>
+  <li><strong>维护周的系统韧性。</strong>本周没有"新东西"，但修复了5-6处基础设施问题（飞书桥接、amruta、7个提醒、DS2API封号）。系统在故障中维持运转，恰恰说明体系已具韧性。</li>
+  <br>
+  <li><strong>条件化大突破。</strong>7/2深度觉察父亲"你管这些干嘛"的条件化事件——从1987年(约4岁)写入的"关心会被拒绝，安全的方式是闭嘴"程序，到38年后的今天才真正看见。解法：每次"被伤害→想封闭"的感觉上来，直接沉到心口，不用脑子分析。</li>
+  <br>
+  <li><strong>善意频率觉察系统成型。</strong>6/30发现能识别别人释放的友善频率——可通过额轮是否堵塞来辨别。对妻子长期不在友善频率中的觉察，解释了为什么没有愿望与她交流。这是灵性感知的精细化和体系化。</li>
+  <br>
+  <li><strong>"做母亲的事"——内容传播的终极归位。</strong>7/4重访青岛交流会启发：我们只需去做太初之母的事，不是为了自己做，不是服务于自己的自我/习性/喜好。Mother's Love正是对太初之母问题的回答。同时悟到"三脉七轮确定语句走完，连接自然来了"——灵性实践已经找到自己的节奏。</li>
+  <br>
+  <li><strong>AI辅助人生模式觉醒。</strong>7/5的洞见：让AI排课→学→做作业。这是Shankara最熟悉也最有劲头的模式。不必自己摸索，AI当老师，自己做学生，学完了照做。简单、有劲、如有神助。</li>
+  <br>
+  <li><strong>Visa卡计划。</strong>7/3记录办Visa卡收国际收入的计划——可能通过海外短视频/项目赚美金。这是收入来源多元化的一个潜在方向。</li>
+</div>
+</div>
+
+<div style="text-align:center;margin-top:40px;padding:20px 0;border-top:1px solid var(--card-border)">
+  <a href="v005.html" style="color:var(--text-soft);text-decoration:none;font-size:12px;margin-right:24px;">← 第五期</a>
+  <a href="index.html" style="color:var(--accent);text-decoration:none;font-size:13px;font-weight:500;">返回评估导航页</a>
+</div>
+
+</div>
+</body>
+</html>
