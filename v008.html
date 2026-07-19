@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>霎哈嘉+X · 第八期评估 · 2026-07-20</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #f4f2ee; --card: rgba(255,255,255,.82); --card-border: rgba(0,0,0,.06); --accent: #b87a5a; --accent-soft: rgba(184,122,90,.12); --accent-light: rgba(184,122,90,.06); --text: #1c1c1e; --text-soft: #6e6e73; --text-caption: #aeaeb2; --gold: #c49032; --gold-empty: #e5ddd4; --radius: 16px; --radius-sm: 10px; --shadow: 0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04); --transition: .2s cubic-bezier(.25,.1,.25,1); --green: #30d158; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Inter','Noto Sans SC',-apple-system,sans-serif; line-height:1.6; padding:28px 16px; min-height:100vh; }
+  .container { max-width:1060px; margin:0 auto; }
+  .header { text-align:center; padding:36px 0 20px; position:relative; }
+  .header::after { content:''; display:block; width:48px; height:2px; background:var(--accent); margin:14px auto 0; border-radius:1px; opacity:.6; }
+  .header h1 { font-family:'Noto Serif SC',serif; font-size:clamp(22px,4vw,34px); font-weight:900; color:var(--text); letter-spacing:3px; }
+  .header .sub { color:var(--text-soft); font-size:clamp(12px,2vw,15px); margin-top:4px; font-weight:300; }
+  .header .badge { display:inline-block; background:var(--accent-soft); color:var(--accent); padding:2px 14px; border-radius:20px; font-size:12px; margin-top:10px; font-weight:500; }
+  .phase-note { max-width:700px; margin:18px auto 24px; padding:14px 18px; background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius-sm); font-size:12px; color:var(--text-soft); line-height:1.7; }
+  .phase-note strong { color:var(--accent); font-weight:600; }
+  .legend { display:flex; flex-wrap:wrap; gap:6px 18px; justify-content:center; padding:8px 0 22px; font-size:12px; color:var(--text-soft); }
+  .legend-item { display:flex; align-items:center; gap:4px; }
+  .star { color:var(--gold); font-size:14px; } .star-e { color:var(--gold-empty); }
+  .diff-up { color:var(--green); font-size:11px; font-weight:500; } .diff-down { color:#ff453a; font-size:11px; font-weight:500; } .diff-none { color:var(--text-caption); font-size:11px; }
+  .dim-bar { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-bottom:24px; }
+  .dim-pill { display:inline-flex; align-items:center; gap:3px; background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); padding:5px 12px; border-radius:20px; font-size:11px; font-weight:500; color:var(--text-soft); cursor:help; position:relative; transition:background var(--transition),border-color var(--transition); }
+  .dim-pill:hover { background:var(--accent-light); border-color:var(--accent); color:var(--accent); }
+  .dim-pill .num { display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; border-radius:50%; background:var(--accent-soft); color:var(--accent); font-size:9px; font-weight:700; margin-right:2px; }
+  .dim-pill:hover .num { background:var(--accent); color:#fff; }
+  .dim-pill .tip { display:none; position:absolute; bottom:calc(100%+8px); left:50%; transform:translateX(-50%); background:var(--text); color:#f0ebe4; font-size:10px; font-weight:400; padding:6px 12px; border-radius:8px; white-space:nowrap; z-index:20; line-height:1.4; }
+  .dim-pill:hover .tip { display:block; }
+  .change-cell { position:relative; cursor:help; border-bottom:1px dotted var(--text-caption); }
+  .change-cell .change-tip { display:none; position:absolute; bottom:calc(100%+8px); left:50%; transform:translateX(-50%); background:#1c1c1e; color:#f0ebe4; font-size:10px; font-weight:400; padding:7px 13px; border-radius:8px; z-index:30; line-height:1.5; max-width:280px; min-width:180px; text-align:left; white-space:normal; word-break:break-word; }
+  tbody td:last-child .change-tip { left:auto; right:0; transform:none; }
+  .summary-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-bottom:28px; }
+  .summary-card { background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius); padding:16px 12px; text-align:center; transition:transform var(--transition),box-shadow var(--transition); cursor:default; }
+  .summary-card:hover { transform:translateY(-2px); box-shadow:var(--shadow); }
+  .summary-card .rank { font-size:22px; font-weight:700; font-family:'Noto Serif SC',serif; }
+  .summary-card .label { font-size:12px; color:var(--text-soft); margin-top:1px; }
+  .summary-card .score-line { font-size:11px; color:var(--accent); font-weight:500; margin-top:5px; }
+  .summary-card .delta { font-size:10px; margin-top:2px; }
+  .summary-card.best { border-color:var(--accent); background:linear-gradient(135deg,rgba(184,122,90,.08),rgba(184,122,90,.02)); }
+  .c1 { color:var(--accent); } .c2 { color:#8a7a6a; } .c3 { color:var(--text-caption); }
+  .tw { background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius); overflow-x:auto; padding:2px; }
+  table { width:100%; border-collapse:collapse; font-size:12px; min-width:900px; }
+  thead th { text-align:center; padding:10px 6px; font-weight:600; color:var(--text); border-bottom:1.5px solid rgba(184,122,90,.2); white-space:nowrap; position:sticky; top:0; background:var(--card); z-index:2; font-size:11px; }
+  thead th:first-child { text-align:left; padding-left:14px; min-width:140px; }
+  tbody td { padding:8px 6px; border-bottom:1px solid rgba(0,0,0,.04); vertical-align:middle; text-align:center; font-size:11px; }
+  tbody td:first-child { font-weight:600; padding-left:14px; text-align:left; white-space:nowrap; font-size:12px; }
+  tbody tr:hover { background:var(--accent-light); }
+  tbody tr:last-child td { border-bottom:none; }
+  .total-c { font-weight:700; font-size:14px; color:var(--accent); }
+  .total-c.up { color:var(--green); }
+  .analysis { margin-top:32px; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .analysis-card { background:var(--card); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--card-border); border-radius:var(--radius); padding:18px; }
+  .analysis-card h3 { font-family:'Noto Serif SC',serif; font-size:15px; font-weight:700; color:var(--accent); margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid rgba(184,122,90,.15); }
+  .analysis-card li,.analysis-card p { font-size:12px; color:var(--text); padding:3px 0; line-height:1.7; list-style:none; }
+  .analysis-card li::before { content:'·'; color:var(--accent); margin-right:5px; }
+  .analysis-card .highlight { background:var(--accent-light); border-left:2px solid var(--accent); padding:8px 12px; margin:6px 0; border-radius:0 6px 6px 0; font-size:12px; }
+  .new-badge { display:inline-block; background:rgba(48,209,88,.12); color:var(--green); font-size:10px; font-weight:600; padding:1px 8px; border-radius:10px; margin-left:4px; }
+  .merge-badge { display:inline-block; background:rgba(184,122,90,.12); color:var(--accent); font-size:10px; font-weight:600; padding:1px 8px; border-radius:10px; margin-left:4px; }
+  .removed-item { opacity:.35; text-decoration:line-through; }
+  @media(max-width:768px) { body{padding:14px 10px} .summary-grid{grid-template-columns:repeat(2,1fr)} .analysis{grid-template-columns:1fr} table{font-size:10px;min-width:680px} thead th,tbody td{padding:5px 3px} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .header,.phase-note,.summary-grid,.tw,.analysis { animation:fadeUp .5s both; }
+  .phase-note{animation-delay:.08s} .summary-grid{animation-delay:.15s} .tw{animation-delay:.25s} .analysis{animation-delay:.35s}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>霎哈嘉+X · 第八期评估</h1>
+  <div class="sub">2026-07-20 · 纯灵性周 · 三相神原理触达 · 无项目进展</div>
+  <div class="badge">第八期 · 19项目 · 6维</div>
+</div>
+
+<div class="phase-note">
+  <strong>📌 本期变化：19项目（无增减），0项评分变动</strong><br>
+  · 本周是<strong style="color:var(--accent);">最纯粹的一周</strong>——没有新项目、没有功能突破、没有赚钱动作。整周的核心只有一件事：深度灵性探索。<br>
+  · <strong style="color:var(--accent);">7/15 触达三相神原理</strong>——静坐中直接感受到湿婆神（纯洁的仁慈与毁灭）、毗湿奴（纯洁的平衡）、梵天（纯洁的创造）的原理。这是极深的灵性体验，超越了概念层面的认知。<br>
+  · <strong style="color:var(--accent);">「24小时完全在灵的状态」</strong>——7/14提出新修行目标，参加集体活动后体验非常好，注意力扩展包裹整个空间。<br>
+  · 维护工作：7/14黄庭打卡时隔1个月重启Day5，7/17从「母亲108句话」PDF为7条每日提醒配Shri Mataji引语（每天换一句，4天一循环）。<br>
+  · ClawBot token 持续过期，微信简报多次发送失败。<br>
+  · 🧠 主题：纯灵性周 · 三相神原理触达 · 每日提醒引语升级 · 妻子作为母亲工具支持青岛集体
+</div>
+
+<div class="dim-bar">
+  <span class="dim-pill"><span class="num">1</span> 想做就启<span class="tip">实际想做+今天就能开始？行为＞意愿</span></span>
+  <span class="dim-pill"><span class="num">2</span> 轻脑轻松<span class="tip">做完能直接干下一件事，不费脑不累身</span></span>
+  <span class="dim-pill"><span class="num">3</span> 传播<span class="tip">有带自觉机会，能传播霎哈嘉的语言/能量</span></span>
+  <span class="dim-pill"><span class="num">4</span> 成长<span class="tip">对个人灵性进步有直接帮助</span></span>
+  <span class="dim-pill"><span class="num">5</span> 收钱<span class="tip">已验证＞能收未验证＞无法收费</span></span>
+  <span class="dim-pill"><span class="num">6</span> 自由<span class="tip">时间灵活，想干就干随时可停</span></span>
+</div>
+
+<h3 style="font-family:'Noto Serif SC',serif;font-size:15px;color:var(--text-soft);margin-bottom:10px;">🏆 综合排名（6维·30分制）</h3>
+<div class="summary-grid">
+  <div class="summary-card best">
+    <div class="rank c1">🥇 视频创作</div><div class="label">Book of Adi Shakti视频待启动·无视频制作</div>
+    <div class="score-line">27/30</div>
+    <div class="delta diff-none">—</div>
+  </div>
+  <div class="summary-card best">
+    <div class="rank c1">🥇 AI技能搭建</div><div class="label">每日提醒配引语·黄庭重启·无技术突破</div>
+    <div class="score-line">27/30</div>
+    <div class="delta diff-none">—</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c3">③ 情绪梳理师APP</div><div class="label">本周无APP层面任何动作</div>
+    <div class="score-line">24/30</div>
+    <div class="delta diff-none">—</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c3">③ 状态梳理</div><div class="label">深层灵性认知：三相神原理·生命能量机制·超越正事化</div>
+    <div class="score-line">24/30</div>
+    <div class="delta diff-none">—</div>
+  </div>
+  <div class="summary-card">
+    <div class="rank c3">⑤ 翻译流水线</div><div class="label">amruta持续运维·无技术升级</div>
+    <div class="score-line">24/30</div>
+    <div class="delta diff-none">—</div>
+  </div>
+</div>
+
+<div class="tw">
+<table>
+<thead>
+<tr>
+  <th>项目</th>
+  <th>①想做就启</th><th>②轻脑轻松</th><th>③传播</th>
+  <th>④成长</th><th>⑤收钱</th><th>⑥自由</th>
+  <th>总分</th><th>变动</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>🎥 状态梳理对应视频创作<br><span style="font-size:10px;color:var(--text-caption);">情绪梳理师APP视频工作流 + Book of Adi Shakti视频立项</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c" style="font-weight:900;">27</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。Book of Adi Shakti视频项目已立项两周仍未启动制作。本周日记未提及任何视频相关工作。项目停留在立项阶段。</span></td>
+</tr>
+<tr>
+  <td>🔧 AI技能搭建服务<br><span style="font-size:10px;color:var(--text-caption);">DS2API+codex-proxy+agents-router+hermes-switcher+lark-codex-bridge</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td class="total-c" style="font-weight:900;">27</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。7/17从「母亲108句话」PDF为7条每日提醒配Shri Mataji引语（每天换一句，4天一循环），引语加粗，删掉末尾长说明。属于产品优化，无基础设施升级。DS2API仍被封(503)。黄庭打卡7/14重启Day5。</span></td>
+</tr>
+<tr>
+  <td>🧠 情绪梳理师APP<br><span style="font-size:10px;color:var(--text-caption);">实时语音监听+分析+霎哈嘉知识库·6/16上线</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">24</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。本周无APP层面任何动作，连续两周零活动。</span></td>
+</tr>
+<tr>
+  <td>🪷 状态梳理<br><span style="font-size:10px;color:var(--text-caption);">启迪式咨询·1v1方向待明确</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">24</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tick">与上期一致。本周灵性认知丰富但无1v1交付：7/14「24小时完全在灵的状态」，7/15三相神原理直接体验，7/16滴酥油清凉体验，7/18注意力→生命能量→无思虑觉知精微理解。均为个人成长，非项目执行。</span></td>
+</tr>
+<tr>
+  <td>📖 霎哈嘉文章AI翻译流水线<br><span style="font-size:10px;color:var(--text-caption);">amruta-actions·GitHub Actions自动化·Mistral Small 4句级对齐</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star-e">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">24</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。本周日记中未提及amruta相关运维，自动化平稳运行。</span></td>
+</tr>
+<tr>
+  <td>🌿 免费初班<br><span style="font-size:10px;color:var(--text-caption);">户外亭子·念初阶书·公益不收费</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star-e">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">23</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。公益项目不收费。本周日记未提及初班活动。</span></td>
+</tr>
+<tr>
+  <td>🌷 Mother's Love内容传播<br><span style="font-size:10px;color:var(--text-caption);">内容传播项目·三条内容线·短视频优先·三步自觉结尾</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star-e">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">22</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。战略完备但未启动执行。本周日记中妻子在做母亲的工具（带自觉、支持青岛集体），这是与Mother's Love相关的实际活动，但属于妻子的工作而非主人的项目执行。</span></td>
+</tr>
+<tr>
+  <td>🎬 AI短视频制作<br><span style="font-size:10px;color:var(--text-caption);">MoneyPrinterTurbo·霎哈嘉/佛教</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">22</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。本周无短视频相关活动。</span></td>
+</tr>
+<tr>
+  <td>🧘 体呼吸<br><span style="font-size:10px;color:var(--text-caption);">丹道·自己练透再教</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">21</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。本周日记中未提及体呼吸练习。</span></td>
+</tr>
+<tr>
+  <td>💬 心理咨询<br><span style="font-size:10px;color:var(--text-caption);">倾听陪伴型</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">21</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>🔮 玄学咨询<br><span style="font-size:10px;color:var(--text-caption);">算卦·1v1收费·需太初之母授权</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">21</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>🕉️ 100天神意照黄庭打卡<br><span style="font-size:10px;color:var(--text-caption);">每日修行·自动化记录·7/14重启</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td><span class="star-e">★★★★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">21</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。7/14时隔1个月重启Day5，但后续日记未再提及打卡活动（可能自动化运行未产生日志）。未达到引发评分变化的程度。</span></td>
+</tr>
+<tr>
+  <td>🖨️ 3D打印创业<br><span style="font-size:10px;color:var(--text-caption);">Bambu P1S·摆摊卖玩偶</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">19</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>🤖 AI训练师<br><span style="font-size:10px;color:var(--text-caption);">数据标注平台</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">19</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>💰 UUMit接任务/知识商品<br><span style="font-size:10px;color:var(--text-caption);">平台接任务+创建知识商品·自动化巡航</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td><span class="star">★★★★★</span></td>
+  <td class="total-c">19</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。本周日记未提及UUMit相关活动。</span></td>
+</tr>
+<tr>
+  <td>✍️ 写小说<br><span style="font-size:10px;color:var(--accent);font-weight:600;">AI辅助</span><br><span style="font-size:10px;color:var(--text-caption);">LLM辅助创作</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★★</span></td>
+  <td class="total-c">18</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。从未启动。</span></td>
+</tr>
+<tr>
+  <td>🛡️ 语言防卫App<br><span style="font-size:10px;color:var(--text-caption);">Android实时回怼</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★★</span><span class="star-e">☆</span></td>
+  <td class="total-c">16</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>💻 玄学代码技术<br><span style="font-size:10px;color:var(--text-caption);">在玄学领域公司做技术开发</span></td>
+  <td><span class="star">★</span><span class="star-e">★★★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td><span class="star">★★★★</span><span class="star-e">☆</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">14</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+<tr>
+  <td>🌾 农业<br><span style="font-size:10px;color:var(--text-caption);">合肥布米农场·有机水稻</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★</span><span class="star-e">★★★★</span></td>
+  <td><span class="star">★★★</span><span class="star-e">★★</span></td><td><span class="star">★★★</span><span class="star-e">★★</span></td>
+  <td><span class="star">★★</span><span class="star-e">★★★</span></td><td><span class="star">★★</span><span class="star-e">★★★</span></td>
+  <td class="total-c">13</td>
+  <td class="change-cell"><span class="diff-none">—</span><span class="change-tip">与上期一致。</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div style="margin:14px 0 28px;font-size:11px;color:var(--text-caption);text-align:center;">
+  6维(30分制) | 19项目(无增减) | 0项评分变动 | 🥇 并列·视频创作/AI技能搭建(27) | 主题·纯灵性周·三相神原理触达
+</div>
+
+<div class="analysis">
+<div class="analysis-card">
+  <h3>🏆 推荐方案</h3>
+  <div class="highlight"><strong>🥇并列持续（27）· 框架稳固不变动</strong></div>
+  <p><strong>评分层·零变动的一周</strong></p>
+  <li>AI技能搭建（27）：7/17每日提醒配Shri Mataji引语优化，属产品层面小改进。DS2API仍被封(503)。基础设施无升级。</li>
+  <li>视频创作（27）：Book of Adi Shakti视频立项已两周，未进入制作阶段。</li>
+  <li>情绪梳理师APP（24）：连续两周无动作。</li>
+  <br>
+  <p><strong>⚡ 灵性突破——无法在评分中体现的价值</strong></p>
+  <li>7/15触达三相神原理（Shiva·纯洁的仁慈与毁灭、Vishnu·纯洁的平衡、Brahma·纯洁的创造）——这是修行以来极深的一次体验，直接触碰的是"原理/Element"层面的实相，而非概念。</li>
+  <li>7/14提出「24小时完全在灵的状态」作为新修行目标，体验中注意力扩展包裹整个空间。</li>
+  <li>7/18精微认知：注意力放在哪里生命能量就来哪里，可以请求母亲的降临来洁净空间——但前提是自我和超我不介入。</li>
+  <br>
+  <p><strong>值得注意的动向</strong></p>
+  <li>妻子在做母亲的工具（带自觉、支持青岛集体）——这可能是Mother's Love项目的潜在启动契机。</li>
+  <li>ClawBot token持续过期问题尚未解决（需主人手动给ClawBot发消息刷新），影响微信推送。</li>
+  <li>这是V007「赚钱执念脱落」之后的延续——真正进入了"只有霎哈嘉"的状态，但项目执行层面停滞。</li>
+</div>
+<div class="analysis-card">
+  <h3>💡 本周关键发现</h3>
+  <li><strong>三相神原理的直接体验。</strong>7/15静坐中直接感受到Shiva（纯洁的仁慈与毁灭）、Vishnu（纯洁的平衡）、Brahma（纯洁的创造）的神圣本质。这是修行以来的里程碑式体验——不是"知道"，是"感受到"。</li>
+  <br>
+  <li><strong>「24小时完全在灵的状态」作为新目标。</strong>7/14提出。参加集体活动后注意力扩展包裹整个空间。这是从"每天静坐一阵子"到"全天候在状态"的跃迁。</li>
+  <br>
+  <li><strong>注意力与生命能量的精微关系。</strong>7/18：注意力放在哪里生命能量就来哪里——甚至可以请求母亲降临洁净空间。但自我或超我的介入（"我想让这个被转化"）会削弱效果。在无思虑觉知中保持纯洁注意力，生命能量自己接管一切。</li>
+  <br>
+  <li><strong>妻子作为母亲的工具。</strong>7/15：妻子一直在做带自觉、支持青岛集体的工作。她是"做工具"的角色，这可能是「Mother's Love内容传播」项目启动的潜在协同力量。</li>
+  <br>
+  <li><strong>每日提醒引语升级。</strong>7/17从「母亲108句话」PDF为7条每日提醒配Shri Mataji引语，每天换一句，4天一循环。引语加粗，删掉末尾长说明。这是对修行基础工具的精细打磨。</li>
+  <br>
+  <li><strong>对饮食的精微明辨。</strong>7/16滴酥油体验后觉察：如果饮食太咸，即使是自己家里做的，也可以拒绝。这是身体在灵性提升后对物质层面的自然敏感。</li>
+  <br>
+  <li><strong>原点：不变。</strong>7/17：「不论别人怎么变来变去…我都去问母亲要做什么。我不变。」真正的话力不在项目执行，在根基的稳固。</li>
+</div>
+</div>
+
+<div style="text-align:center;margin-top:40px;padding:20px 0;border-top:1px solid var(--card-border)">
+  <a href="v007.html" style="color:var(--text-soft);text-decoration:none;font-size:12px;margin-right:24px;">← 第七期</a>
+  <a href="index.html" style="color:var(--accent);text-decoration:none;font-size:13px;font-weight:500;">返回评估导航页</a>
+</div>
+
+</div>
+</body>
+</html>

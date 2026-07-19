@@ -43,4 +43,4 @@
 | - | 玄学技术岗 | 14/30 |
 | - | 农业 | 13/30 |
 
-👉 [查看完整评估](https://chenj.github.io/3rd-career-exploration) · V007 (2026-07-13)
+👉 [查看完整评估](https://chenj.github.io/3rd-career-exploration) · V008 (2026-07-20)
